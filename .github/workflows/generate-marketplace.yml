@@ -1,0 +1,31 @@
+name: Generate Marketplace
+
+on:
+  pull_request:
+    paths:
+      - 'plugins/**/plugin.json'
+    types: 
+      - edited
+      - opened
+      - ready_for_review
+      - reopened
+  workflow_dispatch:
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Generate marketplace.json
+        uses: ./.github/actions/generate-marketplace
+        with:
+          name: awesome-ai
+          owner: MilkyWare
+
+      - uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7
+        with:
+          commit_message: 'chore: Generated Marketplace'

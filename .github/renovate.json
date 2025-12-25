@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":automergeMinor",
+    "helpers:pinGitHubActionDigests",
+    "security:openssf-scorecard"
+  ],
+  "labels": [
+    "dependencies",
+    "{{manager}}",
+    "{{updateType}}"
+  ],
+  "automergeStrategy": "squash",
+  "minimumReleaseAge": "14 days",
+  "separateMajorMinor": true,
+  "vulnerabilityAlerts": {
+    "addLabels": ["security"]
+  },
+  "packageRules": []
+}

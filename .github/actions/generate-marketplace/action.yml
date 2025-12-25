@@ -1,0 +1,20 @@
+name: Generate Plugin Marketplace
+description: Generate the marketplace.json file for the plugin marketplace.
+
+inputs:
+  name:
+    description: The name of the marketplace.
+    required: true
+  owner:
+    description: The owner of the marketplace.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Generate marketplace.json
+      shell: pwsh
+      run: |
+        ${{ github.action_path }}/GenerateMarketplace.ps1 `
+          -Name "${{ inputs.name }}" `
+          -Owner "${{ inputs.owner }}"
