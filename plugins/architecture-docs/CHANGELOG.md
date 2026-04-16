@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.1...architecture-docs-v0.0.2) (2026-04-16)
+
+
+### Features
+
+* Initialised ([fddd30a](https://github.com/milkyware/awesome-ai/commit/fddd30a8f0c04122d1c05574e5d307855544a0e1))
+
 ## [0.0.3](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.2...architecture-docs-v0.0.3) (2026-04-16)
 
 
