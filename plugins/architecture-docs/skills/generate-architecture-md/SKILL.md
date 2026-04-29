@@ -67,7 +67,7 @@ Ask me:
 - How is the code organized architecturally (e.g., by feature, by layer, by domain)?
 - Are there any specific conventions for naming or organizing files?
 
-After gathering this information, I will analyze the repository to generate an ANSI file structure of the key files and directories.
+After gathering this information, I will analyze the repository by using the `git ls-files` command to get a list of all tracked files, then pipe this to the `tree` command with the `--fromfile` option to generate an ANSI file structure showing only the tracked files. This approach ensures we display only files that are part of the repository while maintaining a clean, readable structure. The command will be similar to: `git ls-files | tree --fromfile --charset=ansi --noreport`, which will generate a tree view of only the files tracked by git, excluding untracked files, ignored patterns, and focusing on the important source files and directories that define the project structure.
 
 Wait for my response before continuing.
 
