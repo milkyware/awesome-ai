@@ -3,7 +3,7 @@ name: Generate Marketplace
 on:
   pull_request:
     paths:
-      - 'plugins/**/plugin.json'
+      - .release-please-manifest.json
     types: 
       - edited
       - opened
