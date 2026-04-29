@@ -8,6 +8,7 @@
   "license": "MIT",
   "skills": [
     "./skills/generate-adr",
-    "./skills/generate-hld"
+    "./skills/generate-hld",
+    "./skills/generate-architecture-md"
   ]
 }
