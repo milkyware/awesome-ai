@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.4](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.3...architecture-docs-v0.0.4) (2026-05-12)
+
+
+### Features
+
+* added skill to generate `ARCHITECTURE.md` ([#3](https://github.com/milkyware/awesome-ai/issues/3)) ([cec82ee](https://github.com/milkyware/awesome-ai/commit/cec82ee8b809bc4df0aeba3490a8f725a6e7267b))
+* Initialised ([fddd30a](https://github.com/milkyware/awesome-ai/commit/fddd30a8f0c04122d1c05574e5d307855544a0e1))
+
 ## [0.0.3](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.2...architecture-docs-v0.0.3) (2026-04-29)
 
 
