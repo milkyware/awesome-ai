@@ -1,102 +1,102 @@
 # Awesome AI
 
-A curated collection of enterprise-grade prompts, templates, and tools for AI-assisted software delivery and architecture design.
-
 - [Awesome AI](#awesome-ai)
   - [Contents](#contents)
-  - [Plugins](#plugins)
+  - [Install](#install)
+    - [Recommended: Install With `skills.sh`](#recommended-install-with-skillssh)
+    - [Install as a GitHub Copilot Plugin](#install-as-a-github-copilot-plugin)
+  - [Available Skills](#available-skills)
     - [architecture-docs](#architecture-docs)
   - [Quick Start](#quick-start)
-    - [For Copilot CLI Users](#for-copilot-cli-users)
-    - [For Repository Maintainers](#for-repository-maintainers)
-  - [Repository Structure](#repository-structure)
+    - [Using skills.sh](#using-skillssh)
+    - [Using the GitHub Copilot plugin](#using-the-github-copilot-plugin)
   - [Contributing](#contributing)
   - [License](#license)
 
+[![skills.sh](https://img.shields.io/badge/skills.sh-grey?logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04IDFMMTYgMTVIMEw4IDFaIi8%2BPC9zdmc%2B&style=flat)](https://skills.sh/milkyware/awesome-ai)
+
+A curated collection of enterprise-grade skills, prompts, templates, and documentation tools for AI-assisted software delivery and architecture design.
+
 ## Contents
 
-This repository contains reusable resources for GitHub Copilot CLI and other AI agents:
+This repository contains reusable resources for GitHub Copilot and other AI agents:
 
-- **`/prompts`** – Reusable prompts for generating architectural artefacts (ADRs, HLDs)
-- **`/plugins`** – Packaged plugins that bundle prompts and skills for Copilot CLI
-- **`/docs`** – Templates and style guides (HLD template, conventions)
-- **`/.github/copilot-instructions.md`** – Repository conventions for Copilot assistance
+- **Cross-platform skills** installable via `skills.sh`
+- **GitHub Copilot plugin packaging** for teams that prefer the Copilot plugin model
+- **`/prompts`** – Reusable prompts for generating architectural artefacts
+- **`/docs`** – Templates and style guides
+- **`/plugins`** – Plugin packaging for Copilot CLI distribution
 
-## Plugins
+## Install
 
-### architecture-docs
+### Recommended: Install With `skills.sh`
 
-**Generate professional Architecture Decision Records (ADRs) and High-Level Design (HLD) documents.**
+Install the repository with `skills.sh` for a cross-platform workflow that works across supported coding agents, including GitHub Copilot.
 
-The `architecture-docs` plugin provides two commands:
+```bash
+npx skills add milkyware/awesome-ai
+```
 
-- **`generate-adr`** – Structured, gated workflow for creating Architecture Decision Records
-- **`generate-hld`** – Comprehensive guidance for generating High-Level Design documents
+This exposes the available architecture and documentation skills from the repository without relying on a Copilot-specific plugin workflow.
 
-Both are built on enterprise-grade prompts with strict writing standards (UK English, technical precision, no fabrication).
+### Install as a GitHub Copilot Plugin
 
-**Install:**
+If you specifically want the GitHub Copilot plugin packaging model, first add this repository to the plugin marketplace, then install the `architecture-docs` plugin.
 
 ```bash
 copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
 copilot /plugin install architecture-docs
 ```
 
-[📖 Plugin Documentation](./plugins/architecture-docs/README.md)
+## Available Skills
+
+### architecture-docs
+
+**Generate professional Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides.**
+
+The repository currently provides these architecture-focused skills:
+
+- **`generate-adr`** – Structured, gated workflow for creating Architecture Decision Records
+- **`generate-hld`** – Comprehensive guidance for generating High-Level Design documents
+- **`generate-architecture-md`** – Guidance for creating an `ARCHITECTURE.md` document for rapid codebase understanding
+
+These skills are built on enterprise-grade prompts with strict writing standards: UK English, technical precision, and no fabrication.
+
+[Plugin documentation](./plugins/architecture-docs/README.md)
 
 ## Quick Start
 
-### For Copilot CLI Users
+### Using skills.sh
 
-1. **Install the plugin:**
-   ```bash
-   copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
-   copilot /plugin install architecture-docs
-   ```
+After installation, open your preferred supported coding agent and invoke one of the installed skills. For example:
 
-2. **Generate an ADR:**
-   ```bash
-   copilot
-   /architecture-docs:generate-adr
-   ```
+- `/generate-adr` - Create an Architecture Decision Record for introducing Azure Front Door
+- `/generate-hld` - Produce a High-Level Design for a document processing platform on Azure
+- `/generate-architecture-md` - Create an ARCHITECTURE.md document for this repository
 
-3. **Generate an HLD:**
-   ```bash
-   copilot
-   /architecture-docs:generate-hld
-   ```
+### Using the GitHub Copilot plugin
 
-### For Repository Maintainers
+After installation, start Copilot and invoke a plugin command directly.
 
-To use these resources in your own projects:
-
-1. **Copy the prompts** from `/prompts` directory
-2. **Reference the templates** in `/docs` for your own documentation
-3. **Create custom skills** in `.github/skills/` (see [Copilot documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-skills))
-
-## Repository Structure
+Generate an ADR:
 
 ```bash
-awesome-ai/
-├── plugins/
-│   └── architecture-docs/          # @architecture-docs plugin
-│       ├── plugin.json             # Plugin manifest
-│       ├── README.md               # Plugin documentation
-│       └── skills/
-│           ├── generate-adr/       # ADR generation skill
-│           └── generate-hld/       # HLD generation skill
-├── prompts/
-│   ├── generate-adr.prompt.md      # ADR generation prompt (raw)
-│   ├── generate-hld.prompt.md      # HLD generation prompt (raw)
-│   ├── generate-azure-landing-zone.prompt.md
-│   └── ...
-├── docs/
-│   └── hld.template.md             # High-Level Design template
-├── .github/
-│   └── copilot-instructions.md     # Repository conventions for Copilot CLI
-├── README.md                        # This file
-├── LICENCE                          # MIT License
-└── .gitignore
+copilot
+/architecture-docs:generate-adr
+```
+
+Generate an HLD:
+
+```bash
+copilot
+/architecture-docs:generate-hld
+```
+
+Generate an `ARCHITECTURE.md` document:
+
+```bash
+copilot
+/architecture-docs:generate-architecture-md
 ```
 
 ## Contributing
