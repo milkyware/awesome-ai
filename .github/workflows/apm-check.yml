@@ -1,0 +1,29 @@
+name: APM Check
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  apm-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Install APM CLI
+        uses: microsoft/apm-action@v1
+        with:
+          setup-only: true
+
+      - name: Validate marketplace entries
+        run: apm marketplace check
+
+      - name: Verify version alignment
+        run: apm pack --check-versions --dry-run
+
+      - name: Verify clean marketplace
+        run: apm pack --check-clean --dry-run
