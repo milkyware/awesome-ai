@@ -1,0 +1,17 @@
+name: architecture-docs
+version: 0.0.4
+description: Generate Architecture Decision Records (ADRs) and High-Level Design (HLD) documents with structured, gated workflows.
+author: MilkyWare
+license: MIT
+# Which agent platforms to deploy to.
+# Resolution order: --target flag > this field > auto-detect from filesystem.
+# Accepted values: agent-skills, antigravity, claude, codex, copilot, cursor, gemini, grok-build, kiro, opencode, windsurf
+targets:
+- copilot
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+devDependencies:
+  apm: []
+scripts: {}

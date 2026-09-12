@@ -39,3 +39,9 @@
 
 # Magic Context
 .cortexkit
+
+# APM
+# Generated installable bundles from `apm pack`
+build/
+# APM-generated ecosystem manifests inside plugin packages
+plugins/*/.github/

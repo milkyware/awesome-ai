@@ -1,8 +1,10 @@
 {
   "exclude-paths": [
     ".git",
+    ".claude-plugin",
     ".idea",
-    ".vscode"
+    ".vscode",
+    "build"
   ],
   "release-type": "simple",
   "bump-minor-pre-major": true,
@@ -25,6 +27,11 @@
         {
           "type": "json",
           "path": "plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "apm.yml",
           "jsonpath": "$.version"
         }
       ]
