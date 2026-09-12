@@ -13,9 +13,17 @@
   "tag-separator": "-",
   "separate-pull-requests": true,
   "changelog-sections": [
-    { "type": "feat", "section": "Features" },
-    { "type": "fix", "section": "Bug fixes" },
-    { "type": "docs", "section": "Documentation" }
+    { "type": "breaking", "section": "⛓️‍💥 Breaking Changes" },
+    { "type": "feat", "section": "🚀 Enhancements" },
+    { "type": "perf", "section": "🚀 Enhancements" },
+    { "type": "fix", "section": "🩹 Fixes" },
+    { "type": "docs", "section": "📖 Documentation" },
+    { "type": "refactor", "section": "♻️ Refactoring" },
+    { "type": "test", "section": "✅ Tests" },
+    { "type": "build", "section": "🏗️ Build & Automation" },
+    { "type": "ci", "section": "🏗️ Build & Automation" },
+    { "type": "chore", "section": "🧹 Maintenance" },
+    { "type": "revert", "section": "⏪ Reverts" }
   ],
   "packages": {
     "plugins/architecture-docs": {
