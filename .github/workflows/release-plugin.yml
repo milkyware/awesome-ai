@@ -35,7 +35,8 @@ jobs:
 
       - name: Pack plugin archive (zip)
         shell: bash
-        run: pushd "${{ inputs.plugin-path }}" && apm pack --archive && popd
+        run: apm pack --archive
+        working-directory: ${{ inputs.plugin-path }}
 
       - name: Attach archive to GitHub release
         shell: pwsh
