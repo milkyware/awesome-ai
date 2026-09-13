@@ -77,7 +77,7 @@ This is a documentation and template repository with **no code build, test, or l
 
 - `apm pack --check-versions --check-clean` - validates tag-pattern versioning and a clean marketplace
 - `apm marketplace check` - validates marketplace dependency resolution
-- These run in CI: `.github/workflows/apm-check.yml` on PRs touching `.claude-plugin/marketplace.json`, and `.github/workflows/release.yml` on release tags
+- These run in CI: `.github/workflows/apm-check.yml` on PRs touching `.claude-plugin/marketplace.json`, and `.github/workflows/release-plugin.yml` (invoked from `.github/workflows/release-please.yml`) when release-please creates releases
 
 ### Post-Implementation Validation
 
@@ -162,7 +162,8 @@ This repository has no npm, Python, build, or language toolchain. APM (`apm` CLI
 - `apm pack` regenerates `.claude-plugin/marketplace.json` from root `apm.yml` + plugin manifests
 - `.github/workflows/generate-marketplace.yml` regenerates and commits the marketplace on release PRs
 - `.github/workflows/apm-check.yml` validates marketplace entries, version alignment, and marketplace cleanliness on PRs touching `.claude-plugin/marketplace.json`
-- `.github/workflows/release.yml` gates release tags with `apm pack --check-versions --check-clean` + `apm marketplace check`
+- `.github/workflows/release-please.yml` runs release-please; when it creates releases, the `publish` job resolves released component paths from the `paths_released` output into `{path, version, tag}` objects and runs a matrix of `.github/workflows/release-plugin.yml`
+- `.github/workflows/release-plugin.yml` is a callable workflow (`workflow_call`, inputs `plugin-path` + `tag`) that gates (`apm marketplace check` + `apm pack --check-versions --check-clean`), packs an `apm pack --archive` zip per plugin, and attaches it to the component's `{name}-v{version}` release
 - Release versioning is managed by release-please, which bumps `apm.yml` and `plugin.json` versions and tags `{name}-v{version}`
 
 All content changes are direct Markdown edits. Changes take effect upon commit.
