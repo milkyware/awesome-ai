@@ -13,7 +13,6 @@ on:
       - ready_for_review
       - reopened
       - synchronize
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -24,9 +23,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Install APM CLI
         uses: microsoft/apm-action@v1
+        with:
+          apm-version: '0.30.0'
 
       - name: Generate .claude-plugin/marketplace.json
         run: apm pack
