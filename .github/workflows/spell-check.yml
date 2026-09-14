@@ -3,18 +3,71 @@ name: Spell Check
 on:
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
   spell-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        
+
       - name: Run Spell Check
-        uses: streetsidesoftware/cspell-action@v8
+        uses: streetsidesoftware/cspell-action@de2a73e963e7443969755b648a1008f77033c5b2 # v8
         id: spell-check
         with:
           suggestions: true
+
+      - name: Compose spelling comment
+        if: steps.spell-check.outputs.success == 'true' || steps.spell-check.outputs.success == 'false'
+        shell: pwsh
+        run: |
+          $success = [bool]::Parse('${{ steps.spell-check.outputs.success }}')
+          $icon = if ($success) { '✅' } else { '❌' }
+          $header = if ($success) { 'Spell check passed' } else { 'Spell check failed' }
+          $checked = '${{ steps.spell-check.outputs.number_of_files_checked }}'
+          $fileCount = '${{ steps.spell-check.outputs.number_of_files_with_issues }}'
+          $issues = '${{ steps.spell-check.outputs.number_of_issues }}'
+          $list = @('${{ steps.spell-check.outputs.files_with_issues }}' | ConvertFrom-Json) -join "`n"
+          $runUrl = '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+
+          $failure = ''
+          if ($success -ne 'true') {
+            $failure = @"
+          Please fix the typos, or add intentional words to ``words:`` in ``cspell.config.yaml``.
+
+          <details>
+          <summary>Affected files</summary>
+
+          ``````text
+          $list
+          ``````
+
+          </details>
+          "@
+          }
+
+          $comment = @"
+          ### $icon Spell check $status
+
+          - Result: $icon
+          - Files checked: $checked
+          - Files with issues: $fileCount
+          - Spelling issues: $issues
+
+          $failure
+
+          ---
+          [View workflow run]($runUrl)
+          "@
+
+          $comment | Set-Content -Path comment.md
+
+      - name: Update sticky comment
+        if: steps.spell-check.outputs.success == 'true' || steps.spell-check.outputs.success == 'false'
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        with:
+          header: 'spell-check'
+          path: comment.md
+          skip_unchanged: true
