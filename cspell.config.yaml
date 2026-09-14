@@ -13,6 +13,9 @@ words:
   - opencode
   - openssf
   - xsiam
+overrides:
+  - filename: ".github/workflows/*.yml"
+    languageId: ["powershell", "yaml"]
 patterns:
   - name: MARKDOWN_CODE_BLOCK
     pattern: |
