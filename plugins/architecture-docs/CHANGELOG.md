@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.5](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.4...architecture-docs-v0.0.5) (2026-09-14)
+
+
+### 🚀 Enhancements
+
+* support apm ([#9](https://github.com/milkyware/awesome-ai/issues/9)) ([a270040](https://github.com/milkyware/awesome-ai/commit/a2700406e7734f7c526d4a892e299ce079b6a6f1))
+
+
+### ♻️ Refactoring
+
+* organised the HLD template as skill artifact ([#14](https://github.com/milkyware/awesome-ai/issues/14)) ([2d69448](https://github.com/milkyware/awesome-ai/commit/2d694489a37e3425dfbd4455f1667fb1f301ebc3))
+
 ## [0.0.4](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.3...architecture-docs-v0.0.4) (2026-05-12)
 
 
