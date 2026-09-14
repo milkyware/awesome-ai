@@ -1,0 +1,39 @@
+name: Validate PR Title
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Semantic PR Title Check
+      uses: amannn/action-semantic-pull-request@v6
+      id: semantic-pr
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Add Invalid PR Title Comment
+      uses: marocchino/sticky-pull-request-comment@v3.0.5
+      if: always() && steps.semantic-pr.outputs.error_message != ''
+      with:
+        header: pr-title-lint-error
+        recreate: true
+        message: |
+          This pull request title does not match the required Conventional Commits format.
+
+          Details:
+
+          ```
+          ${{ steps.semantic-pr.outputs.error_message }}
+          ```
+
+    - name: Delete Invalid PR Title Comment
+      uses: marocchino/sticky-pull-request-comment@v3.0.5
+      if: always() && steps.semantic-pr.outputs.error_message == ''
+      with:
+        header: pr-title-lint-error
+        delete: true
