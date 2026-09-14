@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Install APM CLI
-        uses: microsoft/apm-action@v1
+        uses: microsoft/apm-action@d723bb64ed70c135bbaf87d126b721dd2dae0439 # v1
         with:
           apm-version: '0.30.0'
           setup-only: true
