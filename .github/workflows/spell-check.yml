@@ -49,7 +49,7 @@ jobs:
           }
 
           $comment = @"
-          ### $icon Spell check $status
+          ### $icon $header
 
           - Files checked: $checked
           - Files with issues: $fileCount
