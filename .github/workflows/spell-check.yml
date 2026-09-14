@@ -51,7 +51,6 @@ jobs:
           $comment = @"
           ### $icon Spell check $status
 
-          - Result: $icon
           - Files checked: $checked
           - Files with issues: $fileCount
           - Spelling issues: $issues
