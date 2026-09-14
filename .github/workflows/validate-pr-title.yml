@@ -10,13 +10,13 @@ jobs:
       contents: read
     steps:
     - name: Semantic PR Title Check
-      uses: amannn/action-semantic-pull-request@v6
+      uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6
       id: semantic-pr
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
     - name: Add Invalid PR Title Comment
-      uses: marocchino/sticky-pull-request-comment@v3.0.5
+      uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
       if: always() && steps.semantic-pr.outputs.error_message != ''
       with:
         header: pr-title-lint-error
@@ -31,7 +31,7 @@ jobs:
           ```
 
     - name: Delete Invalid PR Title Comment
-      uses: marocchino/sticky-pull-request-comment@v3.0.5
+      uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
       if: always() && steps.semantic-pr.outputs.error_message == ''
       with:
         header: pr-title-lint-error
