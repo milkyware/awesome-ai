@@ -1,6 +1,6 @@
 ## Changes
 
-<!-- Describe what behavior is changed by this PR. -->
+<!-- Describe what behaviour is changed by this PR. -->
 
 > [!IMPORTANT]
 >

@@ -1,0 +1,30 @@
+version: "0.2"
+language: en-GB
+ignorePaths:
+  - .gitignore
+words:
+  - frontmatter
+  - intune
+  - milkyware
+  - negotiables
+  - openssf
+  - xsiam
+patterns:
+  - name: MARKDOWN_CODE_BLOCK
+    pattern: |
+      /^([ \t]*`{3,}).*  # match the opening fence
+      [\s\S]*?           # the code block content
+      ^\1$               # the closing fence
+      /gmx
+  - name: MARKDOWN_INLINE_CODE
+    pattern: /(`+)(?:(?!\1)[^`\n])*\1/g
+  - name: GITHUB_ACTION_REF
+    pattern: /uses:\s*[\w./-]+\s*@\s*[\w./-]+/gi
+languageSettings:
+  - languageId: markdown
+    ignoreRegExpList:
+      - MARKDOWN_CODE_BLOCK
+      - MARKDOWN_INLINE_CODE
+  - languageId: yaml
+    ignoreRegExpList:
+      - GITHUB_ACTION_REF
