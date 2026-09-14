@@ -35,10 +35,13 @@ Do not generate the final HLD until all required sections are complete or explic
 
 ## HLD Structure (must be followed)
 
+The canonical structure is defined in the template file `references/hld.template.md` in this skill directory. Follow it for the final document; the outline below is a summary.
+
 1. Overview
    - Target Audience
    - Document Ownership
    - Stakeholders
+   - References
    - Service Categorisation
 2. Context
    - Problem Statement
@@ -51,8 +54,10 @@ Do not generate the final HLD until all required sections are complete or explic
    - Deployment Design
 4. Module Design
 5. Data Design
+   - Data subsections derived from the user's answers, with Data Retention & Classification always last
 6. Security Design
-7. Appendix (Glossary)
+   - Security subsections derived from the user's answers; common inclusions are identity/authentication, authorisation/RBAC, data protection, network security, logging/monitoring/audit, and external permissions
+7. Glossary
 
 ## Step 1: Overview
 
@@ -156,6 +161,8 @@ Ask me:
 - Are there governance or compliance requirements?
 - Is caching used?
 
+Structure the Data Design subsections based on my answers using the template file `references/hld.template.md`; the examples given there are illustrative, not exhaustive. Ensure the Data Retention & Classification subsection is always the last subsection in Data Design.
+
 Wait for my response before continuing.
 
 ## Step 6: Security Design
@@ -169,6 +176,8 @@ Ask me:
 - What network security controls are used? (for example VNets, Private Endpoints, firewalls, Front Door)
 - What logging, monitoring, and audit is required?
 - What external permissions are required? (for example Microsoft Graph, GitHub, Azure DevOps, third-party APIs)
+
+Structure the Security Design subsections based on my answers using the template file `references/hld.template.md`; the examples given there are common inclusions but not exhaustive. Do not include subsections that do not apply to the solution.
 
 Wait for my response before continuing.
 

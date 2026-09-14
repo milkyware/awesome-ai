@@ -17,7 +17,7 @@
   - `<plugin>/CHANGELOG.md` - Release-please-managed changelog
 - **`/prompts`** - Reusable prompt templates in Markdown format that guide AI agents through structured processes (repo-level content, not distributed primitives)
 - **`/docs`** - Document templates and style guides
-  - `hld.template.md` - Template for High-Level Design documents with all required sections
+  - `plugins/architecture-docs/.apm/skills/generate-hld/references/hld.template.md` - Template for High-Level Design documents with all required sections
 - **`README.md`** - Project index and entry point
 - **`LICENCE`** - Repository licensing
 
@@ -47,7 +47,7 @@
    - Explicit rules for writing, output format, and validation
    - Final output requirements and validation gates
 
-3. **HLD Document Standards** - Referenced in `docs/hld.template.md`:
+3. **HLD Document Standards** - Referenced in `plugins/architecture-docs/.apm/skills/generate-hld/references/hld.template.md`:
    - Seven main sections: Overview, Context, Architecture Design, Module Design, Data Design, Security Design, Appendix
    - Audience: architects, engineers, governance teams, security reviewers
    - Data flows described at behavioural level (not implementation detail)
