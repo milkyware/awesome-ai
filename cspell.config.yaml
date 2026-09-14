@@ -5,8 +5,10 @@ ignorePaths:
 words:
   - frontmatter
   - intune
+  - kiro
   - milkyware
   - negotiables
+  - opencode
   - openssf
   - xsiam
 patterns:
