@@ -3,28 +3,36 @@ name: Generate Marketplace
 on:
   pull_request:
     paths:
+      - apm.yml
+      - plugins/**/apm.yml
+      - plugins/**/plugin.json
       - .release-please-manifest.json
-    types: 
+    types:
       - edited
       - opened
       - ready_for_review
       - reopened
-  workflow_dispatch:
+      - synchronize
+
+permissions:
+  contents: write
 
 jobs:
   job:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
-      - name: Generate marketplace.json
-        uses: ./.github/actions/generate-marketplace
         with:
-          name: awesome-ai
-          owner: MilkyWare
+          ref: ${{ github.head_ref }}
+
+      - name: Install APM CLI
+        uses: microsoft/apm-action@v1
+        with:
+          apm-version: '0.30.0'
+
+      - name: Generate .claude-plugin/marketplace.json
+        run: apm pack
 
       - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7
         with:

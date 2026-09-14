@@ -38,4 +38,10 @@
 # End of https://www.toptal.com/developers/gitignore/api/git,visualstudiocode
 
 # Magic Context
-.cortexkit/
+.cortexkit
+
+# APM
+# Generated installable bundles from `apm pack`
+build/
+# APM-generated ecosystem manifests inside plugin packages
+plugins/*/.github/

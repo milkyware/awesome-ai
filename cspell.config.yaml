@@ -2,11 +2,16 @@ version: "0.2"
 language: en-GB
 ignorePaths:
   - .gitignore
+dictionaries:
+  - powershell
 words:
   - frontmatter
   - intune
+  - kiro
+  - lastexitcode
   - milkyware
   - negotiables
+  - opencode
   - openssf
   - xsiam
 patterns:

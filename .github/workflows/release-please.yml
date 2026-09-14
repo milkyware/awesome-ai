@@ -14,6 +14,9 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    outputs:
+      releases: ${{ steps.release-matrix.outputs.releases }}
+      has-releases: ${{ steps.release-matrix.outputs.has-releases }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -32,3 +35,43 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      - name: Build Release Matrix
+        id: release-matrix
+        shell: pwsh
+        env:
+          OUTPUTS: ${{ toJSON(steps.release-please.outputs) }}
+          PATHS_RELEASED: ${{ steps.release-please.outputs.paths_released }}
+        run: |
+          $outputs = $env:OUTPUTS | ConvertFrom-Json -AsHashtable
+          $pathsReleased = @($env:PATHS_RELEASED | ConvertFrom-Json)
+
+          $releases = [System.Collections.ArrayList]::new()
+          $pathsReleased | ForEach-Object {
+              $p = $_
+              $r = [PSCustomObject]@{
+                  path = $p
+                  tag = $outputs["$p--tag_name"]
+                  version = $outputs["$p--version"]
+              }
+              $releases.Add($r) | Out-Null
+          }
+          $matrix = @{
+              include = $releases
+          }
+          $matrixJson = $matrix | ConvertTo-Json -Compress
+          "releases=$matrixJson" | Add-Content $env:GITHUB_OUTPUT
+
+          $flag = 'false'
+          if ($releases.Count -gt 0) { $flag = 'true' }
+          "has-releases=$flag" | Add-Content $env:GITHUB_OUTPUT
+
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.has-releases == 'true' }}
+    uses: ./.github/workflows/release-plugin.yml
+    strategy:
+      matrix: ${{ fromJSON(needs.release-please.outputs.releases) }}
+    with:
+      plugin-path: ${{ matrix.path }}
+      tag: ${{ matrix.tag }}

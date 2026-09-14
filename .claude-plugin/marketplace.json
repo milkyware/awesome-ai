@@ -1,7 +1,8 @@
 {
   "name": "awesome-ai",
   "owner": {
-    "name": "MilkyWare"
+    "name": "MilkyWare",
+    "url": "https://github.com/milkyware"
   },
   "plugins": [
     {

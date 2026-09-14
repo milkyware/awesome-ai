@@ -1,0 +1,53 @@
+name: Release Plugin
+
+on:
+  workflow_call:
+    inputs:
+      plugin-path:
+        type: string
+        required: true
+      tag:
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  pack-and-attach:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Install APM CLI
+        uses: microsoft/apm-action@v1
+        with:
+          apm-version: '0.30.0'
+
+      - name: Validate marketplace refs
+        run: apm marketplace check
+
+      - name: Verify version alignment and clean marketplace
+        run: apm pack --check-versions --check-clean
+
+      - name: Pack plugin archive (zip)
+        shell: bash
+        run: apm pack --archive
+        working-directory: ${{ inputs.plugin-path }}
+
+      - name: Attach archive to GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $archives = @(Get-ChildItem "${{ inputs.plugin-path }}/build" -Filter *.zip -File -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName)
+          if ($archives.Count -eq 0) { throw "No zip archive found under ${{ inputs.plugin-path }}/build" }
+          gh release view "${{ inputs.tag }}" > $null 2>&1
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload "${{ inputs.tag }}" $archives --clobber
+          } else {
+            gh release create "${{ inputs.tag }}" $archives --notes "APM bundle for ${{ inputs.tag }}"
+          }

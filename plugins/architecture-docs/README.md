@@ -4,20 +4,35 @@
 
 ## Overview
 
-The **@architecture-docs** plugin provides two specialized commands for architectural documentation:
+The **@architecture-docs** plugin provides three specialized commands for architectural documentation:
 
 - **generate-adr** – Creates Architecture Decision Records with guided questions, decision drivers, and formal consequences
 - **generate-hld** – Generates High-Level Design documents with comprehensive architectural guidance covering all key domains
+- **generate-architecture-md** – Creates an `ARCHITECTURE.md` document for rapid codebase understanding
 
-Both commands are built on battle-tested prompts used by enterprise teams. They enforce UK English, technical precision, and architectural rigour.
+The commands are built on battle-tested prompts used by enterprise teams. They enforce UK English, technical precision, and architectural rigour.
 
 ## Installation
 
-The plugin is available from the awesome-ai repository. Install it using the Copilot CLI:
+The plugin is published from the awesome-ai repository as an APM package. Install it with APM:
 
 ```bash
-copilot /plugin marketplace add https://github.com/milkyware/awesome-ai/plugins/architecture-docs
+apm marketplace add milkyware/awesome-ai
+apm install architecture-docs@awesome-ai
+```
+
+For GitHub Copilot CLI, add the repository marketplace, then install the plugin:
+
+```bash
+copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
 copilot /plugin install architecture-docs
+```
+
+For Claude Code:
+
+```bash
+apm marketplace add milkyware/awesome-ai
+apm install architecture-docs@awesome-ai
 ```
 
 Or enable it directly by adding to your repository's `.github/copilot/settings.json`:
@@ -92,6 +107,16 @@ The skill will guide you through:
 | **Language**         | UK English                                      |
 | **Typical Duration** | 30–45 minutes (full workflow with all sections) |
 
+### `/skills generate-architecture-md`
+
+| Aspect               | Details                                        |
+| -------------------- | ---------------------------------------------- |
+| **Skill Name**       | `generate-architecture-md`                     |
+| **Purpose**          | Create an `ARCHITECTURE.md` document           |
+| **Output**           | Markdown architecture overview document        |
+| **Language**         | UK English                                     |
+| **Typical Duration** | 15–25 minutes                                  |
+
 ## Key Features
 
 ✅ **Guided Workflows** – Structured, gated question sequences ensure completeness  
@@ -103,7 +128,7 @@ The skill will guide you through:
 
 ## Writing Standards
 
-Both skills enforce strict writing rules:
+All skills enforce strict writing rules:
 
 - **Concise language** – No marketing tone or storytelling
 - **Technical precision** – Fact-based, specific statements only

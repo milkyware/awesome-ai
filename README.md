@@ -4,7 +4,9 @@
   - [Contents](#contents)
   - [Install](#install)
     - [Recommended: Install With `skills.sh`](#recommended-install-with-skillssh)
+    - [Install as an APM Package](#install-as-an-apm-package)
     - [Install as a GitHub Copilot Plugin](#install-as-a-github-copilot-plugin)
+    - [Install in Claude Code](#install-in-claude-code)
   - [Available Skills](#available-skills)
     - [architecture-docs](#architecture-docs)
   - [Quick Start](#quick-start)
@@ -15,17 +17,19 @@
 
 [![skills.sh](https://img.shields.io/badge/skills.sh-grey?logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04IDFMMTYgMTVIMEw4IDFaIi8%2BPC9zdmc%2B&style=flat)](https://skills.sh/milkyware/awesome-ai)
 
-A curated collection of enterprise-grade skills, prompts, templates, and documentation tools for AI-assisted software delivery and architecture design.
+A curated collection of enterprise-grade skills, prompts, templates, and documentation tools for AI-assisted software delivery and architecture design. Packages are authored with Microsoft Agent Package Manager (APM) and distributed across multiple AI harnesses.
 
 ## Contents
 
-This repository contains reusable resources for GitHub Copilot and other AI agents:
+This repository uses **APM as the source of truth** for authoring and packaging, and generates harness-specific distribution artifacts from it:
 
-- **Cross-platform skills** installable via `skills.sh`
-- **GitHub Copilot plugin packaging** for teams that prefer the Copilot plugin model
+- **`apm.yml`** – Root marketplace manifest (source of truth for distribution)
+- **`.claude-plugin/marketplace.json`** – Generated marketplace consumed by GitHub Copilot CLI, Claude Code, APM, and skills.sh
+- **`plugins/*/apm.yml`** – Per-plugin APM manifests (source of truth per package)
+- **`plugins/*/.apm/`** – APM primitives (skills) authored with APM conventions
+- **`plugins/*/plugin.json`** – Authored Copilot-compatible plugin manifest (skills declared explicitly for Copilot CLI)
 - **`/prompts`** – Reusable prompts for generating architectural artefacts
 - **`/docs`** – Templates and style guides
-- **`/plugins`** – Plugin packaging for Copilot CLI distribution
 
 ## Install
 
@@ -37,15 +41,31 @@ Install the repository with `skills.sh` for a cross-platform workflow that works
 npx skills add milkyware/awesome-ai
 ```
 
-This exposes the available architecture and documentation skills from the repository without relying on a Copilot-specific plugin workflow.
+This exposes the available architecture and documentation skills from the repository without relying on a harness-specific plugin workflow.
+
+### Install as an APM Package
+
+Register the marketplace and install the `architecture-docs` package with APM:
+
+```bash
+apm marketplace add milkyware/awesome-ai
+apm install architecture-docs@awesome-ai
+```
 
 ### Install as a GitHub Copilot Plugin
 
-If you specifically want the GitHub Copilot plugin packaging model, first add this repository to the plugin marketplace, then install the `architecture-docs` plugin.
+First add this repository to the plugin marketplace, then install the `architecture-docs` plugin.
 
 ```bash
 copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
 copilot /plugin install architecture-docs
+```
+
+### Install in Claude Code
+
+```bash
+apm marketplace add milkyware/awesome-ai
+apm install architecture-docs@awesome-ai
 ```
 
 ## Available Skills

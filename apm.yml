@@ -1,0 +1,23 @@
+name: awesome-ai
+version: 1.0.0
+description: Curated AI skills, prompts, templates, and documentation frameworks for AI-assisted software delivery and architecture design.
+author: MilkyWare
+license: MIT
+
+# Publisher (marketplace) manifest. The packages listed here are independently
+# distributable APM packages, each with its own apm.yml under plugins/.
+# `apm pack` compiles this block into .claude-plugin/marketplace.json, which
+# Claude Code, GitHub Copilot CLI, and APM all read as the same artifact.
+marketplace:
+  owner:
+    name: MilkyWare
+    url: https://github.com/milkyware
+  versioning:
+    strategy: tag_pattern
+  build:
+    tagPattern: "{name}-v{version}"
+  packages:
+    - name: architecture-docs
+      description: Generate Architecture Decision Records (ADRs) and High-Level Design (HLD) documents with structured, gated workflows.
+      source: ./plugins/architecture-docs
+      version: 0.0.4
