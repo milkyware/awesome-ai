@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       releases: ${{ steps.release-matrix.outputs.releases }}
+      has-releases: ${{ steps.release-matrix.outputs.has-releases }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -61,8 +62,13 @@ jobs:
           $matrixJson = $matrix | ConvertTo-Json -Compress
           "releases=$matrixJson" | Add-Content $env:GITHUB_OUTPUT
 
+          $flag = 'false'
+          if ($releases.Count -gt 0) { $flag = 'true' }
+          "has-releases=$flag" | Add-Content $env:GITHUB_OUTPUT
+
   publish:
     needs: release-please
+    if: ${{ needs.release-please.outputs.has-releases == 'true' }}
     uses: ./.github/workflows/release-plugin.yml
     strategy:
       matrix: ${{ fromJSON(needs.release-please.outputs.releases) }}
