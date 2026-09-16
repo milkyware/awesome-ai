@@ -24,12 +24,7 @@ This plan outlines a prompt to onboard a repository with release-please, guiding
 
 ```json
 {
-  "exclude-paths": [
-    ".git",
-    ".idea",
-    ".github",
-    ".vscode"
-  ],
+  "exclude-paths": [".git", ".idea", ".github", ".vscode"],
   "release-type": "simple",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
@@ -37,9 +32,7 @@ This plan outlines a prompt to onboard a repository with release-please, guiding
   "packages": {
     ".": {
       "changelog-path": "CHANGELOG.md",
-      "extra-files": [
-        "README.md"
-      ]
+      "extra-files": ["README.md"]
     }
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
@@ -85,7 +78,7 @@ name: Validate PR Title
 
 on:
   pull_request_target:
-    types: 
+    types:
       - opened
       - edited
       - reopened
@@ -98,13 +91,14 @@ jobs:
       pull-requests: read
     steps:
       - uses: amannn/action-semantic-pull-request@v6
-        env: 
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 13. Prompt the user to ensure the following:
-  - Squash merges are enabled with PR title as the default commit message
-  - GitHub Actions are permitted to create and approve pull requests.
+
+- Squash merges are enabled with PR title as the default commit message
+- GitHub Actions are permitted to create and approve pull requests.
 
 ## Further Considerations
 

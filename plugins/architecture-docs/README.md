@@ -109,13 +109,13 @@ The skill will guide you through:
 
 ### `/skills generate-architecture-md`
 
-| Aspect               | Details                                        |
-| -------------------- | ---------------------------------------------- |
-| **Skill Name**       | `generate-architecture-md`                     |
-| **Purpose**          | Create an `ARCHITECTURE.md` document           |
-| **Output**           | Markdown architecture overview document        |
-| **Language**         | UK English                                     |
-| **Typical Duration** | 15–25 minutes                                  |
+| Aspect               | Details                                 |
+| -------------------- | --------------------------------------- |
+| **Skill Name**       | `generate-architecture-md`              |
+| **Purpose**          | Create an `ARCHITECTURE.md` document    |
+| **Output**           | Markdown architecture overview document |
+| **Language**         | UK English                              |
+| **Typical Duration** | 15–25 minutes                           |
 
 ## Key Features
 
@@ -124,7 +124,7 @@ The skill will guide you through:
 ✅ **Architectural Rigour** – Enforces technical precision with no speculation  
 ✅ **Enterprise-Grade** – Based on proven prompts used by enterprise teams  
 ✅ **Markdown-Ready** – Output is immediately ready for version control  
-✅ **No Fabrication** – Clear rules prevent hallucinated information  
+✅ **No Fabrication** – Clear rules prevent hallucinated information
 
 ## Writing Standards
 

@@ -64,19 +64,24 @@ The canonical structure is defined in the template file `references/hld.template
 Ask me:
 
 ### Overview Content
+
 - What is the solution name?
 - What is the solution?
 - What is its purpose?
 - Who will use it?
 
 ### Document Ownership
+
 - Who owns and maintains the document? (name, role, contact)
 
 ### Audience
+
 - Who is the intended audience for this HLD?
 
 ### Stakeholders
+
 After audience questions, ask:
+
 - Are there any key stakeholders?
 - For each stakeholder:
   - Name
@@ -86,6 +91,7 @@ After audience questions, ask:
 Format stakeholders in the HLD as a table with the headings: Name, Concern.
 
 ### References
+
 - Are there any reference documents, standards, or related materials?
 
 Wait for my response before continuing.
@@ -93,6 +99,7 @@ Wait for my response before continuing.
 ## Step 2: Context
 
 Ask me:
+
 - What business problem is being solved?
 - What technical problem is being solved?
 - What are the primary objectives and desired outcomes?
@@ -100,6 +107,7 @@ Ask me:
 - What constraints exist? (policy, security, cost, delivery)
 
 ### Requirements
+
 Format requirements in the HLD as a table with the headings: ID, (Non)Functional, Description.
 
 Wait for my response before continuing.
@@ -109,17 +117,20 @@ Wait for my response before continuing.
 Ask me:
 
 ### Component Design
+
 - What are the major components?
 - How do they interact?
 - What external systems are involved?
 
 ### Architecture Decisions
+
 - Have architectural decisions already been made?
 - Are they documented separately?
   - If yes: where are they stored and in what format?
   - If no: ask questions to capture the key decisions, rationale, and trade-offs.
 
 ### Data Flows
+
 Describe the core system flows and their behaviour based on my answers to these questions.
 
 - What are the named core data flows?
@@ -133,6 +144,7 @@ Describe the core system flows and their behaviour based on my answers to these 
 - Does any flow gate or trigger another flow?
 
 ### Deployment Design
+
 - How is the solution deployed?
 - How are environments separated?
 - What infrastructure components are involved?
@@ -142,6 +154,7 @@ Wait for my response before continuing.
 ## Step 4: Module Design
 
 Ask me:
+
 - What logical modules exist?
 - What is the responsibility of each module?
 - How do modules interact?
@@ -153,6 +166,7 @@ Wait for my response before continuing.
 ## Step 5: Data Design
 
 Ask me:
+
 - What data domains exist?
 - What data does each domain store?
 - Where is each domain stored? (e.g., Azure SQL Database, Cosmos DB, Blob Storage)
@@ -168,6 +182,7 @@ Wait for my response before continuing.
 ## Step 6: Security Design
 
 Ask me:
+
 - How do users or systems authenticate? (for example Entra ID, OIDC)
 - What authorisation or RBAC model is used?
 - What personas or roles exist?
@@ -189,6 +204,7 @@ Perform the following in order:
 2. Extract candidate glossary terms that may be unfamiliar to non-engineering audiences.
 
 Extraction rules:
+
 - Exclude widely understood technical terms such as:
   API, CI/CD, Entra ID, App Service, Log Analytics, Intune, TLS/HTTPS.
 - Include terms that are:

@@ -1,11 +1,5 @@
 {
-  "exclude-paths": [
-    ".git",
-    ".claude-plugin",
-    ".idea",
-    ".vscode",
-    "build"
-  ],
+  "exclude-paths": [".git", ".claude-plugin", ".idea", ".vscode", "build"],
   "release-type": "simple",
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,

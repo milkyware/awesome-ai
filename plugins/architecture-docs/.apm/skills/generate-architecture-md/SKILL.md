@@ -53,6 +53,7 @@ Do not generate the final ARCHITECTURE.md until all required sections are comple
 ## Step 1: Architecture Overview
 
 Ask me:
+
 - What is the solution/project name?
 - What is the solution?
 - What is its purpose?
@@ -63,6 +64,7 @@ Wait for my response before continuing.
 ## Step 2: Project Structure
 
 Ask me:
+
 - What are the main directories or modules in the project?
 - How is the code organized architecturally (e.g., by feature, by layer, by domain)?
 - Are there any specific conventions for naming or organizing files?
@@ -74,6 +76,7 @@ Wait for my response before continuing.
 ## Step 3: High-Level System Diagram
 
 Ask me:
+
 - What are the major systems or services in the architecture?
 - How do users interact with the system?
 - How do the major components communicate with each other?
@@ -87,6 +90,7 @@ Wait for my response before continuing.
 ### 4.1 Frontend
 
 Ask me:
+
 - Is there a frontend/user interface component?
 - If yes, what is its primary purpose?
 - What technologies/frameworks are used?
@@ -96,6 +100,7 @@ Ask me:
 ### 4.2 Backend Services
 
 Ask me:
+
 - What backend services exist?
 - For each backend service:
   - What is its name and purpose?
@@ -108,6 +113,7 @@ Wait for my response before continuing.
 ## Step 5: Data Stores
 
 Ask me:
+
 - What data storage systems are used?
 - For each data store:
   - What is its name and type (e.g., PostgreSQL, MongoDB, Redis)?
@@ -120,6 +126,7 @@ Wait for my response before continuing.
 ## Step 6: External Integrations / APIs
 
 Ask me:
+
 - What external services or APIs does the system integrate with?
 - For each integration:
   - What is the service name?
@@ -131,6 +138,7 @@ Wait for my response before continuing.
 ## Step 7: Deployment & Infrastructure
 
 Ask me:
+
 - What cloud provider or infrastructure is used?
 - What key services are part of the infrastructure?
 - What CI/CD pipeline is used?
@@ -141,6 +149,7 @@ Wait for my response before continuing.
 ## Step 8: Security Considerations
 
 Ask me:
+
 - How do users or systems authenticate?
 - What authorization or access control model is used?
 - What encryption is required (at rest, in transit)?
@@ -153,6 +162,7 @@ Wait for my response before continuing.
 ## Step 9: Development & Testing Environment
 
 Ask me:
+
 - What are the local setup instructions for developers?
 - What testing frameworks are used?
 - What code quality tools are employed?
@@ -162,6 +172,7 @@ Wait for my response before continuing.
 ## Step 10: Future Considerations / Roadmap
 
 Ask me:
+
 - Are there any known architectural debts or planned major changes?
 - What significant future features might impact the architecture?
 - Are there any migration plans or evolutions planned?
@@ -171,6 +182,7 @@ Wait for my response before continuing.
 ## Step 11: Project Identification
 
 Ask me:
+
 - What is the official project name?
 - What is the repository URL?
 - Who is the primary contact or team responsible?
@@ -181,10 +193,12 @@ Wait for my response before continuing.
 ## Step 12: Glossary / Acronyms
 
 Perform the following in order:
+
 1. Extract candidate glossary terms from all prior answers.
 2. Extract candidate glossary terms that may be unfamiliar to non-engineering audiences.
 
 Extraction rules:
+
 - Exclude widely understood technical terms such as:
   API, CI/CD, HTML, CSS, JavaScript, SQL, REST, JSON.
 - Include terms that are:

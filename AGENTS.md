@@ -96,6 +96,7 @@ Content is reviewed through:
 - Template compliance against the HLD structure
 
 When modifying prompts or templates:
+
 - Ensure writing style rules are applied consistently
 - Verify prompt workflows are complete and gated properly
 - Test prompt logic by mentally executing its step-by-step sections
@@ -128,6 +129,7 @@ A plugin packages one or more skills (wrapped prompts) for distribution via the 
 10. **Test skill invocation:** run `apm pack --check-versions --check-clean`; verify skills load in the target harness
 
 **Plugin Structure Example:**
+
 ```
 plugins/my-plugin/
 ├── apm.yml
