@@ -165,7 +165,7 @@ This repository has no npm, Python, build, or language toolchain. APM (`apm` CLI
 - `.github/workflows/generate-marketplace.yml` regenerates and commits the marketplace on release PRs
 - `.github/workflows/apm-check.yml` validates marketplace entries, version alignment, and marketplace cleanliness on PRs touching `.claude-plugin/marketplace.json`
 - `.github/workflows/release-please.yml` runs release-please; when it creates releases, the `publish` job resolves released component paths from the `paths_released` output into `{path, version, tag}` objects and runs a matrix of `.github/workflows/release-plugin.yml`
-- `.github/workflows/release-plugin.yml` is a callable workflow (`workflow_call`, inputs `plugin-path` + `tag`) that gates (`apm marketplace check` + `apm pack --check-versions --check-clean`), packs an `apm pack --archive` zip per plugin, and attaches it to the component's `{name}-v{version}` release
+- `.github/workflows/release-plugin.yml` is a callable workflow (`workflow_call`, inputs `plugin-path` + `tag`) that gates (`apm marketplace check` + `apm pack --check-versions --check-clean`), packs an `apm pack --archive` ZIP per plugin, and attaches it to the component's `{name}-v{version}` release
 - Release versioning is managed by release-please, which bumps `apm.yml` and `plugin.json` versions and tags `{name}-v{version}`
 
 All content changes are direct Markdown edits. Changes take effect upon commit.

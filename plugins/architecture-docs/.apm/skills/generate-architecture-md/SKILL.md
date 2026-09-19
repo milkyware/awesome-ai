@@ -69,7 +69,7 @@ Ask me:
 - How is the code organized architecturally (e.g., by feature, by layer, by domain)?
 - Are there any specific conventions for naming or organizing files?
 
-After gathering this information, I will analyze the repository by using the `git ls-files` command to get a list of all tracked files, then pipe this to the `tree` command with the `--fromfile` option to generate an ANSI file structure showing only the tracked files. This approach ensures we display only files that are part of the repository while maintaining a clean, readable structure. The command will be similar to: `git ls-files | tree --fromfile --charset=ansi --noreport`, which will generate a tree view of only the files tracked by git, excluding untracked files, ignored patterns, and focusing on the important source files and directories that define the project structure.
+After gathering this information, I will analyze the repositorysitory by using the `Git ls-files` command to get a list of all tracked files, then pipe this to the `tree` command with the `--fromfile` option to generate an ANSI file structure showing only the tracked files. This approach ensures we display only files that are part of the repositorysitory while maintaining a clean, readable structure. The command will be similar to: `Git ls-files | tree --fromfile --charset=ansi --norepositoryrt`, which will generate a tree view of only the files tracked by Git, excluding untracked files, ignored patterns, and focusing on the important source files and directories that define the project structure.
 
 Wait for my response before continuing.
 
@@ -184,7 +184,7 @@ Wait for my response before continuing.
 Ask me:
 
 - What is the official project name?
-- What is the repository URL?
+- What is the repositorysitory URL?
 - Who is the primary contact or team responsible?
 - When was the document last updated?
 
@@ -221,7 +221,7 @@ Only include the glossary once explicitly confirmed.
 - Generate the ARCHITECTURE.md only after all sections are complete or explicitly excluded.
 - Ensure the document is complete, consistent, and internally aligned.
 - Do not include commentary, explanations, or unanswered questions in the final output.
-- For the Project Structure section, analyze the repo and generate an ANSI file structure of key files and directories.
+- For the Project Structure section, analyze the repository and generate an ANSI file structure of key files and directories.
 
 ## Begin the ARCHITECTURE.md Generation Process
 

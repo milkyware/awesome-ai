@@ -27,7 +27,7 @@ Your task:
 - When generating the front matter for the ADR (specifically `decision-makers`, `informed`, and `consulted`):
   - Format the list as a valid YAML sequence using the block style (dashes).
   - For any GitHub usernames (values prefixed with "@"), wrap the value in single quotes (e.g. `'@username'`) to ensure valid YAML parsing.
-- Ensure the generated markdown adheres to Markdown linting rules.
+- Ensure the generated Markdown adheres to Markdown linting rules.
 
 ## Process Rules
 
@@ -110,7 +110,7 @@ Based on all responses:
 Generate a suggested ADR filename using the following rules:
 
 - Format: 0000-lowercase-delimited-title-using-hyphens.md
-- Use a four-digit number.
+- Use a four-diGit number.
   - If no ADR number is provided, use "0000".
 - Derive the filename title from the generated ADR title.
 - Use lowercase letters only.
