@@ -1,8 +1,10 @@
 {
-  "exclude-paths": [".git", ".claude-plugin", ".idea", ".vscode", "build"],
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
   "release-type": "simple",
+  "always-update": true,
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
+  "include-commit-authors": true,
   "include-component-in-tag": true,
   "include-v-in-tag": true,
   "include-v-in-release-name": true,
@@ -21,6 +23,12 @@
     { "type": "chore", "section": "🧹 Maintenance" },
     { "type": "revert", "section": "⏪ Reverts" }
   ],
+  "exclude-paths": [
+    ".git",
+    ".claude-plugin",
+    ".idea",
+    ".vscode"
+  ],
   "packages": {
     "plugins/architecture-docs": {
       "component": "architecture-docs",
@@ -38,6 +46,5 @@
         }
       ]
     }
-  },
-  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
+  }
 }
