@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
 
       - name: Run Super Linter
         uses: github/super-linter@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8
