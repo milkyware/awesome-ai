@@ -1,0 +1,22 @@
+name: Super Linter
+
+on:
+  pull_request:
+  workflow_dispatch: 
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Run Super Linter
+        uses: github/super-linter@4ce20838b8ab83717e78138c5b3a1407148e0918 # v8
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
