@@ -6,20 +6,21 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: write
-  issues: write
-  pull-requests: write
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    permissions: 
+      contents: write
+      issues: write
+      pull-requests: write
     outputs:
       releases: ${{ steps.release-matrix.outputs.releases }}
       has-releases: ${{ steps.release-matrix.outputs.has-releases }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
       - name: Generate GitHub App Token
         id: app-token
@@ -69,7 +70,7 @@ jobs:
   publish:
     needs: release-please
     if: ${{ needs.release-please.outputs.has-releases == 'true' }}
-    uses: ./.github/workflows/release-plugin.yml
+    uses: $/.github/workflows/release-plugin.yml
     strategy:
       matrix: ${{ fromJSON(needs.release-please.outputs.releases) }}
     with:
