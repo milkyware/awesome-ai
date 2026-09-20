@@ -23,12 +23,7 @@
     { "type": "chore", "section": "🧹 Maintenance" },
     { "type": "revert", "section": "⏪ Reverts" }
   ],
-  "exclude-paths": [
-    ".git",
-    ".claude-plugin",
-    ".idea",
-    ".vscode"
-  ],
+  "exclude-paths": [".git", ".claude-plugin", ".idea", ".vscode"],
   "packages": {
     "plugins/architecture-docs": {
       "component": "architecture-docs",
