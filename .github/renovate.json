@@ -6,9 +6,14 @@
     "helpers:pinGitHubActionDigests",
     "security:openssf-scorecard"
   ],
-  "labels": ["dependencies", "{{manager}}", "{{updateType}}"],
+  "labels": [
+    "dependencies",
+    "{{manager}}",
+    "{{updateType}}"
+  ],
   "automergeStrategy": "squash",
   "minimumReleaseAge": "14 days",
+  "semanticCommits": "enabled",
   "separateMajorMinor": true,
   "vulnerabilityAlerts": {
     "addLabels": ["security"]
