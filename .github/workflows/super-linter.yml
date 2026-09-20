@@ -3,9 +3,6 @@ name: Super Linter
 on:
   pull_request:
   workflow_dispatch:
-  push: 
-    branches: 
-      - build/super-linter
 
 permissions: 
   contents: read
