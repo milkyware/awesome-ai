@@ -3,7 +3,7 @@ name: Format Prettier
 on:
   pull_request:
     branches-ignore: 
-      - renovate/**
+      - renovate/*
 
 permissions:
   contents: write
