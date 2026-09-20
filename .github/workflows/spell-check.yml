@@ -2,6 +2,8 @@ name: Spell Check
 
 on:
   pull_request:
+    branches-ignore: 
+      - renovate/*
 
 permissions:
   contents: read
