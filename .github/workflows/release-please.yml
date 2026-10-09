@@ -73,6 +73,8 @@ jobs:
     needs: release-please
     if: ${{ needs.release-please.outputs.has-releases == 'true' }}
     uses: $/.github/workflows/release-plugin.yml
+    permissions:
+      contents: write
     strategy:
       matrix: ${{ fromJSON(needs.release-please.outputs.releases) }}
     with:
