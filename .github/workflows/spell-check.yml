@@ -26,14 +26,20 @@ jobs:
       - name: Compose spelling comment
         if: always()
         shell: pwsh
+        env:
+          SPELL_SUCCESS: ${{ steps.spell-check.outputs.success }}
+          SPELL_FILES_CHECKED: ${{ steps.spell-check.outputs.number_of_files_checked }}
+          SPELL_FILES_WITH_ISSUES: ${{ steps.spell-check.outputs.number_of_files_with_issues }}
+          SPELL_ISSUES: ${{ steps.spell-check.outputs.number_of_issues }}
+          SPELL_FILES_WITH_ISSUES_JSON: ${{ steps.spell-check.outputs.files_with_issues }}
         run: |
-          $success = [bool]::Parse('${{ steps.spell-check.outputs.success }}')
+          $success = [bool]::Parse($env:SPELL_SUCCESS)
           $icon = if ($success) { '✅' } else { '❌' }
           $header = if ($success) { 'Spell check passed' } else { 'Spell check failed' }
-          $checked = '${{ steps.spell-check.outputs.number_of_files_checked }}'
-          $fileCount = '${{ steps.spell-check.outputs.number_of_files_with_issues }}'
-          $issues = '${{ steps.spell-check.outputs.number_of_issues }}'
-          $list = @('${{ steps.spell-check.outputs.files_with_issues }}' | ConvertFrom-Json) -join "`n"
+          $checked = $env:SPELL_FILES_CHECKED
+          $fileCount = $env:SPELL_FILES_WITH_ISSUES
+          $issues = $env:SPELL_ISSUES
+          $list = @($env:SPELL_FILES_WITH_ISSUES_JSON | ConvertFrom-Json) -join "`n"
           $runUrl = '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
 
           $failure = ''

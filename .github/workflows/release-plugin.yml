@@ -43,12 +43,14 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
+          PLUGIN_PATH: ${{ inputs.plugin-path }}
+          RELEASE_TAG: ${{ inputs.tag }}
         run: |
-          $archives = @(Get-ChildItem "${{ inputs.plugin-path }}/build" -Filter *.zip -File -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName)
-          if ($archives.Count -eq 0) { throw "No zip archive found under ${{ inputs.plugin-path }}/build" }
-          gh release view "${{ inputs.tag }}" > $null 2>&1
+          $archives = @(Get-ChildItem "$env:PLUGIN_PATH/build" -Filter *.zip -File -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName)
+          if ($archives.Count -eq 0) { throw "No zip archive found under $env:PLUGIN_PATH/build" }
+          gh release view "$env:RELEASE_TAG" > $null 2>&1
           if ($LASTEXITCODE -eq 0) {
-            gh release upload "${{ inputs.tag }}" $archives --clobber
+            gh release upload "$env:RELEASE_TAG" $archives --clobber
           } else {
-            gh release create "${{ inputs.tag }}" $archives --notes "APM bundle for ${{ inputs.tag }}"
+            gh release create "$env:RELEASE_TAG" $archives --notes "APM bundle for $env:RELEASE_TAG"
           }
