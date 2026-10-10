@@ -69,7 +69,7 @@ Ask me:
 - How is the code organized architecturally (e.g., by feature, by layer, by domain)?
 - Are there any specific conventions for naming or organizing files?
 
-After gathering this information, I will analyze the repositorysitory by using the `Git ls-files` command to get a list of all tracked files, then pipe this to the `tree` command with the `--fromfile` option to generate an ANSI file structure showing only the tracked files. This approach ensures we display only files that are part of the repositorysitory while maintaining a clean, readable structure. The command will be similar to: `Git ls-files | tree --fromfile --charset=ansi --norepositoryrt`, which will generate a tree view of only the files tracked by Git, excluding untracked files, ignored patterns, and focusing on the important source files and directories that define the project structure.
+After gathering this information, I will analyze the repository by using the `Git ls-files` command to get a list of all tracked files, then pipe this to the `tree` command with the `--fromfile` option to generate an ANSI file structure showing only the tracked files. This approach ensures we display only files that are part of the repository while maintaining a clean, readable structure. The command will be similar to: `Git ls-files | tree --fromfile --charset=ansi --norepositoryrt`, which will generate a tree view of only the files tracked by Git, excluding untracked files, ignored patterns, and focusing on the important source files and directories that define the project structure.
 
 Wait for my response before continuing.
 
@@ -184,7 +184,7 @@ Wait for my response before continuing.
 Ask me:
 
 - What is the official project name?
-- What is the repositorysitory URL?
+- What is the repository URL?
 - Who is the primary contact or team responsible?
 - When was the document last updated?
 

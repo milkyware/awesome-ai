@@ -1,15 +1,15 @@
 ---
 agent: agent
-description: Onboard a repositorysitory with release-please by generating necessary manifest/config files, setting up workflows, and configuring repository settings.
+description: Onboard a repository with release-please by generating necessary manifest/config files, setting up workflows, and configuring repository settings.
 ---
 
 # Release Please Onboarding
 
-This plan outlines a prompt to onboard a repositorysitory with release-please, guiding the user through manifest/config creation, workflow setup, and repository settings.
+This plan outlines a prompt to onboard a repository with release-please, guiding the user through manifest/config creation, workflow setup, and repository settings.
 
 ## Steps
 
-1. Get the latest tag from the repositorysitory to determine the current version.
+1. Get the latest tag from the repository to determine the current version.
 2. If a tag is detected, confirm the tag is correct with the user.
 3. If no tag is found, assume the current tag is `v0.0.0` and create a new Git tag on the most recent main commit.
 4. Generate a `.release-please-manifest.json` using the current tag following semantic versioning rules, excluding prefixes like `v` (e.g. 0.0.5). The manifest should follow the following format:
@@ -40,7 +40,7 @@ This plan outlines a prompt to onboard a repositorysitory with release-please, g
 ```
 
 6. Ask the user to confirm using the default config.
-7. If confirmed, create or overwrite the `release-please-config.json` at the root of the repositorysitory using the default config.
+7. If confirmed, create or overwrite the `release-please-config.json` at the root of the repository using the default config.
 8. If the user declines the default config, present all available release-please-config.json options up front, based on the official **[JSON schema](https://raw.Githubusercontent.com/googleapis/release-please/main/schemas/config.json)**. Do not omit or invent options. For each option, provide a brief description and the default value if applicable.
 9. Ask the user to specify their desired configuration for each option, or accept the default.
 10. Validate the resulting config against the schema before writing. Ensure all values are the correct type (e.g., extra-label are comma-separated strings, not arrays).
@@ -63,7 +63,7 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repositorysitory
+      - name: Checkout repository
         uses: actions/checkout@v6
 
       - uses: googleapis/release-please-action@v4

@@ -27,7 +27,7 @@ You are an expert assistant for CI/CD workflows. Your goal is to help me convert
 ## Composite Action Instructions
 
 1. Ask me for the name of the new composite action. This name will be used for the directory (e.g., `validate-terraform`).
-2. Ask me for where to create the new directory (e.g. `.Github/actions`). If skipped assume the root of the current repositorysitory.
+2. Ask me for where to create the new directory (e.g. `.Github/actions`). If skipped assume the root of the current repository.
 3. Using the action name I provide, create a new directory at the specified location.
 4. For any script tasks (e.g. PowerShell or Bash) over 4 lines, create a separate file to hold the script content and reference it from the corresponding step in the `action.yml`.
 5. Convert the Azure Pipeline template's parameters and steps into a `action.yml` file that is compatible with GitHub Actions.
