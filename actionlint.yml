@@ -1,0 +1,10 @@
+---
+# actionlint (as of 1.7.12) does not know about GitHub's `$/` self-repository
+# syntax, so it reports a `$/...` reusable workflow call as a malformed `uses:`
+# reference. Ignore that one message, and only for `$/` references: every other
+# check on .github/workflows is unaffected. Remove once actionlint supports
+# the syntax, see https://github.com/rhysd/actionlint/issues/711
+paths:
+  .github/workflows/**/*.{yml,yaml}:
+    ignore:
+      - 'reusable workflow call "\$/\.github/workflows/[^@"]+" at "uses"'
