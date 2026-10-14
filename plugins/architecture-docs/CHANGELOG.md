@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.6](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.5...architecture-docs-v0.0.6) (2026-10-14)
+
+
+### 🩹 Fixes
+
+* `repository` spelling ([8b013b7](https://github.com/milkyware/awesome-ai/commit/8b013b7661a1292693e26716f1cfc34119306bf0))
+
+
+### 🧹 Maintenance
+
+* format with prettier ([2c729c7](https://github.com/milkyware/awesome-ai/commit/2c729c7078c2db2b4610c45557a2f1a957d59b61))
+* formatted repo ([de890d6](https://github.com/milkyware/awesome-ai/commit/de890d6ee4c978bc77f13d5e667d1de4f5124694))
+
 ## [0.0.5](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.4...architecture-docs-v0.0.5) (2026-09-14)
 
 ### 🚀 Enhancements

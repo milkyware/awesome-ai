@@ -1,7 +1,7 @@
 {
   "name": "architecture-docs",
   "description": "Generate Architecture Decision Records (ADRs) and High-Level Design (HLD) documents with structured, gated workflows.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": {
     "name": "MilkyWare"
   },
