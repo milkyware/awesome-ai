@@ -40,6 +40,22 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/devops": {
+      "component": "devops",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "apm.yml",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }
