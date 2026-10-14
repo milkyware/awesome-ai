@@ -24,6 +24,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: ${{ github.event_name != 'pull_request' }}
           VALIDATE_BIOME_FORMAT: false
           VALIDATE_JSCPD: false
