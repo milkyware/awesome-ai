@@ -9,7 +9,7 @@
     - [Install in Claude Code](#install-in-claude-code)
   - [Available Skills](#available-skills)
     - [architecture-docs](#architecture-docs)
-    - [devops](#devops)
+    - [DevOps](#devops)
   - [Quick Start](#quick-start)
     - [Using skills.sh](#using-skillssh)
     - [Using the GitHub Copilot plugin](#using-the-github-copilot-plugin)
@@ -86,7 +86,7 @@ These skills are built on enterprise-grade workflows with strict writing standar
 
 [Plugin documentation](./plugins/architecture-docs/README.md)
 
-### devops
+### DevOps
 
 **Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.**
 
