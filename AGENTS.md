@@ -29,7 +29,8 @@
 3. **`plugin.json` is hand-authored and committed.** Do not rely on `apm pack` to synthesise it: APM strips the `skills` array from generated manifests, and Copilot CLI needs explicit `skills` paths pointing at `.apm/skills/<name>`.
 4. **Versioning strategy is `tag_pattern`** with `tagPattern: "{name}-v{version}"`, matching the release-please tag convention (e.g. `devops-v0.0.1`).
 5. **Marketplace output is defaulted** to `.claude-plugin/marketplace.json`; Copilot CLI reads this location as well as `.github/plugin/marketplace.json`.
-6. **Root `apm.yml` versions are maintained by hand.** `apm pack` copies each `marketplace.packages[].version` into the generated marketplace, while `--check-versions` validates tag alignment against the plugin's own `apm.yml`. The two values can therefore drift without failing any gate. release-please bumps only the plugin manifests, so update the root entry when a plugin is released.
+6. **Local marketplace entries omit `version`.** For local (`./`) sources, `apm pack` reads the display version from each package's own `apm.yml`, so the plugin manifest is the single source of truth and release-please keeps the marketplace in sync automatically. Declaring `version` on a local entry overrides that and reintroduces drift: `--check-versions` validates tag alignment against the plugin manifest, so no gate ever compares the two values. Only remote packages, which have no local manifest to read, declare `version` or `ref`.
+7. **The root `version:` is an inert placeholder.** The root manifest is never published as a package (release-please tracks only `plugins/*`) and no gate reads it, so it stays at `1.0.0`. Do not bump it during a plugin release; it becomes live only if the repository itself is ever published as an installable package.
 
 ### Skill Design Standards
 
@@ -174,6 +175,6 @@ This repository has no npm, Python, build, or language toolchain. APM (`apm` CLI
 - `.github/workflows/apm-check.yml` validates marketplace entries, version alignment, and marketplace cleanliness on every pull request
 - `.github/workflows/release-please.yml` runs release-please; when it creates releases, the `publish` job resolves released component paths from the `paths_released` output into `{path, version, tag}` objects and runs a matrix of `.github/workflows/release-plugin.yml`
 - `.github/workflows/release-plugin.yml` is a callable workflow (`workflow_call`, inputs `plugin-path` + `tag`) that gates (`apm marketplace check` + `apm pack --check-versions --check-clean`), packs an `apm pack --archive` ZIP per plugin, and attaches it to the component's `{name}-v{version}` release
-- Release versioning is managed by release-please, which bumps each plugin's `apm.yml` and `plugin.json` versions and tags `{name}-v{version}`; it does not bump the root `apm.yml` marketplace versions (see APM Packaging Standards, item 6)
+- Release versioning is managed by release-please, which bumps each plugin's `apm.yml`, `plugin.json`, and `version.txt` and tags `{name}-v{version}`. Because local marketplace entries carry no `version`, the regenerated marketplace picks up each new version automatically (see APM Packaging Standards, items 6 and 7)
 
 All content changes are direct Markdown edits. Changes take effect upon commit.
