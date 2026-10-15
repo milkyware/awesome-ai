@@ -121,10 +121,9 @@ Generate a suggested ADR filename using the following rules:
 
 ## Final ADR Format
 
-```
-Suggested filename:
-0000-example-adr-title.md
+- Suggested filename: 0000-example-adr-title.md
 
+```markdown
 ---
 status: "{status}"
 date: "{date}"
