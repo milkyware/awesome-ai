@@ -14,7 +14,7 @@ composite action or a reusable workflow using the `workflow_call` trigger.
 - If the Azure Pipelines template references other Azure Pipelines templates,
   handle each nested template first. For each one, ask me to either provide the
   path to the template file for conversion or the name of an already converted
-  GitHub action to use in its place. Then recursively perform this conversion
+  GitHub Action to use in its place. Then recursively perform this conversion
   before continuing with the parent template.
 - If you write a custom script to replace an Azure Pipelines task, prefer
   PowerShell and ensure cross-platform compatibility (Windows, Linux, macOS) by
@@ -72,7 +72,7 @@ Then follow the instructions for my chosen output type.
 6. Create the `action.yml` file inside the directory created in step 3.
 7. Create a `README.md` file in the action folder documenting the usage of the
    action, including inputs, outputs, and an example of how to call it. Use the
-   README skeleton in `references/output-templates.md`.
+   readme skeleton in `references/output-templates.md`.
 
 ## Reusable Workflow Instructions
 
@@ -88,7 +88,7 @@ Then follow the instructions for my chosen output type.
 4. Create a Markdown file under `docs/workflows`, using the same base name as the
    workflow file, documenting the usage of the reusable workflow, including
    inputs, outputs, and an example of how to call it from another workflow. Use
-   the README skeleton in `references/output-templates.md`.
+   the readme skeleton in `references/output-templates.md`.
 
 ## Final Checks
 
