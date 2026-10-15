@@ -4,7 +4,7 @@
 
 ## Overview
 
-The **@devops** plugin provides two specialised skills for CI/CD migration and
+The **@DevOps** plugin provides two specialised skills for CI/CD migration and
 release automation:
 
 - **convert-az-pipeline** – Converts an Azure Pipelines template into a reusable
@@ -135,7 +135,7 @@ environment secrets and variables, and flags secret redesign where required.
 
 ## Contributing
 
-To report issues or suggest improvements to the @devops plugin:
+To report issues or suggest improvements to the @DevOps plugin:
 
 1. Open an issue in the [awesome-ai repository](https://github.com/milkyware/awesome-ai)
 2. Reference the plugin name and the skill.

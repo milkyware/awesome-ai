@@ -61,7 +61,7 @@ jobs:
         run: <command>
 ```
 
-## README (action or workflow)
+## Readme (action or workflow)
 
 ````markdown
 # <Name>
