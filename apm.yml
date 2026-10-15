@@ -8,6 +8,9 @@ license: MIT
 # distributable APM packages, each with its own apm.yml under plugins/.
 # `apm pack` compiles this block into .claude-plugin/marketplace.json, which
 # Claude Code, GitHub Copilot CLI, and APM all read as the same artifact.
+# Local (./) entries deliberately omit `version`. `apm pack` reads the display
+# version from each package's own apm.yml, so release-please keeps the
+# marketplace in sync without a second place to edit.
 marketplace:
   owner:
     name: MilkyWare
@@ -20,4 +23,6 @@ marketplace:
     - name: architecture-docs
       description: Generate Architecture Decision Records (ADRs) and High-Level Design (HLD) documents with structured, gated workflows.
       source: ./plugins/architecture-docs
-      version: 0.0.4
+    - name: devops
+      description: Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.
+      source: ./plugins/devops

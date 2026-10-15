@@ -1,0 +1,13 @@
+{
+  "name": "devops",
+  "description": "Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.",
+  "version": "0.0.1",
+  "author": {
+    "name": "MilkyWare"
+  },
+  "license": "MIT",
+  "skills": [
+    "./.apm/skills/convert-az-pipeline",
+    "./.apm/skills/onboard-release-please"
+  ]
+}

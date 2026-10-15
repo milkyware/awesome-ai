@@ -1,0 +1,16 @@
+name: devops
+version: 0.0.1
+description: >-
+  Convert Azure DevOps pipeline templates to GitHub Actions and onboard
+  repositories with release-please using structured, gated workflows.
+author: MilkyWare
+license: MIT
+targets:
+  - copilot
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+devDependencies:
+  apm: []
+scripts: {}

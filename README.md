@@ -9,6 +9,7 @@
     - [Install in Claude Code](#install-in-claude-code)
   - [Available Skills](#available-skills)
     - [architecture-docs](#architecture-docs)
+    - [DevOps](#devops)
   - [Quick Start](#quick-start)
     - [Using skills.sh](#using-skillssh)
     - [Using the GitHub Copilot plugin](#using-the-github-copilot-plugin)
@@ -28,8 +29,6 @@ This repository uses **APM as the source of truth** for authoring and packaging,
 - **`plugins/*/apm.yml`** – Per-plugin APM manifests (source of truth per package)
 - **`plugins/*/.apm/`** – APM primitives (skills) authored with APM conventions
 - **`plugins/*/plugin.json`** – Authored Copilot-compatible plugin manifest (skills declared explicitly for Copilot CLI)
-- **`/prompts`** – Reusable prompts for generating architectural artefacts
-- **`/docs`** – Templates and style guides
 
 ## Install
 
@@ -41,24 +40,26 @@ Install the repository with `skills.sh` for a cross-platform workflow that works
 npx skills add milkyware/awesome-ai
 ```
 
-This exposes the available architecture and documentation skills from the repository without relying on a harness-specific plugin workflow.
+This exposes the available architecture, documentation, and DevOps skills from the repository without relying on a harness-specific plugin workflow.
 
 ### Install as an APM Package
 
-Register the marketplace and install the `architecture-docs` package with APM:
+Register the marketplace and install the packages you need with APM:
 
 ```bash
 apm marketplace add milkyware/awesome-ai
 apm install architecture-docs@awesome-ai
+apm install devops@awesome-ai
 ```
 
 ### Install as a GitHub Copilot Plugin
 
-First add this repository to the plugin marketplace, then install the `architecture-docs` plugin.
+First add this repository to the plugin marketplace, then install a plugin.
 
 ```bash
 copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
 copilot /plugin install architecture-docs
+copilot /plugin install devops
 ```
 
 ### Install in Claude Code
@@ -66,6 +67,7 @@ copilot /plugin install architecture-docs
 ```bash
 apm marketplace add milkyware/awesome-ai
 apm install architecture-docs@awesome-ai
+apm install devops@awesome-ai
 ```
 
 ## Available Skills
@@ -80,9 +82,20 @@ The repository currently provides these architecture-focused skills:
 - **`generate-hld`** – Comprehensive guidance for generating High-Level Design documents
 - **`generate-architecture-md`** – Guidance for creating an `ARCHITECTURE.md` document for rapid codebase understanding
 
-These skills are built on enterprise-grade prompts with strict writing standards: UK English, technical precision, and no fabrication.
+These skills are built on enterprise-grade workflows with strict writing standards: UK English, technical precision, and no fabrication.
 
 [Plugin documentation](./plugins/architecture-docs/README.md)
+
+### DevOps
+
+**Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.**
+
+The `devops` plugin provides these CI/CD skills:
+
+- **`convert-az-pipeline`** – Converts an Azure Pipelines template into a reusable GitHub Actions composite action or `workflow_call` workflow, mapping tasks, expressions, and variables
+- **`onboard-release-please`** – Onboards a repository with release-please for single-package or mono-repo layouts, generating the manifest, configuration, and workflows
+
+[Plugin documentation](./plugins/devops/README.md)
 
 ## Quick Start
 
@@ -93,6 +106,8 @@ After installation, open your preferred supported coding agent and invoke one of
 - `/generate-adr` - Create an Architecture Decision Record for introducing Azure Front Door
 - `/generate-hld` - Produce a High-Level Design for a document processing platform on Azure
 - `/generate-architecture-md` - Create an ARCHITECTURE.md document for this repository
+- `/convert-az-pipeline` - Convert an Azure Pipelines template into reusable GitHub Actions
+- `/onboard-release-please` - Onboard a repository with release-please
 
 ### Using the GitHub Copilot plugin
 
@@ -119,13 +134,27 @@ copilot
 /architecture-docs:generate-architecture-md
 ```
 
+Convert an Azure Pipeline:
+
+```bash
+copilot
+/devops:convert-az-pipeline
+```
+
+Onboard a repository with release-please:
+
+```bash
+copilot
+/devops:onboard-release-please
+```
+
 ## Contributing
 
-To contribute improvements, report issues, or suggest new prompts/skills:
+To contribute improvements, report issues, or suggest new skills:
 
 1. Open an [issue](https://github.com/milkyware/awesome-ai/issues) with details
 2. For new content, describe the use case and include examples
-3. Ensure all prompts follow the [Writing Style Rules](./plugins/architecture-docs/README.md#writing-standards)
+3. Ensure all skills follow the [Writing Style Rules](./plugins/architecture-docs/README.md#writing-standards)
 4. Submit a pull request with a clear description
 
 ## License

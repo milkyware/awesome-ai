@@ -1,3 +1,4 @@
 {
-  "plugins/architecture-docs": "0.0.6"
+  "plugins/architecture-docs": "0.0.6",
+  "plugins/devops": "0.0.1"
 }

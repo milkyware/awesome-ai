@@ -27,7 +27,7 @@ Your task:
 - When generating the front matter for the ADR (specifically `decision-makers`, `informed`, and `consulted`):
   - Format the list as a valid YAML sequence using the block style (dashes).
   - For any GitHub usernames (values prefixed with "@"), wrap the value in single quotes (e.g. `'@username'`) to ensure valid YAML parsing.
-- Ensure the generated Markdown adheres to Markdown linting rules.
+- Ensure the generated Markdown adheres to Markdown linter rules.
 
 ## Process Rules
 
@@ -121,37 +121,41 @@ Generate a suggested ADR filename using the following rules:
 
 ## Final ADR Format
 
-```
-Suggested filename:
-0000-example-adr-title.md
+- Suggested filename: 0000-example-adr-title.md
 
+```markdown
 ---
 status: "{status}"
 date: "{date}"
-decision-makers: {decision-makers}
-consulted: {consulted}
-informed: {informed}
+decision-makers: { decision-makers }
+consulted: { consulted }
+informed: { informed }
 ---
 
 # {Generated ADR Title}
 
 ## Context and Problem Statement
+
 {Context}
 
 ## Decision Drivers
+
 - {Driver 1}
 - {Driver 2}
 - ...
 
 ## Considered Options
+
 - {Option 1}
 - {Option 2}
 - {Option 3}
 
 ## Decision Outcome
+
 Chosen option: "{Chosen option}", because {justification}.
 
 ### Consequences
+
 - Good, because {positive consequence}
 - Bad, because {negative consequence}
   - Mitigation, {mitigation}
