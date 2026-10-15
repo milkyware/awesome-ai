@@ -1,0 +1,5 @@
+rules:
+  artipacked:
+    # These workflows push commits and rely on the checkout credentials.
+    ignore:
+      - generate-marketplace.yml
