@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.6...architecture-docs-v0.0.7) (2026-10-15)
+
+
+### 🚀 Enhancements
+
+* migrated prompts to new `devops` plugin ([#30](https://github.com/milkyware/awesome-ai/issues/30)) ([745858c](https://github.com/milkyware/awesome-ai/commit/745858c4af1df54b02d46cfeaf1133fb2518ec3b))
+
 ## [0.0.6](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.5...architecture-docs-v0.0.6) (2026-10-14)
 
 
