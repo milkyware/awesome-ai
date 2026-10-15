@@ -14,7 +14,7 @@
     {
       "name": "devops",
       "description": "Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "source": "./plugins/devops"
     }
   ]

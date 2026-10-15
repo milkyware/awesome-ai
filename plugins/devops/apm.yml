@@ -1,5 +1,5 @@
 name: devops
-version: 0.0.1
+version: 0.0.2
 description: >-
   Convert Azure DevOps pipeline templates to GitHub Actions and onboard
   repositories with release-please using structured, gated workflows.
