@@ -7,18 +7,20 @@
     - [Install as an APM Package](#install-as-an-apm-package)
     - [Install as a GitHub Copilot Plugin](#install-as-a-github-copilot-plugin)
     - [Install in Claude Code](#install-in-claude-code)
-  - [Available Skills](#available-skills)
+  - [Available Plugins](#available-plugins)
     - [architecture-docs](#architecture-docs)
     - [DevOps](#devops)
+    - [Agent Workflow](#agent-workflow)
   - [Quick Start](#quick-start)
     - [Using skills.sh](#using-skillssh)
     - [Using the GitHub Copilot plugin](#using-the-github-copilot-plugin)
+    - [Using the Agent Workflow](#using-the-agent-workflow)
   - [Contributing](#contributing)
   - [License](#license)
 
 [![skills.sh](https://img.shields.io/badge/skills.sh-grey?logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04IDFMMTYgMTVIMEw4IDFaIi8%2BPC9zdmc%2B&style=flat)](https://skills.sh/milkyware/awesome-ai)
 
-A curated collection of enterprise-grade skills, prompts, templates, and documentation tools for AI-assisted software delivery and architecture design. Packages are authored with Microsoft Agent Package Manager (APM) and distributed across multiple AI harnesses.
+A curated collection of enterprise-grade skills and agents for AI-assisted software delivery, architecture design, and DevOps automation. Packages are authored with Microsoft Agent Package Manager (APM) and distributed across multiple AI harnesses.
 
 ## Contents
 
@@ -27,7 +29,7 @@ This repository uses **APM as the source of truth** for authoring and packaging,
 - **`apm.yml`** – Root marketplace manifest (source of truth for distribution)
 - **`.claude-plugin/marketplace.json`** – Generated marketplace consumed by GitHub Copilot CLI, Claude Code, APM, and skills.sh
 - **`plugins/*/apm.yml`** – Per-plugin APM manifests (source of truth per package)
-- **`plugins/*/.apm/`** – APM primitives (skills) authored with APM conventions
+- **`plugins/*/.apm/`** – APM primitives (skills and agents) authored with APM conventions
 - **`plugins/*/plugin.json`** – Authored Copilot-compatible plugin manifest (skills declared explicitly for Copilot CLI)
 
 ## Install
@@ -50,6 +52,7 @@ Register the marketplace and install the packages you need with APM:
 apm marketplace add milkyware/awesome-ai
 apm install architecture-docs@awesome-ai
 apm install devops@awesome-ai
+apm install agent-workflow@awesome-ai
 ```
 
 ### Install as a GitHub Copilot Plugin
@@ -60,6 +63,7 @@ First add this repository to the plugin marketplace, then install a plugin.
 copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
 copilot /plugin install architecture-docs
 copilot /plugin install devops
+copilot /plugin install agent-workflow
 ```
 
 ### Install in Claude Code
@@ -68,9 +72,10 @@ copilot /plugin install devops
 apm marketplace add milkyware/awesome-ai
 apm install architecture-docs@awesome-ai
 apm install devops@awesome-ai
+apm install agent-workflow@awesome-ai
 ```
 
-## Available Skills
+## Available Plugins
 
 ### architecture-docs
 
@@ -96,6 +101,21 @@ The `devops` plugin provides these CI/CD skills:
 - **`onboard-release-please`** – Onboards a repository with release-please for single-package or mono-repo layouts, generating the manifest, configuration, and workflows
 
 [Plugin documentation](./plugins/devops/README.md)
+
+### Agent Workflow
+
+**Human-supervised orchestration of specialist AI coding agents through an explicit, repeatable workflow with bounded tasks and verified results.**
+
+The `agent-workflow` plugin provides an orchestrator and three specialists:
+
+- **`orchestrator`** – Owns the workflow: plans, delegates, verifies evidence, and reports
+- **`researcher`** – Read-only investigation with evidence and explicit gaps
+- **`implementer`** – Executes one bounded task and reports verification it actually ran
+- **`reviewer`** – Independent assessment with a severity-graded verdict
+
+Unlike the skill-based plugins, `agent-workflow` ships agents. It exists for work that needs research, an approved plan, delegated implementation, and independent review rather than a single pass.
+
+[Plugin documentation](./plugins/agent-workflow/README.md)
 
 ## Quick Start
 
@@ -148,9 +168,22 @@ copilot
 /devops:onboard-release-please
 ```
 
+### Using the Agent Workflow
+
+After installation, start the orchestrator and state your objective. It researches,
+plans, and waits for your approval before implementing:
+
+```bash
+copilot
+@orchestrator Plan and deliver <your objective>
+```
+
+The orchestrator delegates to `researcher`, `implementer`, and `reviewer` as the
+work requires, and reports what was verified rather than what was merely claimed.
+
 ## Contributing
 
-To contribute improvements, report issues, or suggest new skills:
+To contribute improvements, report issues, or suggest new skills or agents:
 
 1. Open an [issue](https://github.com/milkyware/awesome-ai/issues) with details
 2. For new content, describe the use case and include examples

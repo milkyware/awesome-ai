@@ -6,6 +6,8 @@ dictionaries:
   - powershell
 words:
   - frontmatter
+  - handoff
+  - handoffs
   - intune
   - kiro
   - lastexitcode
@@ -13,6 +15,8 @@ words:
   - negotiables
   - opencode
   - openssf
+  - worktree
+  - worktrees
   - xsiam
 patterns:
   - name: MARKDOWN_CODE_BLOCK

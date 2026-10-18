@@ -1,0 +1,17 @@
+name: agent-workflow
+version: 0.0.1
+description: >-
+  Human-supervised orchestration of specialist AI coding agents through an
+  explicit, repeatable workflow with bounded tasks and verified results.
+author: MilkyWare
+license: MIT
+targets:
+  - copilot
+  - opencode
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+devDependencies:
+  apm: []
+scripts: {}
