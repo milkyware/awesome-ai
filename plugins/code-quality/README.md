@@ -6,7 +6,7 @@
 
 The **@code-quality** plugin provides:
 
-- **code-review** – Reviews the code in the current Git branch before a pull
+- **`code-review`** – Reviews the code in the current Git branch before a pull
   request is raised, against the branch objective, repository instructions,
   code quality, tests, logging, scope and merge readiness.
 
