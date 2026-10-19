@@ -107,14 +107,11 @@ For each suspected issue, verify it against surrounding code and the complete di
 
 ### 7. Run safe validation
 
-Run proportionate read-only commands where permitted, including those documented in `AGENTS.md`, such as:
+Run proportionate, read-only validation to corroborate the review.
 
-- `git status`, `git diff`, `git log`, `git merge-base`
-- `dotnet build`
-- `dotnet test`
-- `dotnet format --verify-no-changes`
-- `terraform fmt -check`
-- `terraform validate`
+1. Use validation commands documented in project instructions (`AGENTS.md`, `.github/instructions/*`, contribution guidance) where they exist, plus `git status`, `git diff`, `git log`, and `git merge-base`.
+2. Where instructions are silent, derive commands from the technology context established in step 2 and the repository's CI configuration: build, tests, format checks, lint and static analysis, and infrastructure validation.
+3. Run every command in its non-mutating form (for example a `--check` flag rather than an apply or write mode). If a documented command has no non-mutating form, skip it and note it in the report.
 
 Do not run commands that may modify the working tree, Git history, infrastructure, data, or external systems.
 
