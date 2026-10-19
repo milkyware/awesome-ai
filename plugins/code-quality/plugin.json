@@ -6,7 +6,5 @@
     "name": "MilkyWare"
   },
   "license": "MIT",
-  "skills": [
-    "./.apm/skills/code-review"
-  ]
+  "skills": ["./.apm/skills/code-review"]
 }

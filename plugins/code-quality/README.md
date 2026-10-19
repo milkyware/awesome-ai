@@ -68,12 +68,12 @@ Further review required / Not ready for merge.
 
 ### `/skills code-review`
 
-| Aspect         | Details                                              |
-| -------------- | ---------------------------------------------------- |
-| **Skill Name** | `code-review`                                        |
-| **Purpose**    | Read-only pre-PR review of the current Git branch    |
-| **Output**     | Findings, testing and scope summary, merge verdict   |
-| **Language**   | UK English                                           |
+| Aspect         | Details                                            |
+| -------------- | -------------------------------------------------- |
+| **Skill Name** | `code-review`                                      |
+| **Purpose**    | Read-only pre-PR review of the current Git branch  |
+| **Output**     | Findings, testing and scope summary, merge verdict |
+| **Language**   | UK English                                         |
 
 ## Key Features
 
