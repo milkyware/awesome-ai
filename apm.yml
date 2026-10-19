@@ -26,3 +26,6 @@ marketplace:
     - name: devops
       description: Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.
       source: ./plugins/devops
+    - name: code-quality
+      description: Review branch changes for correctness, scope and merge readiness using structured, gated workflows.
+      source: ./plugins/code-quality

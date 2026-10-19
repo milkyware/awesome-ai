@@ -16,6 +16,12 @@
       "description": "Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.",
       "version": "0.0.2",
       "source": "./plugins/devops"
+    },
+    {
+      "name": "code-quality",
+      "description": "Review branch changes for correctness, scope and merge readiness using structured, gated workflows.",
+      "version": "0.0.1",
+      "source": "./plugins/code-quality"
     }
   ]
 }
