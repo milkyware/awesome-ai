@@ -52,7 +52,9 @@ Omit empty sections unless the missing content must be clarified for delivery. D
 
 ## 4. Confirm before writing
 
-Show a short preview of the summary, project, issue type, parent (if any), key acceptance criteria and any requested metadata when material details were inferred or remain uncertain. Ask for confirmation **once** before the write if the user has not already explicitly authorised creation using the final proposed details. A direct, sufficiently detailed request to create the issue counts as authorisation; avoid an unnecessary extra approval loop.
+- Show a short preview of the summary, project, issue type, parent (if any), key acceptance criteria and any requested metadata when material details were inferred or remain uncertain.
+- Ask for confirmation **once** before the write if the user has not already explicitly authorised creation using the final proposed details.
+- A direct, sufficiently detailed request to create the issue counts as authorisation; avoid an unnecessary extra approval loop.
 
 Do not create a duplicate after a timeout or ambiguous tool failure without checking whether the previous request succeeded.
 
