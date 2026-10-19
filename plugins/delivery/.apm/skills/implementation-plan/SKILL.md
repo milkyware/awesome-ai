@@ -13,10 +13,10 @@ Do not reopen settled design decisions unless repository evidence shows that the
 
 Discover and follow all instructions applicable to the planned changes, including:
 
-* `AGENTS.md`, including nested files whose scope covers affected paths;
-* `.github/copilot-instructions.md`;
-* `.github/instructions/*.md` and their path filters;
-* equivalent repository-specific instruction files.
+- `AGENTS.md`, including nested files whose scope covers affected paths;
+- `.github/copilot-instructions.md`;
+- `.github/instructions/*.md` and their path filters;
+- equivalent repository-specific instruction files.
 
 Resolve scope and precedence before preparing the plan. Apply relevant constraints directly to implementation steps.
 
@@ -24,10 +24,10 @@ Resolve scope and precedence before preparing the plan. Apply relevant constrain
 
 Inspect only what is needed to make the handoff executable:
 
-* affected projects, files, symbols, configuration, and dependency registrations;
-* existing patterns and neighbouring implementations;
-* tests, fixtures, mocks, and validation commands;
-* dependency versions or external documentation where they affect implementation.
+- affected projects, files, symbols, configuration, and dependency registrations;
+- existing patterns and neighbouring implementations;
+- tests, fixtures, mocks, and validation commands;
+- dependency versions or external documentation where they affect implementation.
 
 Prefer repository evidence over intuition. Distinguish verified facts from assumptions. Never invent file paths, symbols, signatures, or commands; provide a precise search target when exact details cannot be verified.
 
@@ -39,20 +39,20 @@ Use the following structure.
 
 State:
 
-* current behaviour;
-* required outcome;
-* scope;
-* constraints;
-* non-goals.
+- current behaviour;
+- required outcome;
+- scope;
+- constraints;
+- non-goals.
 
 ### Agreed design
 
 Summarise:
 
-* the chosen approach;
-* component responsibilities;
-* data or control flow;
-* decisions the implementation agent must preserve.
+- the chosen approach;
+- component responsibilities;
+- data or control flow;
+- decisions the implementation agent must preserve.
 
 Do not re-evaluate alternatives unless needed to explain an implementation constraint.
 
@@ -60,10 +60,10 @@ Do not re-evaluate alternatives unless needed to explain an implementation const
 
 Identify:
 
-* applicable project instructions;
-* relevant projects, files, and symbols;
-* configuration and dependency registrations;
-* tests, fixtures, and existing patterns.
+- applicable project instructions;
+- relevant projects, files, and symbols;
+- configuration and dependency registrations;
+- tests, fixtures, and existing patterns.
 
 ### Implementation steps
 
@@ -71,14 +71,14 @@ Provide one canonical, ordered checklist of atomic changes.
 
 For each step include, where relevant:
 
-* file path or precise search target;
-* symbol or code area;
-* exact required change;
-* expected signature or contract;
-* dependency on earlier steps;
-* required observable behaviour;
-* associated tests;
-* applicable scoped instructions.
+- file path or precise search target;
+- symbol or code area;
+- exact required change;
+- expected signature or contract;
+- dependency on earlier steps;
+- required observable behaviour;
+- associated tests;
+- applicable scoped instructions.
 
 Avoid vague directions such as “update the service”, “add validation”, “handle errors”, or “write tests”. State the triggering condition, required action, and expected result.
 
@@ -86,26 +86,26 @@ Avoid vague directions such as “update the service”, “add validation”, �
 
 Define only the relevant:
 
-* success behaviour;
-* validation and failure behaviour;
-* cancellation and timeout handling;
-* concurrency and idempotency;
-* logging and observability;
-* security and authorisation;
-* compatibility and migration behaviour;
-* rollback or contingency measures.
+- success behaviour;
+- validation and failure behaviour;
+- cancellation and timeout handling;
+- concurrency and idempotency;
+- logging and observability;
+- security and authorisation;
+- compatibility and migration behaviour;
+- rollback or contingency measures.
 
 ### Test plan
 
 For each required test specify:
 
-* project and target file or fixture;
-* scenario or proposed test name;
-* setup and dependencies;
-* action;
-* observable assertions;
-* mocks, fakes, or fixtures;
-* edge and regression coverage.
+- project and target file or fixture;
+- scenario or proposed test name;
+- setup and dependencies;
+- action;
+- observable assertions;
+- mocks, fakes, or fixtures;
+- edge and regression coverage.
 
 Prefer observable behaviour over internal implementation details.
 
@@ -113,18 +113,18 @@ Prefer observable behaviour over internal implementation details.
 
 Provide:
 
-* exact targeted and broad validation commands where verified;
-* expected successful results;
-* manual or environment-specific checks.
+- exact targeted and broad validation commands where verified;
+- expected successful results;
+- manual or environment-specific checks.
 
 ### Risks and safeguards
 
 List:
 
-* likely implementation mistakes;
-* assumptions that must hold;
-* compatibility or migration hazards;
-* safeguards the implementation agent must preserve.
+- likely implementation mistakes;
+- assumptions that must hold;
+- compatibility or migration hazards;
+- safeguards the implementation agent must preserve.
 
 ### Completion criteria
 
@@ -134,11 +134,11 @@ Provide objective, independently verifiable conditions for completion.
 
 Before returning the plan, verify that:
 
-* applicable repository instructions are honoured;
-* the agreed design has been preserved;
-* the checklist is complete, internally consistent, and correctly ordered;
-* no step requires the implementation agent to make a material design decision;
-* risks, dependencies, assumptions, and unknowns are visible;
-* exact details are evidence-backed;
-* the plan is concise but sufficient for implementation;
-* nothing implies that changes were made.
+- applicable repository instructions are honoured;
+- the agreed design has been preserved;
+- the checklist is complete, internally consistent, and correctly ordered;
+- no step requires the implementation agent to make a material design decision;
+- risks, dependencies, assumptions, and unknowns are visible;
+- exact details are evidence-backed;
+- the plan is concise but sufficient for implementation;
+- nothing implies that changes were made.

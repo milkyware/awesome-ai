@@ -90,21 +90,21 @@ Requires a working Atlassian MCP integration with Jira create permission.
 
 ### `/skills implementation-plan`
 
-| Aspect         | Details                                                        |
-| -------------- | -------------------------------------------------------------- |
-| **Skill Name** | `implementation-plan`                                          |
-| **Purpose**    | Repository-grounded implementation handoff for a coding agent  |
+| Aspect         | Details                                                              |
+| -------------- | -------------------------------------------------------------------- |
+| **Skill Name** | `implementation-plan`                                                |
+| **Purpose**    | Repository-grounded implementation handoff for a coding agent        |
 | **Output**     | Ordered steps, requirements, tests, validation, risks, done criteria |
-| **Language**   | UK English                                                     |
+| **Language**   | UK English                                                           |
 
 ### `/skills create-jira-ticket`
 
-| Aspect         | Details                                                     |
-| -------------- | ----------------------------------------------------------- |
-| **Skill Name** | `create-jira-ticket`                                        |
-| **Purpose**    | Create Jira issues with testable acceptance criteria        |
-| **Output**     | Created Jira issue key and URL, or a complete ticket draft  |
-| **Language**   | UK English                                                  |
+| Aspect         | Details                                                    |
+| -------------- | ---------------------------------------------------------- |
+| **Skill Name** | `create-jira-ticket`                                       |
+| **Purpose**    | Create Jira issues with testable acceptance criteria       |
+| **Output**     | Created Jira issue key and URL, or a complete ticket draft |
+| **Language**   | UK English                                                 |
 
 ## Key Features
 
