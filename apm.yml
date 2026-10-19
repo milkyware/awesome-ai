@@ -26,3 +26,6 @@ marketplace:
     - name: devops
       description: Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.
       source: ./plugins/devops
+    - name: delivery
+      description: Produce implementation-ready plans and create delivery-ready Jira tickets using structured, gated workflows.
+      source: ./plugins/delivery

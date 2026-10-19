@@ -1,0 +1,16 @@
+name: delivery
+version: 0.0.1
+description: >-
+  Produce implementation-ready plans and create delivery-ready Jira tickets
+  using structured, gated workflows.
+author: MilkyWare
+license: MIT
+targets:
+  - copilot
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+devDependencies:
+  apm: []
+scripts: {}
