@@ -23,12 +23,12 @@ marketplace:
     - name: architecture-docs
       description: Generate Architecture Decision Records (ADRs) and High-Level Design (HLD) documents with structured, gated workflows.
       source: ./plugins/architecture-docs
-    - name: devops
-      description: Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.
-      source: ./plugins/devops
     - name: code-quality
       description: Review branch changes for correctness, scope and merge readiness using structured, gated workflows.
       source: ./plugins/code-quality
     - name: delivery
       description: Produce implementation-ready plans and create delivery-ready Jira tickets using structured, gated workflows.
       source: ./plugins/delivery
+    - name: devops
+      description: Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.
+      source: ./plugins/devops
