@@ -72,6 +72,22 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/delivery": {
+      "component": "delivery",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "apm.yml",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }
