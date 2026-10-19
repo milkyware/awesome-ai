@@ -18,7 +18,7 @@ Create a Jira issue that can be understood and delivered without the original co
 
 Use details already stated in the request and conversation. Resolve, in order:
 
-1. **Project**: accept a project key or unambiguous project name. If not provided, ask; use a previously established project only when context makes the choice unambiguous. Do not hard-code a project.
+1. **Project**: accept a project key or unambiguous project name. If not provided, ask; use a previously established project only when context makes the choice unambiguous. Do not hardcode a project.
 2. **Issue type**: honour an explicit choice. Otherwise infer from intent (Bug = defect, Spike = time-boxed investigation, Epic = larger body of work, Sub-task = child work, Story = user-facing capability, Task = other delivery work). If ambiguous, suggest `Story` and ask for confirmation when it matters.
 3. **Summary and scope**: infer a specific, action-led title and content from the request. Ask for essential missing context rather than fabricating it.
 4. **Parent**: ask up front whether the issue should be linked to a parent (Epic or other parent-capable type), regardless of issue type. Set a parent only when the user requests one or has established a project-specific default, and only when the selected issue type supports it. Sub-tasks normally require one. Do not assume every issue type supports a parent.

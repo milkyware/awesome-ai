@@ -111,7 +111,7 @@ Requires a working Atlassian MCP integration with Jira create permission.
 - **Guided Workflows** – Structured, gated sequences ensure completeness.
 - **No Fabrication** – File paths, symbols, field IDs and issue keys come
   from verified evidence only.
-- **Generic by Default** – No hard-coded projects, issue types or custom
+- **Generic by Default** – No hardcoded projects, issue types or custom
   fields; metadata is discovered per project.
 - **Fixed Ticket Structure** – Jira descriptions follow a consistent,
   delivery-ready shape.
