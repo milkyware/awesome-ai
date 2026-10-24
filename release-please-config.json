@@ -41,8 +41,8 @@
         }
       ]
     },
-    "plugins/devops": {
-      "component": "devops",
+    "plugins/code-quality": {
+      "component": "code-quality",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
@@ -59,6 +59,22 @@
     },
     "plugins/delivery": {
       "component": "delivery",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "apm.yml",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "plugins/devops": {
+      "component": "devops",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {

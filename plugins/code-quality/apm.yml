@@ -1,0 +1,16 @@
+name: code-quality
+version: 0.0.1
+description: >-
+  Review branch changes for correctness, scope and merge readiness using
+  structured, gated workflows.
+author: MilkyWare
+license: MIT
+targets:
+  - copilot
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+devDependencies:
+  apm: []
+scripts: {}
