@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "Awesome AI monorepo rule: keep independent APM plugin release streams for component-vX.Y.Z tags (for example, architecture-docs-v0.0.5).",
+      "matchManagers": ["apm"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["milkyware/awesome-ai"],
+      "extractVersion": "^(?<version>.+)$",
+      "versionCompatibility": "^(?<compatibility>.+)-v(?<version>\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?)$",
+      "versioning": "semver",
+      "commitMessageTopic": "{{depName}} APM package"
+    },
+    {
+      "groupName": "Awesome AI Automerge",
+      "matchManagers": ["apm"],
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["milkyware/awesome-ai"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest", "pinDigest"],
+      "addLabels": ["awesome-ai"],
+      "automerge": true,
+      "minimumReleaseAge": "0 days"
+    }
+  ]
+}

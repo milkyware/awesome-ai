@@ -1,194 +1,88 @@
 # Awesome AI
 
-- [Awesome AI](#awesome-ai)
-  - [Contents](#contents)
-  - [Install](#install)
-    - [Recommended: Install With `skills.sh`](#recommended-install-with-skillssh)
-    - [Install as an APM Package](#install-as-an-apm-package)
-    - [Install as a GitHub Copilot Plugin](#install-as-a-github-copilot-plugin)
-    - [Install in Claude Code](#install-in-claude-code)
-  - [Available Plugins](#available-plugins)
-    - [architecture-docs](#architecture-docs)
-    - [DevOps](#devops)
-    - [Agent Workflow](#agent-workflow)
-  - [Quick Start](#quick-start)
-    - [Using skills.sh](#using-skillssh)
-    - [Using the GitHub Copilot plugin](#using-the-github-copilot-plugin)
-    - [Using the Agent Workflow](#using-the-agent-workflow)
-  - [Contributing](#contributing)
-  - [License](#license)
-
 [![skills.sh](https://img.shields.io/badge/skills.sh-grey?logo=data:image/svg%2Bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04IDFMMTYgMTVIMEw4IDFaIi8%2BPC9zdmc%2B&style=flat)](https://skills.sh/milkyware/awesome-ai)
 
-A curated collection of enterprise-grade skills and agents for AI-assisted software delivery, architecture design, and DevOps automation. Packages are authored with Microsoft Agent Package Manager (APM) and distributed across multiple AI harnesses.
+A curated collection of reusable skills for AI-assisted software delivery and architecture design. Skills are authored with Microsoft Agent Package Manager (APM) and distributed to GitHub Copilot CLI, Claude Code, OpenCode, and skills.sh.
 
-## Contents
+## Plugins
 
-This repository uses **APM as the source of truth** for authoring and packaging, and generates harness-specific distribution artifacts from it:
+| Plugin                                                       | Description                                                                                           | Skills / agents                                                  |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [`architecture-docs`](./plugins/architecture-docs/README.md) | Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides | `generate-adr`, `generate-hld`, `generate-architecture-md`       |
+| [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                                    |
+| [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans and delivery-ready Jira tickets                                            | `implementation-plan`, `create-jira-ticket`                      |
+| [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`                  |
+| [`agent-workflow`](./plugins/agent-workflow/README.md)       | Human-supervised orchestration of specialist AI coding agents through bounded, verified tasks         | `orchestrator`, `researcher`, `implementer`, `reviewer` (agents) |
 
-- **`apm.yml`** – Root marketplace manifest (source of truth for distribution)
-- **`.claude-plugin/marketplace.json`** – Generated marketplace consumed by GitHub Copilot CLI, Claude Code, APM, and skills.sh
-- **`plugins/*/apm.yml`** – Per-plugin APM manifests (source of truth per package)
-- **`plugins/*/.apm/`** – APM primitives (skills and agents) authored with APM conventions
-- **`plugins/*/plugin.json`** – Authored Copilot-compatible plugin manifest (skills declared explicitly for Copilot CLI)
+`agent-workflow` ships agents rather than skills. Each plugin README documents installation for its supported harnesses, what it provides, and usage guidance.
 
 ## Install
 
-### Recommended: Install With `skills.sh`
+### skills.sh
 
-Install the repository with `skills.sh` for a cross-platform workflow that works across supported coding agents, including GitHub Copilot.
+Install every skill in the repository with skills.sh:
 
 ```bash
 npx skills add milkyware/awesome-ai
 ```
 
-This exposes the available architecture, documentation, and DevOps skills from the repository without relying on a harness-specific plugin workflow.
+### APM
 
-### Install as an APM Package
-
-Register the marketplace and install the packages you need with APM:
+Register the marketplace once, then install the plugins you need with an explicit target:
 
 ```bash
 apm marketplace add milkyware/awesome-ai
-apm install architecture-docs@awesome-ai
-apm install devops@awesome-ai
-apm install agent-workflow@awesome-ai
+apm install architecture-docs@awesome-ai --target <target>
+apm install code-quality@awesome-ai --target <target>
+apm install delivery@awesome-ai --target <target>
+apm install devops@awesome-ai --target <target>
+apm install agent-workflow@awesome-ai --target <target>
 ```
 
-### Install as a GitHub Copilot Plugin
+`<target>` is `copilot`, `claude`, or `opencode`. Use the same target for every install in a project; APM reconciles the active target and removes deployments for targets that are no longer selected. The `agent-workflow` plugin declares `copilot` and `opencode` targets.
 
-First add this repository to the plugin marketplace, then install a plugin.
+### Reproducible installs
 
-```bash
-copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
-copilot /plugin install architecture-docs
-copilot /plugin install devops
-copilot /plugin install agent-workflow
-```
-
-### Install in Claude Code
+Pin each package to its release tag, then commit `apm.yml` and `apm.lock.yaml` and use `apm install --frozen` in CI:
 
 ```bash
 apm marketplace add milkyware/awesome-ai
-apm install architecture-docs@awesome-ai
-apm install devops@awesome-ai
-apm install agent-workflow@awesome-ai
+apm install architecture-docs@awesome-ai#architecture-docs-v0.0.7 --target copilot
+apm install --frozen --target copilot
 ```
 
-## Available Plugins
+Replace the tag and target with the release you need. APM records the resolved commit in `apm.lock.yaml`; `--frozen` refuses to install when the lockfile is missing or out of sync.
 
-### architecture-docs
+Pin each package by its own release tag. A repository-level ref freezes the catalog file but does not pin local package sources, so package tags remain necessary.
 
-**Generate professional Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides.**
+## Repository layout
 
-The repository currently provides these architecture-focused skills:
+- `apm.yml` – Marketplace manifest
+- `.claude-plugin/marketplace.json` – Generated marketplace catalog
+- `plugins/<name>/apm.yml` – Plugin manifest and version
+- `plugins/<name>/.apm/skills/` – Skill definitions
+- `plugins/<name>/.apm/agents/` – Agent definitions
+- `plugins/<name>/README.md` – Plugin installation and usage
+- `.github/workflows/` – Release, marketplace generation, and validation automation
 
-- **`generate-adr`** – Structured, gated workflow for creating Architecture Decision Records
-- **`generate-hld`** – Comprehensive guidance for generating High-Level Design documents
-- **`generate-architecture-md`** – Guidance for creating an `ARCHITECTURE.md` document for rapid codebase understanding
+Do not edit `.claude-plugin/marketplace.json` by hand. Run `apm pack` from the repository root to regenerate it.
 
-These skills are built on enterprise-grade workflows with strict writing standards: UK English, technical precision, and no fabrication.
+## Writing standards
 
-[Plugin documentation](./plugins/architecture-docs/README.md)
+All skills enforce the following writing standards:
 
-### DevOps
-
-**Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.**
-
-The `devops` plugin provides these CI/CD skills:
-
-- **`convert-az-pipeline`** – Converts an Azure Pipelines template into a reusable GitHub Actions composite action or `workflow_call` workflow, mapping tasks, expressions, and variables
-- **`onboard-release-please`** – Onboards a repository with release-please for single-package or mono-repo layouts, generating the manifest, configuration, and workflows
-
-[Plugin documentation](./plugins/devops/README.md)
-
-### Agent Workflow
-
-**Human-supervised orchestration of specialist AI coding agents through an explicit, repeatable workflow with bounded tasks and verified results.**
-
-The `agent-workflow` plugin provides an orchestrator and three specialists:
-
-- **`orchestrator`** – Owns the workflow: plans, delegates, verifies evidence, and reports
-- **`researcher`** – Read-only investigation with evidence and explicit gaps
-- **`implementer`** – Executes one bounded task and reports verification it actually ran
-- **`reviewer`** – Independent assessment with a severity-graded verdict
-
-Unlike the skill-based plugins, `agent-workflow` ships agents. It exists for work that needs research, an approved plan, delegated implementation, and independent review rather than a single pass.
-
-[Plugin documentation](./plugins/agent-workflow/README.md)
-
-## Quick Start
-
-### Using skills.sh
-
-After installation, open your preferred supported coding agent and invoke one of the installed skills. For example:
-
-- `/generate-adr` - Create an Architecture Decision Record for introducing Azure Front Door
-- `/generate-hld` - Produce a High-Level Design for a document processing platform on Azure
-- `/generate-architecture-md` - Create an ARCHITECTURE.md document for this repository
-- `/convert-az-pipeline` - Convert an Azure Pipelines template into reusable GitHub Actions
-- `/onboard-release-please` - Onboard a repository with release-please
-
-### Using the GitHub Copilot plugin
-
-After installation, start Copilot and invoke a plugin command directly.
-
-Generate an ADR:
-
-```bash
-copilot
-/architecture-docs:generate-adr
-```
-
-Generate an HLD:
-
-```bash
-copilot
-/architecture-docs:generate-hld
-```
-
-Generate an `ARCHITECTURE.md` document:
-
-```bash
-copilot
-/architecture-docs:generate-architecture-md
-```
-
-Convert an Azure Pipeline:
-
-```bash
-copilot
-/devops:convert-az-pipeline
-```
-
-Onboard a repository with release-please:
-
-```bash
-copilot
-/devops:onboard-release-please
-```
-
-### Using the Agent Workflow
-
-After installation, start the orchestrator and state your objective. It researches,
-plans, and waits for your approval before implementing:
-
-```bash
-copilot
-@orchestrator Plan and deliver <your objective>
-```
-
-The orchestrator delegates to `researcher`, `implementer`, and `reviewer` as the
-work requires, and reports what was verified rather than what was merely claimed.
+- Concise, neutral language without marketing tone or storytelling.
+- Information-dense paragraphs with one architectural concern each.
+- UK English spelling and terminology.
+- Fact-based statements with no speculation or fabricated information.
+- Consistent terminology within and across documents.
 
 ## Contributing
 
-To contribute improvements, report issues, or suggest new skills or agents:
-
-1. Open an [issue](https://github.com/milkyware/awesome-ai/issues) with details
-2. For new content, describe the use case and include examples
-3. Ensure all skills follow the [Writing Style Rules](./plugins/architecture-docs/README.md#writing-standards)
-4. Submit a pull request with a clear description
+1. Open an [issue](https://github.com/milkyware/awesome-ai/issues) with details.
+2. For new content, describe the use case and include examples.
+3. Ensure all skills follow the [writing standards](#writing-standards).
+4. Submit a pull request with a clear description.
 
 ## License
 

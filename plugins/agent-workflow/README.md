@@ -26,22 +26,31 @@ The orchestrator holds the contracts and the task lifecycle, so the specialists
 stay small and single-purpose. There is deliberately no separate planner agent:
 planning is the orchestrator's core responsibility.
 
-## Installation
+## Install
 
-The plugin is published from the awesome-ai repository as an APM package. Install
-it with APM:
+The plugin is published from the awesome-ai marketplace as an APM package. Register the marketplace once, then install the plugin for your harness.
 
 ```bash
 apm marketplace add milkyware/awesome-ai
-apm install agent-workflow@awesome-ai
 ```
 
-For GitHub Copilot CLI, add the repository marketplace, then install the plugin:
+Use one target per project; APM reconciles the active target and removes deployments for targets that are no longer selected. This plugin declares `copilot` and `opencode` targets.
 
 ```bash
-copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
-copilot /plugin install agent-workflow
+# GitHub Copilot CLI
+apm install agent-workflow@awesome-ai --target copilot
+
+# OpenCode
+apm install agent-workflow@awesome-ai --target opencode
 ```
+
+For a reproducible install, pin the plugin to its release tag:
+
+```bash
+apm install agent-workflow@awesome-ai#agent-workflow-v0.0.1 --target copilot
+```
+
+Replace the tag with the latest release for this plugin, then commit `apm.yml` and `apm.lock.yaml` and use `apm install --frozen` in CI. See [Reproducible installs](../../README.md#reproducible-installs).
 
 ## Usage
 
@@ -68,26 +77,17 @@ The orchestrator never implies a task ran when it did not.
 
 Verified against APM 0.30.0:
 
-| Capability                                         | Status                                                              |
-| -------------------------------------------------- | ------------------------------------------------------------------- |
-| Agent deployment via `apm install` (Copilot)       | **Verified** — agents land in `.github/agents/*.agent.md`           |
-| Agent deployment via `apm install` (OpenCode)      | **Verified** — agents land in `.opencode/agents/*.md`               |
-| Agent frontmatter validation                       | **Verified** — `apm compile --validate` accepts all four            |
-| Automatic delegation (OpenCode subagent sessions)  | **Verified** — supported by the harness                             |
-| Automatic delegation (Copilot CLI)                 | **Expected** - via the `agents` allow-list; not verified end-to-end |
-| Copilot CLI marketplace-plugin discovery of agents | **Unverified** — see below                                          |
+| Capability                                        | Status                                                              |
+| ------------------------------------------------- | ------------------------------------------------------------------- |
+| Agent deployment via `apm install` (Copilot)      | **Verified** — agents land in `.github/agents/*.agent.md`           |
+| Agent deployment via `apm install` (OpenCode)     | **Verified** — agents land in `.opencode/agents/*.md`               |
+| Agent frontmatter validation                      | **Verified** — `apm compile --validate` accepts all four            |
+| Automatic delegation (OpenCode subagent sessions) | **Verified** — supported by the harness                             |
+| Automatic delegation (Copilot CLI)                | **Expected** - via the `agents` allow-list; not verified end-to-end |
 
-`apm install` projects these agents to harness-native paths without any explicit
-declaration in `plugin.json`, and `apm pack` generates a manifest that omits one.
-The Copilot CLI marketplace-plugin path is a different mechanism: it reads the
-plugin directory in place, where the agents live under `.apm/agents/`. The
-existing `devops` and `architecture-docs` plugins declare their `skills` array
-explicitly for exactly this reason, so an explicit agents declaration may prove
-necessary. That has not been confirmed against a real Copilot CLI, and the field
-name is not documented, so this plugin ships without inventing one.
-
-If the Copilot plugin path does not surface the agents, use `apm install`, which
-is verified.
+`apm install` projects these agents to harness-native paths. No `plugin.json` is
+authored: APM is the only supported installation mechanism, so no explicit agent
+declaration is required or invented.
 
 ### Delegation and the `tools` conflict
 

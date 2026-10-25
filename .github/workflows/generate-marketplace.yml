@@ -5,7 +5,6 @@ on:
     paths:
       - apm.yml
       - plugins/**/apm.yml
-      - plugins/**/plugin.json
       - .release-please-manifest.json
     types:
       - edited
