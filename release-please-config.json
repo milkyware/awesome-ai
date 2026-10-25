@@ -30,11 +30,6 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "json",
-          "path": "plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
           "type": "yaml",
           "path": "apm.yml",
           "jsonpath": "$.version"
@@ -45,11 +40,6 @@
       "component": "code-quality",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        {
-          "type": "json",
-          "path": "plugin.json",
-          "jsonpath": "$.version"
-        },
         {
           "type": "yaml",
           "path": "apm.yml",
@@ -62,11 +52,6 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "json",
-          "path": "plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
           "type": "yaml",
           "path": "apm.yml",
           "jsonpath": "$.version"
@@ -77,11 +62,6 @@
       "component": "devops",
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
-        {
-          "type": "json",
-          "path": "plugin.json",
-          "jsonpath": "$.version"
-        },
         {
           "type": "yaml",
           "path": "apm.yml",

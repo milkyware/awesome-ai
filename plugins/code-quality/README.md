@@ -1,51 +1,43 @@
-# Code-Quality Plugin
+# Code Quality Plugin
 
-**Review branch changes for correctness, scope and merge readiness, using structured, AI-guided workflows.**
+**Review branch changes for correctness, scope, and merge readiness with a structured, AI-guided workflow.**
 
-## Overview
+## Skills
 
-The **@code-quality** plugin provides:
+| Skill         | Purpose                                           | Output                                                   |
+| ------------- | ------------------------------------------------- | -------------------------------------------------------- |
+| `code-review` | Read-only pre-PR review of the current Git branch | Findings, testing and scope summary, and a merge verdict |
 
-- **`code-review`** – Reviews the code in the current Git branch before a pull
-  request is raised, against the branch objective, repository instructions,
-  code quality, tests, logging, scope and merge readiness.
+All skills enforce the repository [writing standards](../../README.md#writing-standards).
 
-The skill enforces UK English, technical precision, repository evidence over
-preference, and no fabrication.
+## Install
 
-## Installation
-
-The plugin is published from the awesome-ai repository as an APM package. Install
-it with APM:
+The plugin is published from the awesome-ai marketplace as an APM package. Register the marketplace once, then install the plugin for your harness.
 
 ```bash
 apm marketplace add milkyware/awesome-ai
-apm install code-quality@awesome-ai
 ```
 
-For GitHub Copilot CLI, add the repository marketplace, then install the plugin:
+Use one target per project; APM reconciles the active target and removes deployments for targets that are no longer selected.
 
 ```bash
-copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
-copilot /plugin install code-quality
+# GitHub Copilot CLI
+apm install code-quality@awesome-ai --target copilot
+
+# Claude Code
+apm install code-quality@awesome-ai --target claude
+
+# OpenCode
+apm install code-quality@awesome-ai --target opencode
 ```
 
-For Claude Code:
+For a reproducible install, pin the plugin to its release tag:
 
 ```bash
-apm marketplace add milkyware/awesome-ai
-apm install code-quality@awesome-ai
+apm install code-quality@awesome-ai#code-quality-v0.0.1 --target copilot
 ```
 
-Or enable it directly by adding to your repository's `.github/copilot/settings.json`:
-
-```json
-{
-  "enabledPlugins": {
-    "code-quality": true
-  }
-}
-```
+Replace the tag with the latest release for this plugin, then commit `apm.yml` and `apm.lock.yaml` and use `apm install --frozen` in CI. See [Reproducible installs](../../README.md#reproducible-installs).
 
 ## Usage
 
@@ -53,63 +45,30 @@ Or enable it directly by adding to your repository's `.github/copilot/settings.j
 
 Ask the agent to review the current branch. The skill will:
 
-1. Read applicable repository guidance (`AGENTS.md`, `.github/instructions/*`).
+1. Read applicable repository guidance, including `AGENTS.md` and instruction files.
 2. Establish the project technology context from repository evidence.
-3. Determine the branch, base, merge base and diff.
+3. Determine the branch, base, merge base, and diff.
 4. Confirm the inferred branch goal with you where it is unclear.
-5. Report severed findings (Critical / High / Medium / Low / Question),
-   testing gaps, scope assessment and a merge verdict.
+5. Report findings by severity, testing gaps, scope assessment, and a merge verdict.
 
-**Output:** A concise review with findings, testing summary, scope
-assessment and one of Ready for merge / Ready after minor changes /
-Further review required / Not ready for merge.
+**Output:** A concise review with findings, a testing summary, a scope assessment, and one of: Ready for merge, Ready after minor changes, Further review required, or Not ready for merge.
 
-## Command Reference
-
-### `/skills code-review`
-
-| Aspect         | Details                                            |
-| -------------- | -------------------------------------------------- |
-| **Skill Name** | `code-review`                                      |
-| **Purpose**    | Read-only pre-PR review of the current Git branch  |
-| **Output**     | Findings, testing and scope summary, merge verdict |
-| **Language**   | UK English                                         |
-
-## Key Features
-
-- **Guided Workflow** – Fixed review sequence ensures completeness.
-- **Repository Evidence** – Recommendations fit the existing stack; no new
-  technology is introduced without demonstrated need.
-- **No Fabrication** – Findings cite file, line or symbol with impact.
-- **Safe Validation** – Read-only commands only; nothing is modified.
-
-## Writing Standards
-
-All skills enforce strict writing rules:
-
-- **Concise language** – No marketing tone or storytelling.
-- **Technical precision** – Fact-based, specific statements only.
-- **Consistency** – Terminology aligned within documents.
-- **No assumptions** – Questions asked if gaps are detected.
-- **Markdown compliance** – Output adheres to linting standards.
+Invoke the skill from your agent's skill picker, or use `/skills code-review` in GitHub Copilot CLI.
 
 ## Troubleshooting
 
-**Q: The skill isn't appearing in `/skills`**
+**Q: The skill is not appearing in `/skills`.**
+
 A: Reload skills with `/skills reload` or restart the CLI.
 
 ## Contributing
 
-To report issues or suggest improvements to the @code-quality plugin:
-
-1. Open an issue in the [awesome-ai repository](https://github.com/milkyware/awesome-ai)
-2. Reference the plugin name and the skill.
-3. Include the context or output that triggered the issue.
+Report issues and suggest improvements in the [awesome-ai repository](https://github.com/milkyware/awesome-ai/issues). Reference the plugin and skill, and include the context or output that triggered the issue.
 
 ## License
 
 This plugin is licensed under the MIT License. See the [awesome-ai repository LICENCE](../../LICENCE) for details.
 
-## Related Resources
+## Related resources
 
-- [awesome-ai Repository](https://github.com/milkyware/awesome-ai)
+- [awesome-ai repository](https://github.com/milkyware/awesome-ai)

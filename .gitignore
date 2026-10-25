@@ -45,3 +45,4 @@
 build/
 # APM-generated ecosystem manifests inside plugin packages
 plugins/*/.github/
+plugins/*/.claude-plugin/

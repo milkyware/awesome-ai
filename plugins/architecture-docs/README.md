@@ -1,214 +1,100 @@
-# Architecture-Docs Plugin
+# Architecture Docs Plugin
 
-**Generate professional Architecture Decision Records (ADRs) and High-Level Design (HLD) documents with structured, AI-guided workflows.**
+**Generate Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides with structured, AI-guided workflows.**
 
-## Overview
+## Skills
 
-The **@architecture-docs** plugin provides three specialized commands for architectural documentation:
+| Skill                      | Purpose                                                                               | Output                                                                                         |
+| -------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `generate-adr`             | Create an ADR through a gated question sequence covering context, options, and impact | Markdown ADR with a suggested filename                                                         |
+| `generate-hld`             | Create an HLD covering context, architecture, modules, data, and security             | Structured HLD document                                                                        |
+| `generate-architecture-md` | Create an `ARCHITECTURE.md` guide for rapid codebase understanding                    | Architecture overview covering components, data stores, integrations, deployment, and security |
 
-- **generate-adr** – Creates Architecture Decision Records with guided questions, decision drivers, and formal consequences
-- **generate-hld** – Generates High-Level Design documents with comprehensive architectural guidance covering all key domains
-- **generate-architecture-md** – Creates an `ARCHITECTURE.md` document for rapid codebase understanding
+All skills enforce the repository [writing standards](../../README.md#writing-standards).
 
-The commands are built on battle-tested prompts used by enterprise teams. They enforce UK English, technical precision, and architectural rigour.
+## Install
 
-## Installation
-
-The plugin is published from the awesome-ai repository as an APM package. Install it with APM:
-
-```bash
-apm marketplace add milkyware/awesome-ai
-apm install architecture-docs@awesome-ai
-```
-
-For GitHub Copilot CLI, add the repository marketplace, then install the plugin:
-
-```bash
-copilot /plugin marketplace add https://github.com/milkyware/awesome-ai
-copilot /plugin install architecture-docs
-```
-
-For Claude Code:
+The plugin is published from the awesome-ai marketplace as an APM package. Register the marketplace once, then install the plugin for your harness.
 
 ```bash
 apm marketplace add milkyware/awesome-ai
-apm install architecture-docs@awesome-ai
 ```
 
-Or enable it directly by adding to your repository's `.github/copilot/settings.json`:
+Use one target per project; APM reconciles the active target and removes deployments for targets that are no longer selected.
 
-```json
-{
-  "enabledPlugins": {
-    "architecture-docs": true
-  }
-}
+```bash
+# GitHub Copilot CLI
+apm install architecture-docs@awesome-ai --target copilot
+
+# Claude Code
+apm install architecture-docs@awesome-ai --target claude
+
+# OpenCode
+apm install architecture-docs@awesome-ai --target opencode
 ```
+
+For a reproducible install, pin the plugin to its release tag:
+
+```bash
+apm install architecture-docs@awesome-ai#architecture-docs-v0.0.7 --target copilot
+```
+
+Replace the tag with the latest release for this plugin, then commit `apm.yml` and `apm.lock.yaml` and use `apm install --frozen` in CI. See [Reproducible installs](../../README.md#reproducible-installs).
 
 ## Usage
 
-### Generate an Architecture Decision Record (ADR)
+### Generate an Architecture Decision Record
 
-```bash
-copilot
-/architecture-docs:generate-adr
-```
+Ask the agent to create an ADR. The skill guides you through:
 
-The skill will guide you through:
+1. **Metadata** – Status, date, decision-makers, consulted parties.
+2. **Context** – Problem statement and constraints.
+3. **Decision drivers** – Critical factors and non-negotiables.
+4. **Considered options** – At least two or three options with pros and cons.
+5. **Decision outcome** – Selected option and rationale.
+6. **Consequences** – Positive outcomes and trade-offs.
+7. **Title and filename** – Derived from your answers.
 
-1. **Metadata** – Status, date, decision-makers, consulted parties
-2. **Context** – Problem statement, constraints
-3. **Decision Drivers** – Critical factors and non-negotiables
-4. **Considered Options** – At least 2–3 options with pros/cons
-5. **Decision Outcome** – Selected option and rationale
-6. **Consequences** – Positive outcomes and trade-offs
-7. **Title & Filename** – Auto-generated from your answers
+**Output:** A formatted ADR with a filename suggestion, such as `0001-adopt-event-driven-architecture.md`.
 
-**Output:** A properly formatted ADR with filename suggestion (e.g., `0000-adopt-async-processing.md`)
+### Generate a High-Level Design
 
-### Generate a High-Level Design (HLD)
+Ask the agent to create an HLD. The skill guides you through:
 
-```bash
-copilot
-/architecture-docs:generate-hld
-```
+1. **Overview** – Solution name, audience, stakeholders, and document ownership.
+2. **Context** – Problem statement, objectives, and requirements.
+3. **Architecture design** – Components, decisions, data flows, and deployment.
+4. **Module design** – Logical modules and their interactions.
+5. **Data design** – Data domains, storage, retention, and classification.
+6. **Security design** – Authentication, authorisation, encryption, and network security.
+7. **Appendix and glossary** – Solution-specific terminology and supporting detail.
 
-The skill will guide you through:
+**Output:** A structured HLD document suitable for architects, engineers, governance teams, and security reviewers.
 
-1. **Overview** – Solution name, audience, stakeholders, document ownership
-2. **Context** – Problem statement, objectives, requirements
-3. **Architecture Design** – Components, decisions, data flows, deployment
-4. **Module Design** – Logical modules and their interactions
-5. **Data Design** – Data domains, storage, retention, classification
-6. **Security Design** – Authentication, authorisation, encryption, network security
-7. **Glossary** – Solution-specific terminology
+### Generate an ARCHITECTURE.md guide
 
-**Output:** A comprehensive HLD document with structured architectural guidance
+Ask the agent to create an `ARCHITECTURE.md` for the repository. The skill guides you through the architecture overview, project structure, system diagram, core components, data stores, external integrations, deployment, security, development and testing, roadmap, project identification, and glossary. It reads tracked files to ground the project structure section.
 
-## Command Reference
+**Output:** An `ARCHITECTURE.md` document that explains how the codebase fits together.
 
-### `/skills generate-adr`
-
-| Aspect               | Details                                          |
-| -------------------- | ------------------------------------------------ |
-| **Skill Name**       | `generate-adr`                                   |
-| **Purpose**          | Generate Architecture Decision Records           |
-| **Output**           | Markdown ADR file with suggested filename        |
-| **Language**         | UK English                                       |
-| **Typical Duration** | 10–15 minutes (depending on decision complexity) |
-
-### `/skills generate-hld`
-
-| Aspect               | Details                                         |
-| -------------------- | ----------------------------------------------- |
-| **Skill Name**       | `generate-hld`                                  |
-| **Purpose**          | Generate High-Level Design documents            |
-| **Output**           | Comprehensive Markdown HLD document             |
-| **Language**         | UK English                                      |
-| **Typical Duration** | 30–45 minutes (full workflow with all sections) |
-
-### `/skills generate-architecture-md`
-
-| Aspect               | Details                                 |
-| -------------------- | --------------------------------------- |
-| **Skill Name**       | `generate-architecture-md`              |
-| **Purpose**          | Create an `ARCHITECTURE.md` document    |
-| **Output**           | Markdown architecture overview document |
-| **Language**         | UK English                              |
-| **Typical Duration** | 15–25 minutes                           |
-
-## Key Features
-
-✅ **Guided Workflows** – Structured, gated question sequences ensure completeness  
-✅ **UK English** – All content uses UK English spelling and terminology  
-✅ **Architectural Rigour** – Enforces technical precision with no speculation  
-✅ **Enterprise-Grade** – Based on proven prompts used by enterprise teams  
-✅ **Markdown-Ready** – Output is immediately ready for version control  
-✅ **No Fabrication** – Clear rules prevent hallucinated information
-
-## Writing Standards
-
-All skills enforce strict writing rules:
-
-- **Concise language** – No marketing tone or storytelling
-- **Technical precision** – Fact-based, specific statements only
-- **Consistency** – Terminology aligned within documents
-- **No assumptions** – Questions asked if gaps are detected
-- **Industry terminology** – Correct Azure and identity concepts
-- **Markdown compliance** – Output adheres to linting standards
-
-## Examples
-
-### Sample ADR Output
-
-```
-Suggested filename:
-0001-adopt-event-driven-architecture.md
-
----
-status: accepted
-date: 2024-04-03
-decision-makers:
-  - '@alice-architect'
-  - '@bob-engineer'
-consulted:
-  - '@charlie-devops'
-informed:
-  - '@team-platform'
----
-
-# Adopt Event-Driven Architecture for Service Integration
-
-## Context and Problem Statement
-The monolithic service integration layer is becoming a bottleneck...
-```
-
-### Sample HLD Output
-
-```
-# High-Level Design: Asset Management Platform
-
-## 1. Overview
-
-### 1.1 Audience
-- Platform architects
-- Security reviewers
-- Delivery leads
-
-### 1.2 Stakeholders
-
-| Name          | Concern                           |
-| ------------- | --------------------------------- |
-| Platform Lead | Delivery timeline and scalability |
-| Security Lead | Data protection and compliance    |
-| Operations    | Monitoring and support burden     |
-```
+Invoke a skill from your agent's skill picker, or use `/skills <name>` in GitHub Copilot CLI.
 
 ## Troubleshooting
 
-**Q: The skill isn't appearing in `/skills`**  
-A: Reload skills with `/skills reload` or restart the CLI
+**Q: The skill is not appearing in `/skills`.**
 
-**Q: Can I use these skills for non-architecture decisions?**  
-A: These skills are specifically designed for architectural documentation. For other use cases, create a custom skill
-
-**Q: Can I modify the guided questions?**  
-A: Skills are immutable within the plugin. For custom workflows, create a personal skill in `~/.copilot/skills/`
+A: Reload skills with `/skills reload` or restart the CLI.
 
 ## Contributing
 
-To report issues or suggest improvements to the @architecture-docs plugin:
-
-1. Open an issue in the [awesome-ai repository](https://github.com/milkyware/awesome-ai)
-2. Reference the plugin name and the skill (generate-adr or generate-hld)
-3. Include the context or output that triggered the issue
+Report issues and suggest improvements in the [awesome-ai repository](https://github.com/milkyware/awesome-ai/issues). Reference the plugin and skill, and include the context or output that triggered the issue.
 
 ## License
 
 This plugin is licensed under the MIT License. See the [awesome-ai repository LICENCE](../../LICENCE) for details.
 
-## Related Resources
+## Related resources
 
-- [awesome-ai Repository](https://github.com/milkyware/awesome-ai)
-- [ADR Format Reference](https://adr.github.io/)
-- [Architecture Decision Record Examples](https://github.com/joelparkerhenderson/architecture_decision_record)
+- [awesome-ai repository](https://github.com/milkyware/awesome-ai)
+- [ADR format reference](https://adr.github.io/)
+- [Architecture Decision Record examples](https://github.com/joelparkerhenderson/architecture_decision_record)

@@ -7,6 +7,8 @@ author: MilkyWare
 license: MIT
 targets:
   - copilot
+  - claude
+  - opencode
 dependencies:
   apm: []
   mcp: []

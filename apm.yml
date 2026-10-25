@@ -7,7 +7,7 @@ license: MIT
 # Publisher (marketplace) manifest. The packages listed here are independently
 # distributable APM packages, each with its own apm.yml under plugins/.
 # `apm pack` compiles this block into .claude-plugin/marketplace.json, which
-# Claude Code, GitHub Copilot CLI, and APM all read as the same artifact.
+# APM reads as the marketplace catalog.
 # Local (./) entries deliberately omit `version`. `apm pack` reads the display
 # version from each package's own apm.yml, so release-please keeps the
 # marketplace in sync without a second place to edit.
