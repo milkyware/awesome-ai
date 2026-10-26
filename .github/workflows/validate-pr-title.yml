@@ -2,6 +2,11 @@ name: Validate PR Title
 
 on:
   pull_request:
+    types:
+      - edited
+      - opened
+      - ready_for_review
+      - reopened
 
 permissions:
   contents: read
