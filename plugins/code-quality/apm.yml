@@ -1,5 +1,5 @@
 name: code-quality
-version: 0.0.1
+version: 0.0.2
 description: >-
   Review branch changes for correctness, scope and merge readiness using
   structured, gated workflows.
