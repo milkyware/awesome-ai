@@ -1,5 +1,5 @@
 name: delivery
-version: 0.0.2
+version: 0.0.3
 description: >-
   Produce implementation-ready plans and create delivery-ready Jira tickets
   using structured, gated workflows.
