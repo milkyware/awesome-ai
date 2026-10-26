@@ -2,8 +2,6 @@ name: Super Linter
 
 on:
   pull_request:
-    branches-ignore:
-      - release-please--*
   workflow_dispatch:
 
 permissions: 
