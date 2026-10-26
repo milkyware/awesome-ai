@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   job:
+    if: ${{ !startsWith(github.head_ref, 'renovate/') && !startsWith(github.head_ref, 'release-please--') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

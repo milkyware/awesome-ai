@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/milkyware/awesome-ai/compare/devops-v0.0.2...devops-v0.0.3) (2026-10-25)
+
+
+### 🧹 Maintenance
+
+* remove and cleanup `plugin.json` usage ([f207a90](https://github.com/milkyware/awesome-ai/commit/f207a909b44504a30969be52be765746254509d7))
+
 ## [0.0.2](https://github.com/milkyware/awesome-ai/compare/devops-v0.0.1...devops-v0.0.2) (2026-10-15)
 
 

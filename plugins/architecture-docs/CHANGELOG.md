@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.7...architecture-docs-v0.0.8) (2026-10-26)
+
+
+### 🧹 Maintenance
+
+* remove and cleanup `plugin.json` usage ([f207a90](https://github.com/milkyware/awesome-ai/commit/f207a909b44504a30969be52be765746254509d7))
+
 ## [0.0.7](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.6...architecture-docs-v0.0.7) (2026-10-15)
 
 
