@@ -32,7 +32,7 @@
     {
       "name": "agent-workflow",
       "description": "Human-supervised orchestration of specialist AI coding agents through an explicit, repeatable workflow with bounded tasks and verified results.",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "source": "./plugins/agent-workflow"
     }
   ]
