@@ -132,7 +132,7 @@ layered:
 | Layer | Mechanism                                                                                                                   | Applies to |
 | ----- | --------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | L1    | Instruction boundary, plus the requirement to report any write attempted                                                    | Both       |
-| L2    | OpenCode `permission`: `edit: deny`, `task: deny`, `question: deny`, with `bash` limited to read-only git commands or `ask` | OpenCode   |
+| L2    | OpenCode `permission`: `edit: deny`, `task: deny`, `question: deny`, with `bash` limited to read-only Git commands or `ask` | OpenCode   |
 | L3    | Tree fingerprint before dispatch and after return; a difference rejects the result                                          | Both       |
 | L4    | Documented limitation                                                                                                       | Copilot    |
 
@@ -147,8 +147,8 @@ The orchestrator declares an `agents` allow-list (`researcher`, `implementer`,
 `reviewer`) so the harness can surface them as subagents. It deliberately does not
 declare `tools`.
 
-VS Code documents that when `agents` is set, the `agent` tool should be present in
-`tools`. Adding it is not free: VS Code expects `tools` as a YAML list, while
+Visual Studio Code documents that when `agents` is set, the `agent` tool should be present in
+`tools`. Adding it is not free: Visual Studio Code expects `tools` as a YAML list, while
 OpenCode requires a mapping of tool name to boolean and **rejects the agent at
 load time** otherwise. APM deploys agents verbatim and does not translate between
 the two shapes, so a single source file cannot carry `tools` for both targets.
