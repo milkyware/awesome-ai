@@ -8,19 +8,19 @@
     {
       "name": "architecture-docs",
       "description": "Generate Architecture Decision Records (ADRs) and High-Level Design (HLD) documents with structured, gated workflows.",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "source": "./plugins/architecture-docs"
     },
     {
       "name": "code-quality",
       "description": "Review branch changes for correctness, scope and merge readiness using structured, gated workflows.",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "source": "./plugins/code-quality"
     },
     {
       "name": "delivery",
       "description": "Produce implementation-ready plans and create delivery-ready Jira tickets using structured, gated workflows.",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "source": "./plugins/delivery"
     },
     {
