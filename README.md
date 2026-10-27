@@ -6,14 +6,15 @@ A curated collection of reusable skills for AI-assisted software delivery and ar
 
 ## Plugins
 
-| Plugin                                                       | Description                                                                                           | Skills                                                     |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| [`architecture-docs`](./plugins/architecture-docs/README.md) | Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides | `generate-adr`, `generate-hld`, `generate-architecture-md` |
-| [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                              |
-| [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans and delivery-ready Jira tickets                                            | `implementation-plan`, `create-jira-ticket`                |
-| [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`            |
+| Plugin                                                       | Description                                                                                           | Skills / agents                                                  |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [`agent-workflow`](./plugins/agent-workflow/README.md)       | Human-supervised orchestration of specialist AI coding agents through bounded, verified tasks         | `orchestrator`, `researcher`, `implementer`, `reviewer` (agents) |
+| [`architecture-docs`](./plugins/architecture-docs/README.md) | Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides | `generate-adr`, `generate-hld`, `generate-architecture-md`       |
+| [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                                    |
+| [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans and delivery-ready Jira tickets                                            | `implementation-plan`, `create-jira-ticket`                      |
+| [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`                  |
 
-Each plugin README documents installation for its supported harnesses, the skills it provides, and usage guidance.
+`agent-workflow` ships agents rather than skills. Each plugin README documents installation for its supported harnesses, what it provides, and usage guidance.
 
 ## Install
 
@@ -35,9 +36,10 @@ apm install architecture-docs@awesome-ai --target <target>
 apm install code-quality@awesome-ai --target <target>
 apm install delivery@awesome-ai --target <target>
 apm install devops@awesome-ai --target <target>
+apm install agent-workflow@awesome-ai --target <target>
 ```
 
-`<target>` is `copilot`, `claude`, or `opencode`. Use the same target for every install in a project; APM reconciles the active target and removes deployments for targets that are no longer selected.
+`<target>` is `copilot`, `claude`, or `opencode`. Use the same target for every install in a project; APM reconciles the active target and removes deployments for targets that are no longer selected. The `agent-workflow` plugin declares `copilot` and `opencode` targets.
 
 ### Reproducible installs
 
@@ -59,6 +61,7 @@ Pin each package by its own release tag. A repository-level ref freezes the cata
 - `.claude-plugin/marketplace.json` – Generated marketplace catalog
 - `plugins/<name>/apm.yml` – Plugin manifest and version
 - `plugins/<name>/.apm/skills/` – Skill definitions
+- `plugins/<name>/.apm/agents/` – Agent definitions
 - `plugins/<name>/README.md` – Plugin installation and usage
 - `.github/workflows/` – Release, marketplace generation, and validation automation
 

@@ -68,6 +68,17 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/agent-workflow": {
+      "component": "agent-workflow",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "yaml",
+          "path": "apm.yml",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }
