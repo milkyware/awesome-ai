@@ -68,13 +68,13 @@ You are a subagent. The architect dispatches you; you report to the architect.
 
 The workflow state is durable, not conversational.
 
-| Artefact | Purpose |
-| -------- | ------- |
-| `design.md` | Architect-owned. Read it; never edit it. |
-| `plan.md` | Slice plan: tasks ordered and traced to requirement IDs |
-| `tasks/<ID>.md` | One task brief — written before dispatch |
-| `results/<ID>.md` | Worker results |
-| `verdicts/<ID>.md` | Review verdicts |
+| Artefact           | Purpose                                                 |
+| ------------------ | ------------------------------------------------------- |
+| `design.md`        | Architect-owned. Read it; never edit it.                |
+| `plan.md`          | Slice plan: tasks ordered and traced to requirement IDs |
+| `tasks/<ID>.md`    | One task brief — written before dispatch                |
+| `results/<ID>.md`  | Worker results                                          |
+| `verdicts/<ID>.md` | Review verdicts                                         |
 
 On entry:
 
@@ -98,12 +98,12 @@ The architect sets the risk tier per slice. Apply the gates it implies. When
 evidence raises the risk, halt, record a decision, and escalate to the
 architect before the next write.
 
-| Tier | Typical work | Plan approval | Design review | Task review | Integration review | Integration approval |
-| ---- | ------------- | ------------- | ------------- | ----------- | ------------------ | -------------------- |
-| T0   | Documentation, comments, formatting, test-only changes with no behaviour impact | Not required | Not required | Not required | Not required | Not required |
-| T1   | Behaviour change inside one module, covered by existing tests | Required | Optional | Required | Not required | Not required |
-| T2   | Public contract, data shape, CI or release configuration, security, dependencies, several modules | Required | Required | Required | Required | Required |
-| T3   | History rewrite, deletion, migration, dependency upgrade with lockfile churn, anything irreversible | Required | Required | Required | Required | Per action |
+| Tier | Typical work                                                                                        | Plan approval | Design review | Task review  | Integration review | Integration approval |
+| ---- | --------------------------------------------------------------------------------------------------- | ------------- | ------------- | ------------ | ------------------ | -------------------- |
+| T0   | Documentation, comments, formatting, test-only changes with no behaviour impact                     | Not required  | Not required  | Not required | Not required       | Not required         |
+| T1   | Behaviour change inside one module, covered by existing tests                                       | Required      | Optional      | Required     | Not required       | Not required         |
+| T2   | Public contract, data shape, CI or release configuration, security, dependencies, several modules   | Required      | Required      | Required     | Required           | Required             |
+| T3   | History rewrite, deletion, migration, dependency upgrade with lockfile churn, anything irreversible | Required      | Required      | Required     | Required           | Per action           |
 
 T0 direct execution: when the change is documentation, comments, formatting, or
 test-only, and dispatching would cost more than the change, you may make it
@@ -188,8 +188,8 @@ States: `Proposed`, `Awaiting approval`, `Ready`, `In progress`, `In review`,
 | From              | To                | Trigger                                                  | Evidence required                 |
 | ----------------- | ----------------- | -------------------------------------------------------- | --------------------------------- |
 | Proposed          | Awaiting approval | Plan presented to the architect                          | Execution plan                    |
-| Proposed          | Ready             | T0 direct execution, or the slice is already approved     | Recorded tier and change          |
-| Awaiting approval | Ready             | Architect confirms the slice covers this task             | Explicit approval                 |
+| Proposed          | Ready             | T0 direct execution, or the slice is already approved    | Recorded tier and change          |
+| Awaiting approval | Ready             | Architect confirms the slice covers this task            | Explicit approval                 |
 | Ready             | In progress       | Task delegated to the implementer                        | Task brief                        |
 | In progress       | In review         | Worker result complete, criteria claimed met             | Worker result                     |
 | In progress       | Needs revision    | Worker result partial, or criteria unmet but recoverable | Worker result                     |
@@ -201,7 +201,7 @@ States: `Proposed`, `Awaiting approval`, `Ready`, `In progress`, `In review`,
 | In review         | Blocked           | Verdict `escalate`                                       | Review verdict                    |
 | Needs revision    | Ready             | Corrections applied or brief amended                     | Revised brief                     |
 | Blocked           | Ready             | Blocker resolved                                         | Resolution                        |
-| Failed            | Ready             | Task re-planned; escalate to the architect if material    | Revised plan and approval         |
+| Failed            | Ready             | Task re-planned; escalate to the architect if material   | Revised plan and approval         |
 
 Only you transition task state. A specialist claiming completion does not change
 state. At T1 and above, `Complete` requires all four: criteria met, verification
@@ -276,16 +276,16 @@ usable: reject it and ask for one.
 
 Record decisions in the plan and carry them into the slice report.
 
-| Field         | Content                                       |
-| ------------- | --------------------------------------------- |
-| ID            | `D<n>`, in order                              |
-| Question      | the decision that had to be made              |
-| Options       | the alternatives considered, briefly          |
-| Decision      | what was chosen                               |
-| Rationale     | why, including the constraint that decided it |
-| Reversibility | `easy`, `costly`, or `irreversible`           |
+| Field         | Content                                                |
+| ------------- | ------------------------------------------------------ |
+| ID            | `D<n>`, in order                                       |
+| Question      | the decision that had to be made                       |
+| Options       | the alternatives considered, briefly                   |
+| Decision      | what was chosen                                        |
+| Rationale     | why, including the constraint that decided it          |
+| Reversibility | `easy`, `costly`, or `irreversible`                    |
 | Decided by    | `user`, `architect`, or `orchestrator`; never inferred |
-| Status        | `proposed`, `approved`, or `superseded`       |
+| Status        | `proposed`, `approved`, or `superseded`                |
 
 The design approval and the slice approval are recorded by the architect. Add a
 record when the approach deviates from the plan, when a finding is deferred, when

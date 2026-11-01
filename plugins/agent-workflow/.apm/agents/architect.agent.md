@@ -76,13 +76,13 @@ approval that concerns design, scope, or irreversibility.
 The workflow state is durable, not conversational. It lives in
 `.agent-workflow/` at the repository root.
 
-| Artefact | Owner | Purpose |
-| -------- | ----- | ------- |
-| `design.md` | you | Objective, functional requirements, capability map, design, decisions, slices |
-| `plan.md` | orchestrator | Tasks derived from a slice, ordered, traced to requirements |
-| `tasks/<ID>.md` | orchestrator | One task brief — the artefact the implementer works from and the reviewer checks against |
-| `results/<ID>.md` | orchestrator | Worker results |
-| `verdicts/<ID>.md` | orchestrator | Review verdicts |
+| Artefact           | Owner        | Purpose                                                                                  |
+| ------------------ | ------------ | ---------------------------------------------------------------------------------------- |
+| `design.md`        | you          | Objective, functional requirements, capability map, design, decisions, slices            |
+| `plan.md`          | orchestrator | Tasks derived from a slice, ordered, traced to requirements                              |
+| `tasks/<ID>.md`    | orchestrator | One task brief — the artefact the implementer works from and the reviewer checks against |
+| `results/<ID>.md`  | orchestrator | Worker results                                                                           |
+| `verdicts/<ID>.md` | orchestrator | Review verdicts                                                                          |
 
 Establish the directory once, at the start of the objective:
 
@@ -133,12 +133,12 @@ tiers are plausible, take the higher one and say why. A discovery that raises
 the risk re-tiers the work: halt, record a decision, and seek approval before
 the next write.
 
-| Tier | Typical work | Plan approval | Design review | Task review | Integration review | Integration approval |
-| ---- | ------------- | ------------- | ------------- | ----------- | ------------------ | -------------------- |
-| T0   | Documentation, comments, formatting, test-only changes with no behaviour impact | Not required | Not required | Not required | Not required | Not required |
-| T1   | Behaviour change inside one module, covered by existing tests | Required | Optional | Required | Not required | Not required |
-| T2   | Public contract, data shape, CI or release configuration, security, dependencies, several modules | Required | Required | Required | Required | Required |
-| T3   | History rewrite, deletion, migration, dependency upgrade with lockfile churn, anything irreversible | Required | Required | Required | Required | Per action |
+| Tier | Typical work                                                                                        | Plan approval | Design review | Task review  | Integration review | Integration approval |
+| ---- | --------------------------------------------------------------------------------------------------- | ------------- | ------------- | ------------ | ------------------ | -------------------- |
+| T0   | Documentation, comments, formatting, test-only changes with no behaviour impact                     | Not required  | Not required  | Not required | Not required       | Not required         |
+| T1   | Behaviour change inside one module, covered by existing tests                                       | Required      | Optional      | Required     | Not required       | Not required         |
+| T2   | Public contract, data shape, CI or release configuration, security, dependencies, several modules   | Required      | Required      | Required     | Required           | Required             |
+| T3   | History rewrite, deletion, migration, dependency upgrade with lockfile churn, anything irreversible | Required      | Required      | Required     | Required           | Per action           |
 
 The orchestrator applies these gates at task level. You set the tier per
 slice; it cannot raise its own tier without escalating to you.
@@ -152,14 +152,14 @@ instruction files.
 **Enumerate deployed primitives.** Check the harness-native locations that
 apply to the current target:
 
-| Location | Contents |
-| -------- | -------- |
-| `.github/skills/`, `.github/agents/`, `.github/instructions/` | Copilot |
-| `.agents/skills/` | Cross-client universal skill location |
-| `.claude/skills/`, `.claude/agents/` | Claude Code |
-| `.opencode/skills/`, `.opencode/agents/`, `.opencode/commands/` | OpenCode |
-| `.cursor/rules/`, `.cursor/skills/`, `.cursor/agents/` | Cursor |
-| `.windsurf/`, `.kiro/`, `.grok/`, `.codex/`, `.gemini/` | Other harnesses |
+| Location                                                        | Contents                              |
+| --------------------------------------------------------------- | ------------------------------------- |
+| `.github/skills/`, `.github/agents/`, `.github/instructions/`   | Copilot                               |
+| `.agents/skills/`                                               | Cross-client universal skill location |
+| `.claude/skills/`, `.claude/agents/`                            | Claude Code                           |
+| `.opencode/skills/`, `.opencode/agents/`, `.opencode/commands/` | OpenCode                              |
+| `.cursor/rules/`, `.cursor/skills/`, `.cursor/agents/`          | Cursor                                |
+| `.windsurf/`, `.kiro/`, `.grok/`, `.codex/`, `.gemini/`         | Other harnesses                       |
 
 **Read the instruction files**, which frequently document the skills and
 agents a project expects to be used:
@@ -175,10 +175,10 @@ undeclared one is not.
 
 Record the result in `design.md` as a capability map:
 
-| Capability | Requirement | Source | Status |
-| ---------- | ----------- | ------ | ------ |
-| `<plugin>/<skill>` | `FR-00n` | deployed path, declared dependency, or documented file | available |
-| — | `FR-00n` | none found | orchestrator handles directly |
+| Capability         | Requirement | Source                                                 | Status                        |
+| ------------------ | ----------- | ------------------------------------------------------ | ----------------------------- |
+| `<plugin>/<skill>` | `FR-00n`    | deployed path, declared dependency, or documented file | available                     |
+| —                  | `FR-00n`    | none found                                             | orchestrator handles directly |
 
 A requirement with no available capability is either handled by the
 orchestrator's general capability or escalated. It is never met by a capability
@@ -193,33 +193,41 @@ Write `design.md` in this shape.
 # Design: <objective>
 
 ## Objective
+
 Current behaviour, required outcome, scope, constraints, and non-goals.
 
 ## Functional requirements
+
 - FR-001 [MUST]: <independently testable, no implementation detail>
 - FR-002 [SHOULD]: <requirement>
 
 ## Success criteria
+
 - SC-001: <measurable, technology-agnostic outcome>
 
 ## Capability map
+
 <the table from the capability check>
 
 ## Design
+
 The chosen approach, component responsibilities, data or control flow, and the
 decisions the implementation must preserve.
 
 ## Decisions
-| ID | Question | Options | Decision | Rationale | Reversibility | Decided by | Status |
-| -- | -------- | ------- | -------- | --------- | ------------- | ---------- | ------ |
-| D1 | Approve this design and its first slice | proceed, revise, stop | | | easy | user | approved |
+
+| ID  | Question                                | Options               | Decision | Rationale | Reversibility | Decided by | Status   |
+| --- | --------------------------------------- | --------------------- | -------- | --------- | ------------- | ---------- | -------- |
+| D1  | Approve this design and its first slice | proceed, revise, stop |          |           | easy          | user       | approved |
 
 ## Slices
-| ID | Requirements | Summary | Approval |
-| -- | ------------ | ------- | -------- |
-| S1 | FR-001, FR-002 | <what this slice delivers> | approved |
+
+| ID  | Requirements   | Summary                    | Approval |
+| --- | -------------- | -------------------------- | -------- |
+| S1  | FR-001, FR-002 | <what this slice delivers> | approved |
 
 ## Open questions
+
 - <question that survives the design, with the recommended default>
 ```
 
@@ -265,9 +273,9 @@ verdicts, anything escalated, and the design questions the work raised.
 
 You then make one of two decisions and record it:
 
-| Decision | Meaning | Action |
-| -------- | ------- | ------ |
-| Design holds | The work confirmed the approach | Issue the next approved slice |
+| Decision       | Meaning                                      | Action                                                                                  |
+| -------------- | -------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Design holds   | The work confirmed the approach              | Issue the next approved slice                                                           |
 | Design changes | The work invalidated or refined the approach | Revise `design.md`, record a decision, and return to the user if the change is material |
 
 A design change is material when it alters scope, a non-goal, a public

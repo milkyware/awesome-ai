@@ -24,20 +24,20 @@ and the integrated outcome afterwards.
 
 ## Agents
 
-| Agent            | Mode (OpenCode) | Responsibility                                                                                                                                                    |
-| ---------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **architect**    | `primary`       | Owns the design. Establishes the spec with you, checks capability, writes the design artefact, and issues approved slices. Does not implement or review.          |
+| Agent            | Mode (OpenCode) | Responsibility                                                                                                                                                                  |
+| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **architect**    | `primary`       | Owns the design. Establishes the spec with you, checks capability, writes the design artefact, and issues approved slices. Does not implement or review.                        |
 | **orchestrator** | `subagent`      | Owns one approved slice. Plans the tasks inside it, delegates implementation, verifies evidence, obtains review, integrates, and reports. Accepts work from the architect only. |
-| **researcher**   | `subagent`      | Read-only investigation. Discovery for the architect, targeted questions for the orchestrator. Returns findings with evidence, confidence, and explicit gaps.      |
-| **implementer**  | `subagent`      | Executes one bounded task inside a stated write scope, and returns a structured result with the verification it actually ran.                                     |
-| **reviewer**     | `subagent`      | Independently assesses a design, a plan, a task, or an integrated change, and returns a severity-graded verdict bound to an identity.                              |
+| **researcher**   | `subagent`      | Read-only investigation. Discovery for the architect, targeted questions for the orchestrator. Returns findings with evidence, confidence, and explicit gaps.                   |
+| **implementer**  | `subagent`      | Executes one bounded task inside a stated write scope, and returns a structured result with the verification it actually ran.                                                   |
+| **reviewer**     | `subagent`      | Independently assesses a design, a plan, a task, or an integrated change, and returns a severity-graded verdict bound to an identity.                                           |
 
 Only the architect is selectable as a primary agent, so the workflow has one
 entry point and one agent that can approve. The orchestrator holds the task
 lifecycle and all delegation below the slice.
 
 The researcher stays a separate agent rather than folding into the architect.
-The architect's value is that it holds *distilled* design context across slices;
+The architect's value is that it holds _distilled_ design context across slices;
 if it also did its own searching it would carry raw file contents, dead ends and
 grep noise, which is the context pollution the separation is meant to prevent.
 The architect receives findings, not searches.
@@ -123,13 +123,13 @@ The workflow state is durable, not conversational, so a context reset, a session
 change, or a model change does not lose the design. It lives in
 `.agent-workflow/` at the repository root.
 
-| Artefact          | Owner        | Purpose                                                                     |
-| ----------------- | ------------ | --------------------------------------------------------------------------- |
-| `design.md`       | architect    | Objective, functional requirements, capability map, design, decisions, slices |
-| `plan.md`         | orchestrator | Tasks derived from a slice, ordered and traced to requirement IDs            |
-| `tasks/<ID>.md`   | orchestrator | One task brief — the artefact the implementer works from                     |
-| `results/<ID>.md` | orchestrator | Worker results                                                               |
-| `verdicts/<ID>.md`| orchestrator | Review verdicts                                                              |
+| Artefact           | Owner        | Purpose                                                                       |
+| ------------------ | ------------ | ----------------------------------------------------------------------------- |
+| `design.md`        | architect    | Objective, functional requirements, capability map, design, decisions, slices |
+| `plan.md`          | orchestrator | Tasks derived from a slice, ordered and traced to requirement IDs             |
+| `tasks/<ID>.md`    | orchestrator | One task brief — the artefact the implementer works from                      |
+| `results/<ID>.md`  | orchestrator | Worker results                                                                |
+| `verdicts/<ID>.md` | orchestrator | Review verdicts                                                               |
 
 The load-bearing property is that **the reviewer reviews the diff against
 `tasks/<ID>.md`, not against the conversation.** The implementer reads the same
@@ -169,20 +169,20 @@ serves no requirement is recorded and left unused.
 
 Verified against APM 0.30.0 and the current harness documentation:
 
-| Capability                                         | Status                                                              |
-| -------------------------------------------------- | ------------------------------------------------------------------- |
-| Agent deployment via `apm install` (Copilot)       | **Verified** — agents land in `.github/agents/*.agent.md`           |
-| Agent deployment via `apm install` (OpenCode)      | **Verified** — agents land in `.opencode/agents/*.md`               |
-| Agent frontmatter validation                       | **Verified** — `apm compile --validate` accepts all five           |
-| Automatic delegation (OpenCode subagent sessions)  | **Verified** — supported by the harness                             |
-| Nested delegation (orchestrator → specialist)      | **Expected** — `task: allow`; not verified end-to-end               |
-| Automatic delegation (Copilot CLI)                 | **Expected** — via the `agents` allow-list; not verified end-to-end |
-| Primary/subagent separation (OpenCode `mode`)      | **Verified** — `opencode debug agents` resolves primary/subagent    |
+| Capability                                         | Status                                                               |
+| -------------------------------------------------- | -------------------------------------------------------------------- |
+| Agent deployment via `apm install` (Copilot)       | **Verified** — agents land in `.github/agents/*.agent.md`            |
+| Agent deployment via `apm install` (OpenCode)      | **Verified** — agents land in `.opencode/agents/*.md`                |
+| Agent frontmatter validation                       | **Verified** — `apm compile --validate` accepts all five             |
+| Automatic delegation (OpenCode subagent sessions)  | **Verified** — supported by the harness                              |
+| Nested delegation (orchestrator → specialist)      | **Expected** — `task: allow`; not verified end-to-end                |
+| Automatic delegation (Copilot CLI)                 | **Expected** — via the `agents` allow-list; not verified end-to-end  |
+| Primary/subagent separation (OpenCode `mode`)      | **Verified** — `opencode debug agents` resolves primary/subagent     |
 | Read-only enforcement (OpenCode `permission`)      | **Verified** — `edit: deny` resolves; prompt behaviour not exercised |
-| Nested delegation by specialists (OpenCode `task`) | **Verified** — `task: deny` resolves to `subagent deny`             |
-| Read-only enforcement (Copilot)                    | **Not enforced** — instructions plus detection only                 |
-| Architect refuses delegated use                    | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot |
-| Orchestrator refuses non-architect delegation      | **Instruction only** — `question: deny` removes the user channel    |
+| Nested delegation by specialists (OpenCode `task`) | **Verified** — `task: deny` resolves to `subagent deny`              |
+| Read-only enforcement (Copilot)                    | **Not enforced** — instructions plus detection only                  |
+| Architect refuses delegated use                    | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot  |
+| Orchestrator refuses non-architect delegation      | **Instruction only** — `question: deny` removes the user channel     |
 
 `apm install` projects these agents to harness-native paths. No `plugin.json` is
 authored: APM is the only supported installation mechanism, so no explicit agent
@@ -199,12 +199,12 @@ enforcement there is instruction plus detection.
 There is no single frontmatter that both harnesses enforce, so read-only is
 layered:
 
-| Layer | Mechanism                                                                                                                    | Applies to |
-| ----- | ---------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| L1    | Instruction boundary, plus the requirement to report any write attempted                                                      | Both       |
-| L2    | OpenCode `permission`: `edit: deny`, `task: deny`, `question: deny`, with `bash` limited to read-only Git commands or `ask`   | OpenCode   |
-| L3    | Tree fingerprint before dispatch and after return; a difference rejects the result                                            | Both       |
-| L4    | Documented limitation                                                                                                        | Copilot    |
+| Layer | Mechanism                                                                                                                   | Applies to |
+| ----- | --------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| L1    | Instruction boundary, plus the requirement to report any write attempted                                                    | Both       |
+| L2    | OpenCode `permission`: `edit: deny`, `task: deny`, `question: deny`, with `bash` limited to read-only Git commands or `ask` | OpenCode   |
+| L3    | Tree fingerprint before dispatch and after return; a difference rejects the result                                          | Both       |
+| L4    | Documented limitation                                                                                                       | Copilot    |
 
 The fingerprint is `git status --porcelain=v1`, the diff identity, and a hash of
 each untracked file. Layer 3 does not prevent a write; it makes one visible and
@@ -280,8 +280,8 @@ benefits most, because design quality compounds across every slice it dispatches
 The tier sets the gates. The architect classifies; the orchestrator applies them
 at task level. When two tiers are plausible, take the higher one.
 
-| Tier | Typical work                                                                                        | Plan approval | Design review | Task review | Integration review | Integration approval |
-| ---- | --------------------------------------------------------------------------------------------------- | ------------- | ------------- | ----------- | ------------------ | -------------------- |
+| Tier | Typical work                                                                                        | Plan approval | Design review | Task review  | Integration review | Integration approval |
+| ---- | --------------------------------------------------------------------------------------------------- | ------------- | ------------- | ------------ | ------------------ | -------------------- |
 | T0   | Documentation, comments, formatting, test-only changes with no behaviour impact                     | Not required  | Not required  | Not required | Not required       | Not required         |
 | T1   | Behaviour change inside one module, covered by existing tests                                       | Required      | Optional      | Required     | Not required       | Not required         |
 | T2   | Public contract, data shape, CI or release configuration, security, dependencies, several modules   | Required      | Required      | Required     | Required           | Required             |
