@@ -1,8 +1,9 @@
 name: agent-workflow
 version: 0.0.2
 description: >-
-  Human-supervised orchestration of specialist AI coding agents through an
-  explicit, repeatable workflow with bounded tasks and verified results.
+  Human-supervised design and delivery: an architect owns the spec and iterates
+  it with the user, then issues approved slices to an orchestrator that
+  delegates bounded tasks and verifies the results.
 author: MilkyWare
 license: MIT
 targets:

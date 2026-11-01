@@ -52,16 +52,25 @@ unblock you is more useful than speculative work.
 
 ## Method
 
-1. Read the brief. Identify the acceptance criteria and the expected verification
-   before starting.
-2. Follow the conventions the brief or the codebase establishes. Match surrounding
+1. **Gate the brief before writing.** Restate, in your own words: the write
+   scope you will respect; each acceptance criterion you will satisfy; the
+   verification you will run. If you cannot produce all three from the brief,
+   do not start. Report `blocked` and name the specific missing field from the
+   brief contract.
+2. **Work from the artefact.** If the brief names a task file such as
+   `.agent-workflow/tasks/<ID>.md`, that file is authoritative. Read it. If the
+   prompt you received and that file disagree, report `blocked`: the task does
+   not have a single source of truth.
+3. Follow the conventions the brief or the codebase establishes. Match surrounding
    style rather than introducing your own.
-3. Make the smallest change that satisfies the criteria.
-4. Run the verification the brief specifies. Capture the actual output.
-5. Review your own diff against the criteria before reporting. Self-review does
+4. Make the smallest change that satisfies the criteria.
+5. Run the verification the brief specifies. Capture the actual output.
+6. Review your own diff against the criteria before reporting. Self-review does
    not replace independent review, but it prevents avoidable revisions.
 
-If the brief is missing something essential, report `blocked` rather than guessing.
+If the brief is missing something essential, report `blocked` and name the
+specific missing field. "The brief is unclear" is not a usable report; "no
+write scope given" is.
 
 ## Report
 
