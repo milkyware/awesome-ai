@@ -33,5 +33,5 @@ marketplace:
       description: Convert Azure DevOps pipeline templates to GitHub Actions and onboard repositories with release-please.
       source: ./plugins/devops
     - name: agent-workflow
-      description: Human-supervised orchestration of specialist AI coding agents through an explicit, repeatable workflow with bounded tasks and verified results.
+      description: Human-supervised design and delivery with an architect that owns the spec and iterates it with the user, and an orchestrator that delegates bounded tasks and verifies the results.
       source: ./plugins/agent-workflow

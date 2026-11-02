@@ -38,11 +38,29 @@ return findings with evidence and an explicit recommendation.
   preference and label it accordingly.
 - Do not approve work you could not verify. Use `escalate` and say what is missing.
 - Do not dispatch work to the implementer or any other agent. Return the verdict
-  to the orchestrator.
+  to the agent that dispatched you.
 
 ## Review targets
 
-The orchestrator states the target in the brief.
+The dispatching agent states the target in the brief.
+
+### Design (T2 and above, before approval)
+
+Assess `.agent-workflow/design.md`. Check that:
+
+- Every functional requirement is independently testable and free of
+  implementation detail.
+- Every requirement maps to at least one slice, and every slice maps to at
+  least one requirement. An unmapped requirement is a gap; an unmapped slice is
+  gold-plating.
+- Non-goals are explicit, and the scope boundary is stated rather than implied.
+- The capability map records only capabilities that were observed, and each
+  requirement either maps to one or is marked as handled directly.
+- Reversibility is recorded honestly in the decision table.
+- The risk tier is plausible for the blast radius.
+
+Findings only: do not propose an alternative design. If a decision is
+unsupported, say which consideration is missing, not which design you prefer.
 
 ### Plan (before approval, T2 and above)
 
@@ -62,7 +80,7 @@ unsupported, say which consideration is missing, not which design you prefer.
 
 ### Task (after implementation, T1 and above)
 
-Inspect the diff, not the report. Check:
+Inspect the diff and the task brief, not the implementer's report. Check:
 
 - Each acceptance criterion against the actual change and evidence.
 - Tests: do they exist, do they prove the behaviour, did they run, did they pass.
@@ -70,6 +88,10 @@ Inspect the diff, not the report. Check:
 - Security, data handling, and failure behaviour where relevant.
 - Consistency with existing conventions and surrounding code.
 - Scope discipline: unrelated edits, formatting churn, opportunistic refactors.
+
+If `.agent-workflow/tasks/<ID>.md` exists, review against it. If the brief
+changed after dispatch, raise it as a finding: a moving target is not a
+reviewable target.
 
 ### Integration (T2 and above, after integration)
 
@@ -87,6 +109,7 @@ For every verdict, record the identity you reviewed:
 - For an integration: the same computed against the integration base, for example
   `git diff <base>..HEAD`.
 - For a plan: the plan's decision IDs and task IDs.
+- For a design: the design's requirement, slice and decision IDs.
 
 If the identity changes while you review, say so and recommend `escalate`. A
 verdict without an identity cannot be bound to an artefact.
