@@ -14,7 +14,7 @@ dependencies:
   mcp:
     - name: atlassian
       registry: false
-      url: https://mcp.atlassian.com/v1/mcp
+      url: https://mcp.atlassian.com/v2/mcp
       transport: http
 includes: auto
 devDependencies:
