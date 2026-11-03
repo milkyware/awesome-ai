@@ -11,7 +11,11 @@ targets:
   - opencode
 dependencies:
   apm: []
-  mcp: []
+  mcp:
+    - name: atlassian
+      registry: false
+      url: https://mcp.atlassian.com/v1/mcp
+      transport: http
 includes: auto
 devDependencies:
   apm: []
