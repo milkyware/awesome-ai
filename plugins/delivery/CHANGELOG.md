@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.3...delivery-v0.0.4) (2026-11-03)
+
+
+### 🩹 Fixes
+
+* added missing atlassian mcp server ([#47](https://github.com/milkyware/awesome-ai/issues/47)) ([ffed9b6](https://github.com/milkyware/awesome-ai/commit/ffed9b69efe5fbd66dd221ed2aba791ad922a2aa))
+
 ## [0.0.3](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.2...delivery-v0.0.3) (2026-10-26)
 
 
