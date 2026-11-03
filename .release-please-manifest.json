@@ -2,6 +2,6 @@
   "plugins/architecture-docs": "0.0.8",
   "plugins/agent-workflow": "0.1.0",
   "plugins/code-quality": "0.0.2",
-  "plugins/delivery": "0.0.4",
+  "plugins/delivery": "0.0.5",
   "plugins/devops": "0.0.3"
 }

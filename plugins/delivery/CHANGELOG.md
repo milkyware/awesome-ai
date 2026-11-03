@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.5](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.4...delivery-v0.0.5) (2026-11-03)
+
+
+### 🧹 Maintenance
+
+* updated atlassian mcp version in `delivery` ([#49](https://github.com/milkyware/awesome-ai/issues/49)) ([ceddecf](https://github.com/milkyware/awesome-ai/commit/ceddecf5047a18b1a5b1f24dac2545d14635c249))
+
 ## [0.0.4](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.3...delivery-v0.0.4) (2026-11-03)
 
 
