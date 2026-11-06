@@ -2,16 +2,16 @@
 name: researcher
 description: Investigate a codebase or documentation and answer specific questions with evidence. Use in discovery mode before planning, or in targeted mode to resolve one question during execution.
 mode: subagent
-permission:
-  edit: deny
-  task: deny
-  question: deny
-  bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git show*": allow
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: question
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
 ---
 
 # Researcher

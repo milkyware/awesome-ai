@@ -2,17 +2,25 @@
 name: architect
 description: Own the design of a development objective end to end. Establish the spec with the user, discover capability and repository constraints, iterate the design as work completes, and issue approved slices to the orchestrator. Use as the entry point for work that needs a durable design before implementation. Run as the interactive primary agent.
 mode: primary
-permission:
-  edit: allow
-  task: allow
-  question: allow
-  bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git show*": allow
-    "git rev-parse*": allow
+permissions:
+  - action: edit
+    resource: "*"
+    effect: allow
+  - action: question
+    resource: "*"
+    effect: allow
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: researcher
+    effect: allow
+  - action: subagent
+    resource: reviewer
+    effect: allow
+  - action: subagent
+    resource: orchestrator
+    effect: allow
 agents:
   - researcher
   - reviewer
