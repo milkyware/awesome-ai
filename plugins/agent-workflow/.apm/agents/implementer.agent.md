@@ -2,16 +2,16 @@
 name: implementer
 description: Execute one bounded task with explicit scope and acceptance criteria, and report the change with the verification actually run. Use when a single task brief defines what to change and how success is proved.
 mode: subagent
-permission:
-  task: deny
-  question: deny
-  bash:
-    "*": allow
-    "git commit*": deny
-    "git push*": deny
-    "git reset*": deny
-    "git rebase*": deny
-    "git stash*": deny
+permissions:
+  - action: edit
+    resource: "*"
+    effect: allow
+  - action: question
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
 ---
 
 # Implementer

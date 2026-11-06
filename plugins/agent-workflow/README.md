@@ -175,11 +175,11 @@ Verified against APM 0.30.0 and the current harness documentation:
 | Agent deployment via `apm install` (OpenCode)      | **Verified** — agents land in `.opencode/agents/*.md`                |
 | Agent frontmatter validation                       | **Verified** — `apm compile --validate` accepts all five             |
 | Automatic delegation (OpenCode subagent sessions)  | **Verified** — supported by the harness                              |
-| Nested delegation (orchestrator → specialist)      | **Expected** — `task: allow`; not verified end-to-end                |
+| Nested delegation (orchestrator → specialist)      | **Expected** — `subagent` allow-list; not verified end-to-end       |
 | Automatic delegation (Copilot CLI)                 | **Expected** — via the `agents` allow-list; not verified end-to-end  |
 | Primary/subagent separation (OpenCode `mode`)      | **Verified** — `opencode debug agents` resolves primary/subagent     |
-| Read-only enforcement (OpenCode `permission`)      | **Verified** — `edit: deny` resolves; prompt behaviour not exercised |
-| Nested delegation by specialists (OpenCode `task`) | **Verified** — `task: deny` resolves to `subagent deny`              |
+| Read-only enforcement (OpenCode `permissions`)     | **Verified** — `edit: deny` resolves; prompt behaviour not exercised |
+| Nested delegation by specialists (OpenCode)        | **Verified** — `subagent: deny` resolves for each specialist         |
 | Read-only enforcement (Copilot)                    | **Not enforced** — instructions plus detection only                  |
 | Architect refuses delegated use                    | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot  |
 | Orchestrator refuses non-architect delegation      | **Instruction only** — `question: deny` removes the user channel     |
@@ -190,9 +190,52 @@ declaration is required or invented.
 
 APM deploys agent frontmatter verbatim for both targets. It does not translate
 between harness conventions, so the following fields are **OpenCode-only** and
-should be treated as inert in Copilot until verified: `mode`, `permission`, and
+should be treated as inert in Copilot until verified: `mode`, `permissions`, and
 the `agents` allow-list. Copilot has no equivalent for read-only subagents, so
 enforcement there is instruction plus detection.
+
+### Agent permissions
+
+Each agent declares only what its role can or cannot do, using OpenCode V2
+`permissions`. The last matching rule wins.
+
+| Agent        | Edit   | Question | Subagents                                  |
+| ------------ | ------ | -------- | ------------------------------------------ |
+| architect    | allow  | allow    | researcher, reviewer, orchestrator only    |
+| orchestrator | allow  | deny     | researcher, implementer, reviewer only     |
+| implementer  | allow  | deny     | none                                       |
+| researcher   | deny   | deny     | none                                       |
+| reviewer     | deny   | deny     | none                                       |
+
+No agent declares shell `allow` or `ask` rules. Approval policy belongs to the
+person running the harness, not to a portable agent definition: agent rules are
+appended after global rules and the last match wins, so a blanket `shell *: ask`
+in frontmatter would silently override every shell allow the user configured.
+The boundaries that matter — read-only, no delegation, no user channel — are
+`deny` rules, which only ever tighten.
+
+### Required shell policy (OpenCode)
+
+The agents rely on the harness for shell approval. Install these hard denies once
+in your user or project configuration, as policies rather than permissions, so
+that an agent or a project file cannot lift them:
+
+```jsonc
+{
+  "policies": [
+    { "action": "tool.use", "resource": "shell:git push *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:git reset --hard *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:git clean -f*", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:rm -rf *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:Remove-Item -Recurse *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:terraform apply *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:terraform destroy *", "effect": "deny" }
+  ]
+}
+```
+
+Without these, the agents inherit the harness defaults: permissive on a stock
+OpenCode install, and instruction plus fingerprint only on Copilot.
 
 ### Read-only enforcement
 
@@ -202,7 +245,7 @@ layered:
 | Layer | Mechanism                                                                                                                   | Applies to |
 | ----- | --------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | L1    | Instruction boundary, plus the requirement to report any write attempted                                                    | Both       |
-| L2    | OpenCode `permission`: `edit: deny`, `task: deny`, `question: deny`, with `bash` limited to read-only Git commands or `ask` | OpenCode   |
+| L2    | OpenCode `permissions`: `edit: deny`, `subagent: deny`, `question: deny`; no shell rules, so shell approval stays with the user | OpenCode   |
 | L3    | Tree fingerprint before dispatch and after return; a difference rejects the result                                          | Both       |
 | L4    | Documented limitation                                                                                                       | Copilot    |
 
@@ -219,8 +262,8 @@ scopes are different. OpenCode documents a path-scoped form for this —
 top-level wildcard is not overridden by a named-key object rule, and pattern
 matching is simple wildcard against the Git worktree root rather than the launch
 directory. Since a per-agent write scope cannot be expressed mechanically, these
-three agents use scalar `edit: allow` and rely on the instruction boundary in
-their own definition plus the L3 tree fingerprint.
+three agents use a blanket `edit: "*" → allow` rule and rely on the instruction
+boundary in their own definition plus the L3 tree fingerprint.
 
 Read-only agents are unaffected: total denial (`edit: deny`) is reliable. This is
 a real limitation, not a design preference. If the underlying harness bug is
@@ -251,9 +294,9 @@ available, but that has not been verified. Until it is, treat automatic Copilot
 delegation as expected rather than proven, and use the handoff buttons or explicit
 `@agent` invocation, both of which are verified.
 
-`permission` is used instead of `tools` for read-only enforcement because it is an
+`permissions` is used instead of `tools` for read-only enforcement because it is an
 OpenCode-only key with no conflicting shape in Copilot. If Copilot rejects an
-unknown frontmatter key on install, the fallback is to drop `permission` and rely
+unknown frontmatter key on install, the fallback is to drop `permissions` and rely
 on instruction plus detection.
 
 ### Agent naming
@@ -435,9 +478,8 @@ slice proceeds without further approval. Integration approval applies at T2 and
 above.
 
 **Q: The reviewer is asking me to approve a test command.**
-A: OpenCode read-only permission allows file edits to be denied while leaving
-shell commands to you. Approve test, lint, and build commands; deny anything that
-writes to the tree.
+A: The reviewer is read-only for files, but shell approval belongs to you. Approve
+test, lint, and build commands; deny anything that writes to the tree.
 
 **Q: Only the architect appears in the agent picker.**
 A: That is intended. The specialists declare `mode: subagent` so they are

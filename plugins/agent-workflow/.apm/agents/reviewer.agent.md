@@ -2,18 +2,16 @@
 name: reviewer
 description: Independently assess a plan, a task diff, or an integrated change, and return a severity-graded verdict with the diff identity reviewed. Use after planning, after implementation, and after integration.
 mode: subagent
-permission:
-  edit: deny
-  task: deny
-  question: deny
-  bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git show*": allow
-    "git hash-object*": allow
-    "git rev-parse*": allow
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: question
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
 ---
 
 # Reviewer

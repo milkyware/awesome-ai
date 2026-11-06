@@ -2,18 +2,25 @@
 name: orchestrator
 description: Execute one approved design slice through bounded tasks, delegated implementation, and independent review. Use when the architect has issued a slice and the work needs task-level planning, delegation, verification and integration. Runs as a subagent delegated by the architect.
 mode: subagent
-permission:
-  edit: allow
-  task: allow
-  question: deny
-  bash:
-    "*": ask
-    "git status*": allow
-    "git diff*": allow
-    "git log*": allow
-    "git show*": allow
-    "git hash-object*": allow
-    "git rev-parse*": allow
+permissions:
+  - action: edit
+    resource: "*"
+    effect: allow
+  - action: question
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: "*"
+    effect: deny
+  - action: subagent
+    resource: researcher
+    effect: allow
+  - action: subagent
+    resource: implementer
+    effect: allow
+  - action: subagent
+    resource: reviewer
+    effect: allow
 agents:
   - researcher
   - implementer
