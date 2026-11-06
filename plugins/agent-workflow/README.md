@@ -169,20 +169,20 @@ serves no requirement is recorded and left unused.
 
 Verified against APM 0.30.0 and the current harness documentation:
 
-| Capability                                         | Status                                                               |
-| -------------------------------------------------- | -------------------------------------------------------------------- |
-| Agent deployment via `apm install` (Copilot)       | **Verified** — agents land in `.github/agents/*.agent.md`            |
-| Agent deployment via `apm install` (OpenCode)      | **Verified** — agents land in `.opencode/agents/*.md`                |
-| Agent frontmatter validation                       | **Verified** — `apm compile --validate` accepts all five             |
-| Automatic delegation (OpenCode subagent sessions)  | **Verified** — supported by the harness                              |
-| Nested delegation (orchestrator → specialist)      | **Expected** — `subagent` allow-list; not verified end-to-end       |
-| Automatic delegation (Copilot CLI)                 | **Expected** — via the `agents` allow-list; not verified end-to-end  |
-| Primary/subagent separation (OpenCode `mode`)      | **Verified** — `opencode debug agents` resolves primary/subagent     |
-| Read-only enforcement (OpenCode `permissions`)     | **Verified** — `edit: deny` resolves; prompt behaviour not exercised |
-| Nested delegation by specialists (OpenCode)        | **Verified** — `subagent: deny` resolves for each specialist         |
-| Read-only enforcement (Copilot)                    | **Not enforced** — instructions plus detection only                  |
-| Architect refuses delegated use                    | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot  |
-| Orchestrator refuses non-architect delegation      | **Instruction only** — `question: deny` removes the user channel     |
+| Capability                                        | Status                                                               |
+| ------------------------------------------------- | -------------------------------------------------------------------- |
+| Agent deployment via `apm install` (Copilot)      | **Verified** — agents land in `.github/agents/*.agent.md`            |
+| Agent deployment via `apm install` (OpenCode)     | **Verified** — agents land in `.opencode/agents/*.md`                |
+| Agent frontmatter validation                      | **Verified** — `apm compile --validate` accepts all five             |
+| Automatic delegation (OpenCode subagent sessions) | **Verified** — supported by the harness                              |
+| Nested delegation (orchestrator → specialist)     | **Expected** — `subagent` allow-list; not verified end-to-end        |
+| Automatic delegation (Copilot CLI)                | **Expected** — via the `agents` allow-list; not verified end-to-end  |
+| Primary/subagent separation (OpenCode `mode`)     | **Verified** — `opencode debug agents` resolves primary/subagent     |
+| Read-only enforcement (OpenCode `permissions`)    | **Verified** — `edit: deny` resolves; prompt behaviour not exercised |
+| Nested delegation by specialists (OpenCode)       | **Verified** — `subagent: deny` resolves for each specialist         |
+| Read-only enforcement (Copilot)                   | **Not enforced** — instructions plus detection only                  |
+| Architect refuses delegated use                   | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot  |
+| Orchestrator refuses non-architect delegation     | **Instruction only** — `question: deny` removes the user channel     |
 
 `apm install` projects these agents to harness-native paths. No `plugin.json` is
 authored: APM is the only supported installation mechanism, so no explicit agent
@@ -199,13 +199,13 @@ enforcement there is instruction plus detection.
 Each agent declares only what its role can or cannot do, using OpenCode V2
 `permissions`. The last matching rule wins.
 
-| Agent        | Edit   | Question | Subagents                                  |
-| ------------ | ------ | -------- | ------------------------------------------ |
-| architect    | allow  | allow    | researcher, reviewer, orchestrator only    |
-| orchestrator | allow  | deny     | researcher, implementer, reviewer only     |
-| implementer  | allow  | deny     | none                                       |
-| researcher   | deny   | deny     | none                                       |
-| reviewer     | deny   | deny     | none                                       |
+| Agent        | Edit  | Question | Subagents                               |
+| ------------ | ----- | -------- | --------------------------------------- |
+| architect    | allow | allow    | researcher, reviewer, orchestrator only |
+| orchestrator | allow | deny     | researcher, implementer, reviewer only  |
+| implementer  | allow | deny     | none                                    |
+| researcher   | deny  | deny     | none                                    |
+| reviewer     | deny  | deny     | none                                    |
 
 No agent declares shell `allow` or `ask` rules. Approval policy belongs to the
 person running the harness, not to a portable agent definition: agent rules are
@@ -224,13 +224,33 @@ that an agent or a project file cannot lift them:
 {
   "policies": [
     { "action": "tool.use", "resource": "shell:git push *", "effect": "deny" },
-    { "action": "tool.use", "resource": "shell:git reset --hard *", "effect": "deny" },
-    { "action": "tool.use", "resource": "shell:git clean -f*", "effect": "deny" },
+    {
+      "action": "tool.use",
+      "resource": "shell:git reset --hard *",
+      "effect": "deny",
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:git clean -f*",
+      "effect": "deny",
+    },
     { "action": "tool.use", "resource": "shell:rm -rf *", "effect": "deny" },
-    { "action": "tool.use", "resource": "shell:Remove-Item -Recurse *", "effect": "deny" },
-    { "action": "tool.use", "resource": "shell:terraform apply *", "effect": "deny" },
-    { "action": "tool.use", "resource": "shell:terraform destroy *", "effect": "deny" }
-  ]
+    {
+      "action": "tool.use",
+      "resource": "shell:Remove-Item -Recurse *",
+      "effect": "deny",
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:terraform apply *",
+      "effect": "deny",
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:terraform destroy *",
+      "effect": "deny",
+    },
+  ],
 }
 ```
 
@@ -242,12 +262,12 @@ OpenCode install, and instruction plus fingerprint only on Copilot.
 There is no single frontmatter that both harnesses enforce, so read-only is
 layered:
 
-| Layer | Mechanism                                                                                                                   | Applies to |
-| ----- | --------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| L1    | Instruction boundary, plus the requirement to report any write attempted                                                    | Both       |
+| Layer | Mechanism                                                                                                                       | Applies to |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| L1    | Instruction boundary, plus the requirement to report any write attempted                                                        | Both       |
 | L2    | OpenCode `permissions`: `edit: deny`, `subagent: deny`, `question: deny`; no shell rules, so shell approval stays with the user | OpenCode   |
-| L3    | Tree fingerprint before dispatch and after return; a difference rejects the result                                          | Both       |
-| L4    | Documented limitation                                                                                                       | Copilot    |
+| L3    | Tree fingerprint before dispatch and after return; a difference rejects the result                                              | Both       |
+| L4    | Documented limitation                                                                                                           | Copilot    |
 
 The fingerprint is `git status --porcelain=v1`, the diff identity, and a hash of
 each untracked file. Layer 3 does not prevent a write; it makes one visible and
