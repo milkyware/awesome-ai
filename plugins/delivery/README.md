@@ -1,6 +1,6 @@
 # Delivery Plugin
 
-**Produce implementation-ready plans and create delivery-ready Jira tickets with structured, AI-guided workflows.**
+**Produce implementation-ready plans, create delivery-ready Jira tickets, and open GitHub issues with structured, AI-guided workflows.**
 
 ## Skills
 
@@ -8,6 +8,7 @@
 | --------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | `implementation-plan` | Convert an agreed design into a repository-grounded implementation contract                      | Ordered steps, requirements, tests, validation, risks, and done criteria |
 | `create-jira-ticket`  | Create a Jira issue from a structured or free-form request through the Atlassian MCP integration | Created Jira issue key and URL, or a complete ticket draft               |
+| `create-github-issue` | Create a GitHub issue with type, size, and priority labels through the GitHub CLI                | Created issue number and URL, or a complete issue draft                  |
 
 All skills enforce the repository [writing standards](../../README.md#writing-standards).
 
@@ -65,6 +66,22 @@ Ask the agent to create a Jira issue. The skill will:
 
 Requires a working Atlassian MCP integration with Jira create permission.
 
+### Create a GitHub issue
+
+Ask the agent to open a GitHub issue. The skill will:
+
+1. Resolve the repository and the type of work, and ask whether a parent issue is wanted.
+2. Search open and closed issues before creating a new one.
+3. Classify the work with one `type:`, one `size:`, and one `priority:` label, creating missing labels first.
+4. Author the issue using the fixed description structure, adapted for Bug, Story, Feature, Task, Spike, or Epic.
+5. Confirm once before writing, create the issue, and report the number and URL.
+
+**Output:** A created GitHub issue, or a complete issue draft with no fabricated number or URL if creation is unavailable.
+
+Requires an authenticated `gh` CLI with write access to the target repository.
+
+The label vocabulary is fixed: `type:` for `epic`, `feature`, `story`, `task`, `bug`, and `spike`; `size:` for `xs` to `xl`; `priority:` for `p0` to `p4`. An epic takes no size label. Canonical names, colours, and descriptions are in [github-labels.md](.apm/skills/create-github-issue/references/github-labels.md).
+
 Invoke a skill from your agent's skill picker, or use `/skills <name>` in GitHub Copilot CLI.
 
 ## Troubleshooting
@@ -77,6 +94,14 @@ A: Reload skills with `/skills reload` or restart the CLI.
 
 A: Connect the Atlassian MCP server (`https://mcp.atlassian.com/v1/mcp`) with Jira metadata and create permission, then retry. The skill provides a manual draft in the meantime.
 
+**Q: GitHub issue creation reports no access.**
+
+A: Run `gh auth status`, then `gh auth login` if needed, and confirm you have write access to the target repository. The skill provides a complete draft and the exact command in the meantime.
+
+**Q: GitHub issue creation fails because a label does not exist.**
+
+A: Creating labels also requires write access. Ask the skill to reconcile the labels first, or create them with `gh label create` using the names and colours in [github-labels.md](.apm/skills/create-github-issue/references/github-labels.md).
+
 ## Contributing
 
 Report issues and suggest improvements in the [awesome-ai repository](https://github.com/milkyware/awesome-ai/issues). Reference the plugin and skill, and include the context or output that triggered the issue.
@@ -88,4 +113,6 @@ This plugin is licensed under the MIT License. See the [awesome-ai repository LI
 ## Related resources
 
 - [Atlassian Remote MCP Server](https://mcp.atlassian.com/v1/mcp)
+- [GitHub CLI: gh issue create](https://cli.github.com/manual/gh_issue_create)
+- [GitHub Docs: managing labels](https://docs.github.com/issues/using-labels-and-milestones-to-track-work/managing-labels)
 - [awesome-ai repository](https://github.com/milkyware/awesome-ai)
