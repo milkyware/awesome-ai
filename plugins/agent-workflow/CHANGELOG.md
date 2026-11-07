@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.0...agent-workflow-v0.1.1) (2026-11-07)
+
+
+### 🩹 Fixes
+
+* updated permissions to opencode v2 model ([#52](https://github.com/milkyware/awesome-ai/issues/52)) ([56e3ecd](https://github.com/milkyware/awesome-ai/commit/56e3ecd9b8ef33f9aadca42edd4e71d4bc922908))
+
 ## [0.1.0](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.0.2...agent-workflow-v0.1.0) (2026-11-02)
 
 
