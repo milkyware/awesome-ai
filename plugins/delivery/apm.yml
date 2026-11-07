@@ -1,8 +1,8 @@
 name: delivery
 version: 0.0.5
 description: >-
-  Produce implementation-ready plans and create delivery-ready Jira tickets
-  using structured, gated workflows.
+  Produce implementation-ready plans and create delivery-ready Jira tickets or
+  GitHub issues using structured, gated workflows.
 author: MilkyWare
 license: MIT
 targets:
