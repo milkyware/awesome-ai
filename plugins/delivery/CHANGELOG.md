@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.5...delivery-v0.0.6) (2026-11-07)
+
+
+### 🚀 Enhancements
+
+* added skill to create github issues ([#54](https://github.com/milkyware/awesome-ai/issues/54)) ([119822c](https://github.com/milkyware/awesome-ai/commit/119822c84e94ce552fe37ca140c027383890522b))
+
 ## [0.0.5](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.4...delivery-v0.0.5) (2026-11-03)
 
 
