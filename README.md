@@ -6,13 +6,13 @@ A curated collection of reusable skills for AI-assisted software delivery and ar
 
 ## Plugins
 
-| Plugin                                                       | Description                                                                                           | Skills / agents                                                  |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| [`agent-workflow`](./plugins/agent-workflow/README.md)       | Human-supervised orchestration of specialist AI coding agents through bounded, verified tasks         | `orchestrator`, `researcher`, `implementer`, `reviewer` (agents) |
-| [`architecture-docs`](./plugins/architecture-docs/README.md) | Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides | `generate-adr`, `generate-hld`, `generate-architecture-md`       |
-| [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                                    |
-| [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans and delivery-ready Jira tickets                                            | `implementation-plan`, `create-jira-ticket`                      |
-| [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`                  |
+| Plugin                                                       | Description                                                                                           | Skills / agents                                                    |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [`agent-workflow`](./plugins/agent-workflow/README.md)       | Human-supervised orchestration of specialist AI coding agents through bounded, verified tasks         | `orchestrator`, `researcher`, `implementer`, `reviewer` (agents)   |
+| [`architecture-docs`](./plugins/architecture-docs/README.md) | Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides | `generate-adr`, `generate-hld`, `generate-architecture-md`         |
+| [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                                      |
+| [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans, delivery-ready Jira tickets, and GitHub issues                            | `implementation-plan`, `create-jira-ticket`, `create-github-issue` |
+| [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`                    |
 
 `agent-workflow` ships agents rather than skills. Each plugin README documents installation for its supported harnesses, what it provides, and usage guidance.
 
