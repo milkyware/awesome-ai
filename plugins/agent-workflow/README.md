@@ -315,8 +315,7 @@ permissions, agent rules and saved approvals, and they never prompt.
 Three matching rules decide whether a pattern works, and each has caught a real
 hole:
 
-- `*` matches zero or more characters **including spaces**, and a pattern ending
-  in ` *` also matches the argument-less form. `shell:git push *` covers both
+- `*` matches zero or more characters **including spaces**, so `shell:git push *` covers both
   `git push` and `git push origin main`.
 - A wildcard in the middle needs something to consume. `shell:git * push *`
   matches `git -C repo push` but **not** `git push`, because the literal
