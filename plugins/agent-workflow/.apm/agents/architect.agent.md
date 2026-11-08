@@ -3,8 +3,23 @@ name: architect
 description: Own the design of a development objective end to end. Establish the spec with the user, discover capability and repository constraints, iterate the design as work completes, and issue approved slices to the orchestrator. Use as the entry point for work that needs a durable design before implementation. Run as the interactive primary agent.
 mode: primary
 permissions:
+  # Deny first, re-grant the design directory after it. The scalar form is the one
+  # OpenCode honours; the object form documented for path scopes is broken.
   - action: edit
     resource: "*"
+    effect: deny
+  - action: edit
+    resource: ".agent-workflow/*"
+    effect: allow
+  # The one tracked file the agent may touch: the ignore entry for the workflow
+  # directory. Documented in Boundaries, so the permission matches the prose.
+  - action: edit
+    resource: ".gitignore"
+    effect: allow
+  # The agent's own deny is evaluated after the global permissions, so the plan
+  # directory needs its own re-grant when the architect runs in plan mode.
+  - action: edit
+    resource: "~/.opencode/plan/*"
     effect: allow
   - action: question
     resource: "*"
