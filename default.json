@@ -2,13 +2,14 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "description": "Awesome AI monorepo rule: keep independent APM plugin release streams for component-vX.Y.Z tags (for example, architecture-docs-v0.0.5).",
+      "description": "Awesome AI monorepo rule: keep independent APM plugin release streams for component-vX.Y.Z tags (for example, architecture-docs-v0.0.5), and pin each plugin to its commit digest with the release tag kept as a trailing comment (owner/repo#<sha> # component-vX.Y.Z).",
       "matchManagers": ["apm"],
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["milkyware/awesome-ai"],
       "extractVersion": "^(?<version>.+)$",
       "versionCompatibility": "^(?<compatibility>.+)-v(?<version>\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?)$",
       "versioning": "semver",
+      "pinDigests": true,
       "commitMessageTopic": "{{depName}} APM package"
     },
     {
