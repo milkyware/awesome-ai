@@ -179,6 +179,8 @@ Verified against APM 0.30.0 and the current harness documentation:
 | Automatic delegation (Copilot CLI)                | **Expected** — via the `agents` allow-list; not verified end-to-end  |
 | Primary/subagent separation (OpenCode `mode`)     | **Verified** — `opencode debug agents` resolves primary/subagent     |
 | Read-only enforcement (OpenCode `permissions`)    | **Verified** — `edit: deny` resolves; prompt behaviour not exercised |
+| Scoped writes (OpenCode, scalar deny + allow)     | **Verified** — probe agent wrote in scope, out of scope rejected     |
+| Policy hard denies (OpenCode `policies`)          | **Verified** — `git push` and `git -C . push` both blocked           |
 | Nested delegation by specialists (OpenCode)       | **Verified** — `subagent: deny` resolves for each specialist         |
 | Read-only enforcement (Copilot)                   | **Not enforced** — instructions plus detection only                  |
 | Architect refuses delegated use                   | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot  |
@@ -197,65 +199,182 @@ enforcement there is instruction plus detection.
 ### Agent permissions
 
 Each agent declares only what its role can or cannot do, using OpenCode V2
-`permissions`. The last matching rule wins.
+`permissions`. The last matching rule wins, so a catch-all sits first and every
+exception after it.
 
-| Agent        | Edit  | Question | Subagents                               |
-| ------------ | ----- | -------- | --------------------------------------- |
-| architect    | allow | allow    | researcher, reviewer, orchestrator only |
-| orchestrator | allow | deny     | researcher, implementer, reviewer only  |
-| implementer  | allow | deny     | none                                    |
-| researcher   | deny  | deny     | none                                    |
-| reviewer     | deny  | deny     | none                                    |
+| Agent        | Edit                                            | Question | Subagents                               | Shell        |
+| ------------ | ----------------------------------------------- | -------- | --------------------------------------- | ------------ |
+| architect    | `.agent-workflow/*` and `.gitignore`; else deny | allow    | researcher, reviewer, orchestrator only | global rules |
+| orchestrator | allow                                           | deny     | researcher, implementer, reviewer only  | global rules |
+| implementer  | allow                                           | deny     | none                                    | global rules |
+| researcher   | deny                                            | deny     | none                                    | global rules |
+| reviewer     | deny                                            | deny     | none                                    | global rules |
 
-No agent declares shell `allow` or `ask` rules. Approval policy belongs to the
-person running the harness, not to a portable agent definition: agent rules are
-appended after global rules and the last match wins, so a blanket `shell *: ask`
-in frontmatter would silently override every shell allow the user configured.
-The boundaries that matter — read-only, no delegation, no user channel — are
-`deny` rules, which only ever tighten.
+`global rules` means the agent declares no shell rule and inherits whatever the
+harness configured. Shell approval policy belongs to the person running the
+harness: agent rules are appended after global rules and the last match wins, so a
+blanket `shell *: ask` here would silently override every shell allow the user
+configured, and a blanket `shell *: allow` would give every agent an unprompted
+shell regardless of the user's policy. Roles that need one are configured in the
+harness instead — see [Per-agent shell grants](#per-agent-shell-grants-optional).
+
+The architect is the only role with a declared write scope. It records design
+artefacts and must not turn design work into implementation, so it denies `edit`
+and re-grants one directory. The rules are scalar — a catch-all deny followed by a
+prefix allow — which is the form OpenCode honours. The plan directory is
+re-granted for the same reason: the agent's own deny is evaluated after the global
+permissions, so leaving it out would revoke a path the harness already allows.
 
 ### Required shell policy (OpenCode)
 
 The agents rely on the harness for shell approval. Install these hard denies once
 in your user or project configuration, as policies rather than permissions, so
-that an agent or a project file cannot lift them:
+that an agent or a project file cannot lift them. Policies are evaluated after
+permissions, agent rules and saved approvals, and they never prompt.
 
 ```jsonc
 {
   "policies": [
-    { "action": "tool.use", "resource": "shell:git push *", "effect": "deny" },
+    // Remote side effects.
+    { "action": "tool.use", "resource": "shell:*git push *", "effect": "deny" },
     {
       "action": "tool.use",
-      "resource": "shell:git reset --hard *",
+      "resource": "shell:*git * push *",
       "effect": "deny",
     },
     {
       "action": "tool.use",
-      "resource": "shell:git clean -f*",
-      "effect": "deny",
-    },
-    { "action": "tool.use", "resource": "shell:rm -rf *", "effect": "deny" },
-    {
-      "action": "tool.use",
-      "resource": "shell:Remove-Item -Recurse *",
+      "resource": "shell:*git send-pack *",
       "effect": "deny",
     },
     {
       "action": "tool.use",
-      "resource": "shell:terraform apply *",
+      "resource": "shell:*gh pr merge *",
       "effect": "deny",
     },
     {
       "action": "tool.use",
-      "resource": "shell:terraform destroy *",
+      "resource": "shell:*gh * delete *",
       "effect": "deny",
     },
+    // Irreversible local loss.
+    {
+      "action": "tool.use",
+      "resource": "shell:*git reset --hard*",
+      "effect": "deny",
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:*git clean -f*",
+      "effect": "deny",
+    },
+    { "action": "tool.use", "resource": "shell:*rm -rf *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:*rm -fr *", "effect": "deny" },
+    {
+      "action": "tool.use",
+      "resource": "shell:*Remove-Item*-Recurse*",
+      "effect": "deny",
+    },
+    // Infrastructure teardown.
+    {
+      "action": "tool.use",
+      "resource": "shell:*terraform apply*",
+      "effect": "deny",
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:*terraform destroy*",
+      "effect": "deny",
+    },
+    {
+      "action": "tool.use",
+      "resource": "shell:*az * delete*",
+      "effect": "deny",
+    },
+    // Secrets, through both tools.
+    { "action": "tool.use", "resource": "edit:*.env*", "effect": "deny" },
+    {
+      "action": "tool.use",
+      "resource": "edit:*.env.example",
+      "effect": "allow",
+    },
+    { "action": "tool.use", "resource": "shell:*.env", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:*.env.*", "effect": "deny" },
+    {
+      "action": "tool.use",
+      "resource": "shell:*.env.example",
+      "effect": "allow",
+    },
+    // MCP tools: the base policy allows them outright, so only a policy stops them.
+    { "action": "tool.use", "resource": "*_delete_*:*", "effect": "deny" },
+    { "action": "tool.use", "resource": "github_merge_*:*", "effect": "deny" },
   ],
 }
 ```
 
+Three matching rules decide whether a pattern works, and each has caught a real
+hole:
+
+- `*` matches zero or more characters **including spaces**, so `shell:git push *` covers both
+  `git push` and `git push origin main`.
+- A wildcard in the middle needs something to consume. `shell:git * push *`
+  matches `git -C repo push` but **not** `git push`, because the literal
+  `push` requires a character before it. Use both forms: an anchored pattern for
+  the bare command, a mid-`*` pattern for wrapped invocations.
+- Policy resources do not expand `~`. Permissions do, policies do not, so a
+  `~/.config/...` statement silently matches nothing. Use a literal path or a
+  suffix pattern, and check the server log after editing — a statement that fails
+  validation is dropped with a warning while the rest still applies.
+
+Prefixing a pattern with `*` catches wrapped commands (`sudo git push`,
+`env FOO=1 git push`), which is why the local-loss patterns start that way. The
+same prefix is unnecessary where the literal already contains the spaces.
+
 Without these, the agents inherit the harness defaults: permissive on a stock
 OpenCode install, and instruction plus fingerprint only on Copilot.
+
+### Per-agent shell grants (optional)
+
+The agent files declare no shell rules, so each role inherits the user's policy.
+Two roles are more useful with an explicit grant, because their work is dominated
+by commands that would otherwise prompt on every call: the implementer runs
+builds and tests, and the orchestrator integrates. Configure them in the harness,
+not in the agent files, so that a plugin upgrade cannot remove them and a shared
+plugin does not loosen anyone else's shell policy.
+
+```jsonc
+{
+  "agents": {
+    "implementer": {
+      "permissions": [
+        { "action": "shell", "resource": "*", "effect": "allow" },
+        { "action": "shell", "resource": "git commit *", "effect": "ask" },
+        { "action": "shell", "resource": "git reset *", "effect": "ask" },
+        { "action": "shell", "resource": "git clean *", "effect": "ask" },
+        { "action": "shell", "resource": "git restore *", "effect": "ask" },
+        { "action": "shell", "resource": "git checkout -- *", "effect": "ask" },
+        { "action": "shell", "resource": "git rebase *", "effect": "ask" },
+        { "action": "shell", "resource": "git branch -D *", "effect": "ask" },
+        { "action": "shell", "resource": "git stash drop *", "effect": "ask" },
+      ],
+    },
+    "orchestrator": {
+      "permissions": [
+        { "action": "shell", "resource": "git add *", "effect": "allow" },
+        { "action": "shell", "resource": "git commit *", "effect": "allow" },
+        { "action": "shell", "resource": "git switch *", "effect": "allow" },
+        { "action": "shell", "resource": "git reset *", "effect": "ask" },
+        { "action": "shell", "resource": "git clean *", "effect": "ask" },
+        { "action": "shell", "resource": "git rebase *", "effect": "ask" },
+      ],
+    },
+  },
+}
+```
+
+Order matters: the blanket allow comes first and the narrower `ask` rules after
+it, because the last matching rule wins. `git push` never prompts — it is denied
+by the policy above.
 
 ### Read-only enforcement
 
@@ -266,29 +385,51 @@ layered:
 | ----- | ------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | L1    | Instruction boundary, plus the requirement to report any write attempted                                                        | Both       |
 | L2    | OpenCode `permissions`: `edit: deny`, `subagent: deny`, `question: deny`; no shell rules, so shell approval stays with the user | OpenCode   |
-| L3    | Tree fingerprint before dispatch and after return; a difference rejects the result                                              | Both       |
-| L4    | Documented limitation                                                                                                           | Copilot    |
+| L3    | OpenCode `policies`: hard denies that no agent rule or saved approval can lift                                                  | OpenCode   |
+| L4    | Tree fingerprint before dispatch and after return; a difference rejects the result                                              | Both       |
+| L5    | Documented limitation                                                                                                           | Copilot    |
 
 The fingerprint is `git status --porcelain=v1`, the diff identity, and a hash of
-each untracked file. Layer 3 does not prevent a write; it makes one visible and
+each untracked file. It does not prevent a write; it makes one visible and
 attributable. That is the achievable guarantee for a harness without a read-only
 subagent mode.
 
-### Why write scopes are not enforced by permission
+### Why only one write scope is enforced by permission
 
-The architect, orchestrator and implementer all need to write, and their write
-scopes are different. OpenCode documents a path-scoped form for this —
-`edit: { "*": "deny", "path/**": "allow" }` — but it does not work reliably: a
-top-level wildcard is not overridden by a named-key object rule, and pattern
-matching is simple wildcard against the Git worktree root rather than the launch
-directory. Since a per-agent write scope cannot be expressed mechanically, these
-three agents use a blanket `edit: "*" → allow` rule and rely on the instruction
-boundary in their own definition plus the L3 tree fingerprint.
+OpenCode documents a path-scoped form for `edit`:
 
-Read-only agents are unaffected: total denial (`edit: deny`) is reliable. This is
-a real limitation, not a design preference. If the underlying harness bug is
-fixed, the whitelist form becomes available and the L1-only guarantee for the
-three writing agents can be strengthened.
+```yaml
+edit:
+  "*": deny
+  "src/**": allow
+```
+
+That object form does not work. A top-level wildcard in the object is not
+overridden by a named-key rule, and patterns are matched as simple wildcards
+against the Git worktree root rather than the launch directory. The scalar form
+does work, and is verified against the current harness:
+
+```yaml
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: edit
+    resource: ".agent-workflow/*"
+    effect: allow
+```
+
+A probe agent carrying exactly those two rules wrote `.agent-workflow/ok.md` and
+was denied `root.md` with `permission.rejected`. Because `*` spans path
+separators, one prefix covers the whole subtree.
+
+Only the architect uses this, because its boundary is a single directory. The
+orchestrator and implementer write across the repository, where a multi-path scope
+is still not expressible: they take `edit: "*" → allow` and rely on the
+instruction boundary plus the tree fingerprint. Read-only agents are unaffected —
+total denial is reliable. Note also that an `edit` rule governs the edit tool
+only: a write performed through a shell command is not covered by it, which is
+what the fingerprint layer and the shell policy exist to catch.
 
 ### The `tools` conflict
 
@@ -510,12 +651,14 @@ select them directly for workflow work.
 A: Treat it as a boundary violation. The tree fingerprint will differ, the result
 is rejected, and the reviewed state is restored before continuing.
 
-**Q: Why can the architect and orchestrator write anywhere?**
-A: Because per-agent write scopes cannot be expressed reliably in OpenCode
-frontmatter. Their scopes — `.agent-workflow/design.md` and
-`.agent-workflow/**` plus Git operations respectively — are enforced by their own
-instructions and checked by the tree fingerprint. See "Why write scopes are not
-enforced by permission".
+**Q: Can any agent write anywhere?**
+A: Only the orchestrator and implementer, and only because their write scope spans
+the repository and a multi-path scope cannot be expressed in OpenCode frontmatter.
+The architect is scoped to `.agent-workflow/` by permission — a scalar `edit` deny
+followed by a prefix allow, which the harness enforces — plus the plan directory
+when it runs in plan mode. The orchestrator and implementer rely on their own
+instructions and are checked by the tree fingerprint. See "Why only one write
+scope is enforced by permission".
 
 ## Contributing
 
