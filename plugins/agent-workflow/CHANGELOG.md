@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.1...agent-workflow-v0.1.2) (2026-11-08)
+
+
+### 🩹 Fixes
+
+* refined `architect` permissions ([#56](https://github.com/milkyware/awesome-ai/issues/56)) ([49b2e7c](https://github.com/milkyware/awesome-ai/commit/49b2e7cbf927c25daae4d4d82b812d17d5f9a094))
+
 ## [0.1.1](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.0...agent-workflow-v0.1.1) (2026-11-07)
 
 

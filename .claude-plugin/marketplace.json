@@ -32,7 +32,7 @@
     {
       "name": "agent-workflow",
       "description": "Human-supervised design and delivery with an architect that owns the spec and iterates it with the user, and an orchestrator that delegates bounded tasks and verifies the results.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "source": "./plugins/agent-workflow"
     }
   ]
