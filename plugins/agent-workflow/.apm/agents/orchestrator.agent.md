@@ -18,10 +18,6 @@ permissions:
   - action: edit
     resource: ".gitignore"
     effect: allow
-  # The untracked fallback for the same entry, when .gitignore is tracked.
-  - action: edit
-    resource: ".git/info/exclude"
-    effect: allow
   # No channel to the user: approvals route through the architect.
   - action: question
     resource: "*"
@@ -121,8 +117,7 @@ On entry:
    they do not exist.
 3. Confirm `.agent-workflow/` is ignored by Git. If it is not in `.gitignore`,
    append it; if `.gitignore` does not exist, create it with that single entry.
-   Where a tracked-file change is undesirable, use `.git/info/exclude`. Report
-   what you did.
+   Report what you did.
 4. Never commit the contents of `.agent-workflow/`.
 
 Write the task brief to `tasks/<ID>.md` **before** dispatching. The file is the

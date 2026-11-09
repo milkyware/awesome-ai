@@ -139,10 +139,9 @@ a silent edit.
 
 The architect establishes the directory and ensures it is ignored. If
 `.gitignore` lacks the entry it is appended; if the file does not exist it is
-created with that single entry. Where a tracked-file change is undesirable,
-`.git/info/exclude` is used instead. The contents are never committed. The
-architect and orchestrator both report what they did to `.gitignore`, because
-editing a tracked file is a visible act.
+created with that single entry. The contents are never committed. The architect
+and orchestrator both report what they did to `.gitignore`, because editing a
+tracked file is a visible act.
 
 ## Capability check
 
@@ -421,11 +420,6 @@ by the policy above. The architect's write asks are speed bumps, not a boundary:
 `[IO.File]::WriteAllText` and redirection bypass them. The boundary is the policy
 layer plus the audit in
 [Trust and audit](#trust-and-audit-the-architects-shell).
-
-`dotnet restore` is granted to the orchestrator but omitted from the implementer:
-the implementer's blanket `shell * allow` already covers it, so an explicit entry
-would be noise. It is listed here because the orchestrator has no blanket and
-would otherwise prompt before nearly every verification run.
 
 ### Read-only enforcement
 
@@ -757,9 +751,8 @@ session; start a new conversation with the architect selected.
 
 **Q: The `.agent-workflow` directory got committed.**
 A: That is a defect. The contents are local state, not a deliverable. Remove them
-from the index, confirm `.agent-workflow/` is in `.gitignore` or
-`.git/info/exclude`, and note that this is exactly what the directory check exists
-to prevent.
+from the index, confirm `.agent-workflow/` is in `.gitignore`, and note that this
+is exactly what the directory check exists to prevent.
 
 **Q: How much ceremony should a small change get?**
 A: T0 or T1. A documentation fix needs no design approval or independent review; a
