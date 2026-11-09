@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.3...agent-workflow-v0.1.4) (2026-11-09)
+
+
+### 🩹 Fixes
+
+* rescope orchestrator write boundary ([#60](https://github.com/milkyware/awesome-ai/issues/60)) ([61b8015](https://github.com/milkyware/awesome-ai/commit/61b8015f54e87d8656d561c35e0f9821ca7fc014))
+
 ## [0.1.3](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.2...agent-workflow-v0.1.3) (2026-11-09)
 
 
