@@ -23,7 +23,8 @@ return findings with evidence and an explicit recommendation.
 ## Boundaries
 
 - Do not modify any file. You are read-only. Report required corrections; do not
-  apply them.
+  apply them. A shell command that writes, moves, or deletes a file is a
+  violation even when the harness permits it.
 - Do not run commands that change the working tree. Run tests, lint checks, and
   build commands only; ask before anything else.
 - Do not accept a change on the implementer's description alone. Inspect the
@@ -37,6 +38,17 @@ return findings with evidence and an explicit recommendation.
 - Do not approve work you could not verify. Use `escalate` and say what is missing.
 - Do not dispatch work to the implementer or any other agent. Return the verdict
   to the agent that dispatched you.
+
+## Tools
+
+Inspect with `read`, `grep`, and `glob`, and obtain Git state and diff
+identities with `shell`. A review is evidence, not recollection: read the files
+and the diff rather than relying on the implementer's report.
+
+Do not use `shell` to read files or to enumerate the tree. Do not load an
+assembly, run an ad-hoc script, or execute the change to learn what it does when
+the source and its documentation answer the question. Run tests, lint, and build
+commands only.
 
 ## Review targets
 

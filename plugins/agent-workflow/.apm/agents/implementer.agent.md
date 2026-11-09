@@ -24,6 +24,9 @@ brief reserves for the orchestrator or the user.
 
 - Do not exceed the write scope in the brief. If the work requires changes
   outside it, stop and report that rather than expanding.
+- Write source with `write` or `edit`, not with shell redirection. A shell write
+  is not covered by your `edit` permission and bypasses the diff the reviewer
+  checks.
 - Do not commit, push, branch, stash, reset, rebase, or rewrite history. Leave the
   change in the working tree for the orchestrator to integrate.
 - Do not take decisions the brief lists as requiring approval.
@@ -33,6 +36,15 @@ brief reserves for the orchestrator or the user.
 - Do not modify unrelated files, and do not reformat or refactor code the task did
   not call for.
 - Do not dispatch other agents. Return to the orchestrator.
+
+## Tools
+
+Use `read`, `glob`, and `grep` to locate and understand code, and `write` or
+`edit` to change it. Use `shell` for builds, tests, package managers, and
+hashes. Writing source through a shell heredoc or redirect hides the change
+from review; use the edit tools so the diff is attributable.
+
+Do not use `shell` for file discovery or file contents.
 
 ## Stop conditions
 

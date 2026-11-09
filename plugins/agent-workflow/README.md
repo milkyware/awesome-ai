@@ -150,14 +150,19 @@ Capabilities are declared and verified by observation. They are not discovered b
 inference, and you are not asked what is installed.
 
 The architect enumerates the harness-native primitive locations for the active
-target — `.github/skills/`, `.github/agents/`, `.github/instructions/`,
-`.agents/skills/`, `.claude/skills/`, `.claude/agents/`, `.opencode/skills/`,
-`.opencode/agents/`, `.cursor/`, `.windsurf/`, `.kiro/`, `.grok/`, `.codex/`,
-`.gemini/` — and reads the instruction files that frequently document the skills
-and agents a project expects to be used: `AGENTS.md` at the root and in nested
-directories, `.github/copilot-instructions.md`, `.github/instructions/*.md`,
-`CLAUDE.md`, `GEMINI.md`, and the repository `README.md`. It reads `apm.yml` and
-`apm.lock.yaml` for declared dependencies.
+target with `glob` and `read` — `.github/skills/`, `.github/agents/`,
+`.github/instructions/`, `.agents/skills/`, `.claude/skills/`, `.claude/agents/`,
+`.opencode/skills/`, `.opencode/agents/`, `.cursor/`, `.windsurf/`, `.kiro/`,
+`.grok/`, `.codex/`, `.gemini/` — and reads the instruction files that frequently
+document the skills and agents a project expects to be used: `AGENTS.md` at the
+root and in nested directories, `.github/copilot-instructions.md`,
+`.github/instructions/*.md`, `CLAUDE.md`, `GEMINI.md`, and the repository
+`README.md`. It reads `apm.yml` and `apm.lock.yaml` for declared dependencies.
+
+Third-party packages are inspected through what they ship, not by executing them:
+the `.xml` documentation beside the `.dll`, the `.nuspec`, and the consumer's
+`project.assets.json`. Reflection is reserved for packages with no documentation,
+run through a committed inspection script rather than an interactive probe.
 
 The result is recorded in `design.md` as a capability map, with each capability
 tied to the requirement it serves and its source. A requirement with no available
@@ -167,24 +172,26 @@ serves no requirement is recorded and left unused.
 
 ## Harness Support
 
-Verified against APM 0.30.0 and the current harness documentation:
+Verified against APM 0.30.0, OpenCode 2.2.6, and the current harness
+documentation:
 
-| Capability                                        | Status                                                               |
-| ------------------------------------------------- | -------------------------------------------------------------------- |
-| Agent deployment via `apm install` (Copilot)      | **Verified** — agents land in `.github/agents/*.agent.md`            |
-| Agent deployment via `apm install` (OpenCode)     | **Verified** — agents land in `.opencode/agents/*.md`                |
-| Agent frontmatter validation                      | **Verified** — `apm compile --validate` accepts all five             |
-| Automatic delegation (OpenCode subagent sessions) | **Verified** — supported by the harness                              |
-| Nested delegation (orchestrator → specialist)     | **Expected** — `subagent` allow-list; not verified end-to-end        |
-| Automatic delegation (Copilot CLI)                | **Expected** — via the `agents` allow-list; not verified end-to-end  |
-| Primary/subagent separation (OpenCode `mode`)     | **Verified** — `opencode debug agents` resolves primary/subagent     |
-| Read-only enforcement (OpenCode `permissions`)    | **Verified** — `edit: deny` resolves; prompt behaviour not exercised |
-| Scoped writes (OpenCode, scalar deny + allow)     | **Verified** — probe agent wrote in scope, out of scope rejected     |
-| Policy hard denies (OpenCode `policies`)          | **Verified** — `git push` and `git -C . push` both blocked           |
-| Nested delegation by specialists (OpenCode)       | **Verified** — `subagent: deny` resolves for each specialist         |
-| Read-only enforcement (Copilot)                   | **Not enforced** — instructions plus detection only                  |
-| Architect refuses delegated use                   | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot  |
-| Orchestrator refuses non-architect delegation     | **Instruction only** — `question: deny` removes the user channel     |
+| Capability                                        | Status                                                                                 |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Agent deployment via `apm install` (Copilot)      | **Verified** — agents land in `.github/agents/*.agent.md`                              |
+| Agent deployment via `apm install` (OpenCode)     | **Verified** — agents land in `.opencode/agents/*.md`                                  |
+| Agent frontmatter validation                      | **Verified** — `apm compile --validate` accepts all five                               |
+| Automatic delegation (OpenCode subagent sessions) | **Verified** — supported by the harness                                                |
+| Nested delegation (orchestrator → specialist)     | **Expected** — `subagent` allow-list; not verified end-to-end                          |
+| Automatic delegation (Copilot CLI)                | **Expected** — via the `agents` allow-list; not verified end-to-end                    |
+| Primary/subagent separation (OpenCode `mode`)     | **Verified** — `opencode debug agents` resolves primary/subagent                       |
+| Edit-tool enforcement (OpenCode `permissions`)    | **Verified** — `edit: deny` resolves; shell writes are outside it                      |
+| Architect shell grant (OpenCode)                  | **Verified** — broad shell with write asks; `opencode debug agents` resolves the order |
+| Scoped writes (OpenCode, scalar deny + allow)     | **Verified** — probe agent wrote in scope, out of scope rejected                       |
+| Policy hard denies (OpenCode `policies`)          | **Verified** — `git push` and `git -C . push` both blocked                             |
+| Nested delegation by specialists (OpenCode)       | **Verified** — `subagent: deny` resolves for each specialist                           |
+| Read-only enforcement (Copilot)                   | **Not enforced** — instructions plus detection only                                    |
+| Architect refuses delegated use                   | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot                    |
+| Orchestrator refuses non-architect delegation     | **Instruction only** — `question: deny` removes the user channel                       |
 
 `apm install` projects these agents to harness-native paths. No `plugin.json` is
 authored: APM is the only supported installation mechanism, so no explicit agent
@@ -202,13 +209,13 @@ Each agent declares only what its role can or cannot do, using OpenCode V2
 `permissions`. The last matching rule wins, so a catch-all sits first and every
 exception after it.
 
-| Agent        | Edit                                            | Question | Subagents                               | Shell        |
-| ------------ | ----------------------------------------------- | -------- | --------------------------------------- | ------------ |
-| architect    | `.agent-workflow/*` and `.gitignore`; else deny | allow    | researcher, reviewer, orchestrator only | global rules |
-| orchestrator | allow                                           | deny     | researcher, implementer, reviewer only  | global rules |
-| implementer  | allow                                           | deny     | none                                    | global rules |
-| researcher   | deny                                            | deny     | none                                    | global rules |
-| reviewer     | deny                                            | deny     | none                                    | global rules |
+| Agent        | Edit                                            | Question | Subagents                               | Shell                                   |
+| ------------ | ----------------------------------------------- | -------- | --------------------------------------- | --------------------------------------- |
+| architect    | `.agent-workflow/*` and `.gitignore`; else deny | allow    | researcher, reviewer, orchestrator only | broad shell, writes ask (recommended)   |
+| orchestrator | allow                                           | deny     | researcher, implementer, reviewer only  | global rules; Git grants recommended    |
+| implementer  | allow                                           | deny     | none                                    | global rules; blanket grant recommended |
+| researcher   | deny                                            | deny     | none                                    | global rules, native-tool method        |
+| reviewer     | deny                                            | deny     | none                                    | global rules, native-tool method        |
 
 `global rules` means the agent declares no shell rule and inherits whatever the
 harness configured. Shell approval policy belongs to the person running the
@@ -216,11 +223,16 @@ harness: agent rules are appended after global rules and the last match wins, so
 blanket `shell *: ask` here would silently override every shell allow the user
 configured, and a blanket `shell *: allow` would give every agent an unprompted
 shell regardless of the user's policy. Roles that need one are configured in the
-harness instead — see [Per-agent shell grants](#per-agent-shell-grants-optional).
+harness instead — see [Per-agent shell grants](#per-agent-shell-grants).
 
-The architect is the only role with a declared write scope. It records design
-artefacts and must not turn design work into implementation, so it denies `edit`
-and re-grants one directory. The rules are scalar — a catch-all deny followed by a
+The architect is the one role where a harness grant is recommended rather than
+optional. Its discovery work is open-ended, and a prefix allowlist cannot cover an
+idiom the agent invents. That grant is a trust-and-audit posture, not a read-only
+guarantee; see [Trust and audit](#trust-and-audit-the-architects-shell).
+
+It is also the only role with a declared write scope. It records design artefacts
+and must not turn design work into implementation, so it denies `edit` and
+re-grants one directory. The rules are scalar — a catch-all deny followed by a
 prefix allow — which is the form OpenCode honours. The plan directory is
 re-granted for the same reason: the agent's own deny is evaluated after the global
 permissions, so leaving it out would revoke a path the harness already allows.
@@ -333,18 +345,40 @@ same prefix is unnecessary where the literal already contains the spaces.
 Without these, the agents inherit the harness defaults: permissive on a stock
 OpenCode install, and instruction plus fingerprint only on Copilot.
 
-### Per-agent shell grants (optional)
+### Per-agent shell grants
 
 The agent files declare no shell rules, so each role inherits the user's policy.
-Two roles are more useful with an explicit grant, because their work is dominated
-by commands that would otherwise prompt on every call: the implementer runs
-builds and tests, and the orchestrator integrates. Configure them in the harness,
-not in the agent files, so that a plugin upgrade cannot remove them and a shared
-plugin does not loosen anyone else's shell policy.
+Three roles are more useful with an explicit grant, because their work is
+dominated by commands that would otherwise prompt on every call: the architect
+discovers, the implementer runs builds and tests, and the orchestrator
+integrates. Configure them in the harness, not in the agent files, so that a
+plugin upgrade cannot remove them and a shared plugin does not loosen anyone
+else's shell policy.
 
 ```jsonc
 {
   "agents": {
+    "architect": {
+      "permissions": [
+        { "action": "shell", "resource": "*", "effect": "allow" },
+        { "action": "shell", "resource": "git add *", "effect": "ask" },
+        { "action": "shell", "resource": "git commit *", "effect": "ask" },
+        { "action": "shell", "resource": "git switch *", "effect": "ask" },
+        { "action": "shell", "resource": "git checkout *", "effect": "ask" },
+        { "action": "shell", "resource": "git reset *", "effect": "ask" },
+        { "action": "shell", "resource": "git restore *", "effect": "ask" },
+        { "action": "shell", "resource": "git stash *", "effect": "ask" },
+        { "action": "shell", "resource": "Set-Content *", "effect": "ask" },
+        { "action": "shell", "resource": "Add-Content *", "effect": "ask" },
+        { "action": "shell", "resource": "Out-File *", "effect": "ask" },
+        { "action": "shell", "resource": "New-Item *", "effect": "ask" },
+        { "action": "shell", "resource": "Remove-Item *", "effect": "ask" },
+        { "action": "shell", "resource": "Move-Item *", "effect": "ask" },
+        { "action": "shell", "resource": "Copy-Item *", "effect": "ask" },
+        { "action": "shell", "resource": "Rename-Item *", "effect": "ask" },
+        { "action": "shell", "resource": "Tee-Object *", "effect": "ask" },
+      ],
+    },
     "implementer": {
       "permissions": [
         { "action": "shell", "resource": "*", "effect": "allow" },
@@ -374,25 +408,56 @@ plugin does not loosen anyone else's shell policy.
 
 Order matters: the blanket allow comes first and the narrower `ask` rules after
 it, because the last matching rule wins. `git push` never prompts — it is denied
-by the policy above.
+by the policy above. The architect's write asks are speed bumps, not a boundary:
+`[IO.File]::WriteAllText` and redirection bypass them. The boundary is the policy
+layer plus the audit in
+[Trust and audit](#trust-and-audit-the-architects-shell).
 
 ### Read-only enforcement
 
-There is no single frontmatter that both harnesses enforce, so read-only is
-layered:
+There is no single frontmatter that both harnesses enforce, so the write boundary
+is layered. The first four layers constrain writes; the fifth is an audit layer
+for the architect, which needs broad shell for discovery.
 
-| Layer | Mechanism                                                                                                                       | Applies to |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| L1    | Instruction boundary, plus the requirement to report any write attempted                                                        | Both       |
-| L2    | OpenCode `permissions`: `edit: deny`, `subagent: deny`, `question: deny`; no shell rules, so shell approval stays with the user | OpenCode   |
-| L3    | OpenCode `policies`: hard denies that no agent rule or saved approval can lift                                                  | OpenCode   |
-| L4    | Tree fingerprint before dispatch and after return; a difference rejects the result                                              | Both       |
-| L5    | Documented limitation                                                                                                           | Copilot    |
+| Layer | Mechanism                                                                                                          | Applies to |
+| ----- | ------------------------------------------------------------------------------------------------------------------ | ---------- |
+| L1    | Instruction boundary, plus the requirement to report any write attempted                                           | Both       |
+| L2    | OpenCode `permissions`: `edit: deny`, `subagent: deny`, `question: deny`; this scopes the edit tool, not the shell | OpenCode   |
+| L3    | OpenCode `policies`: hard denies that no agent rule or saved approval can lift                                     | OpenCode   |
+| L4    | Tree fingerprint before dispatch and after return; a difference rejects the result                                 | Both       |
+| L5    | Trust and audit for the architect: broad shell, write commands ask, fingerprint at slice approval                  | OpenCode   |
+| L6    | Documented limitation                                                                                              | Copilot    |
 
 The fingerprint is `git status --porcelain=v1`, the diff identity, and a hash of
 each untracked file. It does not prevent a write; it makes one visible and
 attributable. That is the achievable guarantee for a harness without a read-only
 subagent mode.
+
+### Trust and audit (the architect's shell)
+
+`edit: deny` does not make an agent read-only. The shell is a write primitive, and
+a prefix allowlist cannot cover commands an agent invents. The researcher and
+reviewer stay on the user's allowlist, and their native-tool method keeps them
+inside it. The implementer's grant is broad but bounded by asks on the Git verbs
+that rewrite work. The architect needs the broadest grant because its discovery
+work is open-ended, and every new PowerShell idiom becomes a new permission
+resource.
+
+The recommended grant therefore trusts the architect with shell and makes the
+irreversible cases visible:
+
+- The policy layer still denies remote side effects, history rewrites, and secret
+  access, and no agent rule can lift those.
+- Write-shaped commands (`Set-Content`, `Out-File`, `New-Item`, `Remove-Item`,
+  and the Git write verbs) prompt.
+- The architect records a tree fingerprint at design start, before dispatch, and
+  at slice approval, so a shell write is attributable even when it was not
+  prevented.
+
+That is an audit boundary, not a prevention boundary. The asks can be bypassed
+and the fingerprint is post-hoc. If you need prevention, keep the architect on the
+narrow allowlist and accept that discovery will prompt; do not describe the result
+as read-only under either configuration.
 
 ### Why only one write scope is enforced by permission
 
@@ -428,8 +493,10 @@ orchestrator and implementer write across the repository, where a multi-path sco
 is still not expressible: they take `edit: "*" → allow` and rely on the
 instruction boundary plus the tree fingerprint. Read-only agents are unaffected —
 total denial is reliable. Note also that an `edit` rule governs the edit tool
-only: a write performed through a shell command is not covered by it, which is
-what the fingerprint layer and the shell policy exist to catch.
+only: a write performed through a shell command is not covered by it. The
+fingerprint layer and the shell policy exist to catch that, and the architect's
+configuration is discussed in
+[Trust and audit](#trust-and-audit-the-architects-shell).
 
 ### The `tools` conflict
 
@@ -478,6 +545,29 @@ Choose per role in your harness configuration: the strongest available model for
 the architect and the reviewer, a mid-tier model for orchestration, and a cheaper
 model for bounded research and implementation where quality holds. The architect
 benefits most, because design quality compounds across every slice it dispatches.
+
+## Companion packages
+
+The plugin is deliberately domain-neutral. Its agents hold process, not technology
+knowledge, and a skill that names a framework or a package manager would date the
+plugin and burden every install. Technology capabilities ship as separate packages
+installed alongside it:
+
+```bash
+apm install agent-workflow@awesome-ai --target opencode
+apm install <technology>@awesome-ai --target opencode
+```
+
+The capability check enumerates deployed skills and reads `apm.lock.yaml`, so a
+companion appears in the capability map when it is installed and is absent
+otherwise. Neither package depends on the other, which keeps the process plugin
+installable on its own and the technology plugin usable by any agent.
+
+A companion skill is a procedure, not a bundled tool. It should prefer the native
+tools and the artefacts a technology ships; a script earns its place only where no
+readable artefact exists. Skills are loaded on demand, so the description carries
+the discovery burden: name the technology and the question it answers, and avoid
+overlap with the process skills.
 
 ## Risk Tiers and Gates
 
@@ -586,7 +676,12 @@ Shipped in this version:
 - A slice-based feedback loop: the orchestrator reports, the architect decides
   whether the design holds.
 - A durable workflow directory, so state survives a context reset.
-- A dependency-free capability check over harness locations and instruction files.
+- A dependency-free capability check over harness locations and instruction
+  files, run with the native tools.
+- Native-tool-first discovery, with shell reserved for Git, builds, tests, and
+  hashes.
+- A trust-and-audit posture for the architect's shell, with write asks and tree
+  fingerprints.
 - Functional requirements as identifiers, traced from design to slice to task.
 - Risk tiers and a gate matrix, so ceremony is decided by rules rather than mood.
 - Two targeted research tasks may run concurrently, with disjoint questions and
@@ -639,8 +734,38 @@ slice proceeds without further approval. Integration approval applies at T2 and
 above.
 
 **Q: The reviewer is asking me to approve a test command.**
-A: The reviewer is read-only for files, but shell approval belongs to you. Approve
-test, lint, and build commands; deny anything that writes to the tree.
+A: The reviewer is read-only for files, and it should inspect with `read` and
+`grep` rather than shell. Shell approval still belongs to you: approve test, lint,
+and build commands; deny anything that writes to the tree.
+
+**Q: The architect prompts on every new PowerShell idiom. Why?**
+A: OpenCode splits a compound command into one permission resource per
+sub-command, method call, and script-block body. `$t.GetMethods()` and the body of
+`ForEach-Object` are each a resource, and "always allow" saves the literal text,
+so the next script with a different variable name prompts again. Use the native
+tools for discovery and keep shell to Git, builds, tests, and hashes. If discovery
+is genuinely open-ended, apply the architect grant in
+[Per-agent shell grants](#per-agent-shell-grants).
+
+**Q: Should I give the architect a blanket shell allow?**
+A: That is the trust-and-audit posture in
+[Trust and audit](#trust-and-audit-the-architects-shell). It removes the prompt
+storm, keeps the hard policies, and makes writes ask. It does not make the
+architect read-only: a shell write is possible, and the tree fingerprint is what
+makes it visible. If you need prevention rather than audit, keep the narrow
+allowlist.
+
+**Q: The architect wants to load a .NET assembly to inspect an API.**
+A: It should not. The `.xml` documentation beside the `.dll` documents the public
+members, and the `.nuspec` and `project.assets.json` describe the package. Read
+those with `read`. Reflection is a last resort for packages that ship no
+documentation, and belongs in a committed script rather than an interactive probe.
+
+**Q: Can I install a technology skill alongside this plugin?**
+A: Yes. This plugin is deliberately domain-neutral; technology capabilities ship
+as separate packages. The capability check enumerates deployed skills and reads
+`apm.lock.yaml`, so a companion appears in the map when installed and is simply
+absent when not. There is no hard dependency in either direction.
 
 **Q: Only the architect appears in the agent picker.**
 A: That is intended. The specialists declare `mode: subagent` so they are
@@ -652,12 +777,14 @@ A: Treat it as a boundary violation. The tree fingerprint will differ, the resul
 is rejected, and the reviewed state is restored before continuing.
 
 **Q: Can any agent write anywhere?**
-A: Only the orchestrator and implementer, and only because their write scope spans
-the repository and a multi-path scope cannot be expressed in OpenCode frontmatter.
-The architect is scoped to `.agent-workflow/` by permission — a scalar `edit` deny
-followed by a prefix allow, which the harness enforces — plus the plan directory
-when it runs in plan mode. The orchestrator and implementer rely on their own
-instructions and are checked by the tree fingerprint. See "Why only one write
+A: The orchestrator and implementer can, because their write scope spans the
+repository and a multi-path scope cannot be expressed in OpenCode frontmatter.
+The architect is scoped to `.agent-workflow/` by the edit permission — a scalar
+`edit` deny followed by a prefix allow, which the harness enforces — plus the plan
+directory when it runs in plan mode. Under the recommended grant the architect can
+also write through shell; that is an audit boundary, not a permission scope, and
+the tree fingerprint is what makes it visible. See
+[Trust and audit](#trust-and-audit-the-architects-shell) and "Why only one write
 scope is enforced by permission".
 
 ## Contributing

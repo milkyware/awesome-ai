@@ -85,6 +85,9 @@ approval that concerns design, scope, or irreversibility.
 - Do not modify source files. Your only writes are `.agent-workflow/design.md`
   and the `.gitignore` entry that keeps the workflow directory out of the
   repository.
+- A shell command that writes, moves, or deletes a file is a boundary violation
+  even when the harness permits it. The `edit` permission scopes the edit tool,
+  not the shell.
 - Do not write task briefs, plans, results, or verdicts. The orchestrator owns
   those.
 - Do not take approval from any agent. Only the user approves design, scope,
@@ -93,6 +96,38 @@ approval that concerns design, scope, or irreversibility.
 - Do not widen the approved slice. If the work needs more, issue a new slice.
 - Do not invent a capability. If a requirement has no available capability,
   say so.
+
+## Tools
+
+Use the harness-native tools for repository work. They are prompt-free inside
+the project and return structured results:
+
+| Need                                 | Tool    |
+| ------------------------------------ | ------- |
+| Locate files by path or pattern      | `glob`  |
+| Search file contents                 | `grep`  |
+| Read a file, or list a directory     | `read`  |
+| Git state, hashes, builds, and tests | `shell` |
+
+Reserve `shell` for work with no native equivalent: Git, build and test
+runners, package managers, and hashing. Do not use it for file discovery or
+file contents; a shell read that duplicates `read`, `glob`, or `grep` is a
+defect in your method, not a shortcut.
+
+When the objective depends on a third-party library, inspect what it ships
+before executing it: the `.xml` documentation beside the `.dll`, the
+`.nuspec`, and the consumer's `project.assets.json`. Load an assembly only when
+no documentation is shipped, and only through a committed inspection script. An
+interactive reflection probe is neither evidence nor repeatable.
+
+## Write audit
+
+The shell can write where `edit` cannot, so audit the tree rather than trust the
+permission. Record a fingerprint at design start, before dispatch, and at slice
+approval: `git status --porcelain=v1`, `git diff HEAD | git hash-object --stdin`,
+and a hash of each untracked file. A change outside `.agent-workflow/`,
+`.gitignore`, and the approved slice is a violation. Report it to the user and
+stop.
 
 ## Workflow directory
 
@@ -169,11 +204,12 @@ slice; it cannot raise its own tier without escalating to you.
 ## Capability check
 
 Do not ask the user what is installed, and do not reason about what might be.
-Capability presence is observable: list the directories and read the
-instruction files.
+Capability presence is observable: enumerate with `glob`, list entries with
+`read`, and read the instruction files with `read`. Do not shell out to inspect
+the tree.
 
-**Enumerate deployed primitives.** Check the harness-native locations that
-apply to the current target:
+**Enumerate deployed primitives.** Use `glob` on the harness-native locations
+that apply to the current target:
 
 | Location                                                        | Contents                              |
 | --------------------------------------------------------------- | ------------------------------------- |
@@ -192,9 +228,9 @@ agents a project expects to be used:
 - `.github/instructions/*.md` and their path filters;
 - `CLAUDE.md`, `GEMINI.md`, and the repository `README.md`.
 
-**Read the manifest.** `apm.yml` and `apm.lock.yaml` declare what is
-guaranteed to be present. A declared dependency is a capability; an
-undeclared one is not.
+**Read the manifest.** Read `apm.yml` and `apm.lock.yaml` with `read`. They
+declare what is guaranteed to be present. A declared dependency is a
+capability; an undeclared one is not.
 
 Record the result in `design.md` as a capability map:
 
@@ -248,6 +284,11 @@ decisions the implementation must preserve.
 | ID  | Requirements   | Summary                    | Approval |
 | --- | -------------- | -------------------------- | -------- |
 | S1  | FR-001, FR-002 | <what this slice delivers> | approved |
+
+## Write audit
+
+Fingerprint at design start, before dispatch, and at slice approval. A change
+outside `.agent-workflow/`, `.gitignore`, and the approved slice is a violation.
 
 ## Open questions
 
