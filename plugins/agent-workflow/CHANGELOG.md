@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.2...agent-workflow-v0.1.3) (2026-11-09)
+
+
+### 🩹 Fixes
+
+* prefer native tools and audit architect shell ([#58](https://github.com/milkyware/awesome-ai/issues/58)) ([116a193](https://github.com/milkyware/awesome-ai/commit/116a193f011794830bb02ee2dd8e612aca5c8a74))
+
 ## [0.1.2](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.1...agent-workflow-v0.1.2) (2026-11-08)
 
 
