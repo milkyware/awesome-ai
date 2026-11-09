@@ -2,6 +2,7 @@ version: "0.2"
 language: en-GB
 ignorePaths:
   - .gitignore
+  - "**/CHANGELOG.md"
 dictionaries:
   - powershell
 words:
