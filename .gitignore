@@ -46,3 +46,6 @@ build/
 # APM-generated ecosystem manifests inside plugin packages
 plugins/*/.github/
 plugins/*/.claude-plugin/
+
+# Agent workflow local state — never committed
+.agent-workflow/
