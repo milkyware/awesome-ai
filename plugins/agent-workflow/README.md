@@ -406,11 +406,6 @@ else's shell policy.
         { "action": "shell", "resource": "git add *", "effect": "allow" },
         { "action": "shell", "resource": "git commit *", "effect": "allow" },
         { "action": "shell", "resource": "git switch *", "effect": "allow" },
-        {
-          "action": "shell",
-          "resource": "dotnet restore *",
-          "effect": "allow",
-        },
         { "action": "shell", "resource": "git reset *", "effect": "ask" },
         { "action": "shell", "resource": "git clean *", "effect": "ask" },
         { "action": "shell", "resource": "git rebase *", "effect": "ask" },
@@ -537,21 +532,6 @@ edit tool only: a write performed through a shell command is not covered by it.
 The fingerprint layer and the shell policy exist to catch that, and the architect's
 configuration is discussed in
 [Trust and audit](#trust-and-audit-the-architects-shell).
-
-### The `build` agent is a stated exception
-
-OpenCode ships a built-in `build` agent. It is not part of this plugin, but it is
-often configured beside it with `edit: "*" → allow` and `shell: "*" → allow`,
-with `ask` on the Git verbs that rewrite work. That is a full-trust agent, and it
-silently permits more than the Git asks cover: `Remove-Item` without `-Recurse`
-(permanent, with no recycle bin), `rm`, `del`, `rd /s`, `Move-Item`, `Copy-Item`,
-`Rename-Item`, and `git stash clear`.
-
-The exception holds only because the policy layer still denies remote side
-effects, history rewrites, recursive deletion, and secret access, and no
-permission rule or saved approval can lift those. It is neither read-only nor
-scoped. Record it as a stated boundary rather than an omission, and do not
-describe the resulting posture as least-privilege.
 
 ### The `tools` conflict
 
