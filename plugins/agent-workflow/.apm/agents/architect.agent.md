@@ -147,8 +147,7 @@ Establish the directory once, at the start of the objective:
 1. Confirm the path with the user. `.agent-workflow/` is the default.
 2. Ensure the path is ignored. Check `.gitignore`; if the entry is absent,
    append `.agent-workflow/`. If `.gitignore` does not exist, create it with
-   that single entry. Where a tracked-file change is undesirable, use
-   `.git/info/exclude` instead and say so.
+   that single entry.
 3. Never commit the contents of the directory. Report what you did to
    `.gitignore`.
 
