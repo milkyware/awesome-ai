@@ -16,6 +16,10 @@ permissions:
   - action: edit
     resource: ".gitignore"
     effect: allow
+  # The untracked fallback for the same entry, when .gitignore is tracked.
+  - action: edit
+    resource: ".git/info/exclude"
+    effect: allow
   # The agent's own deny is evaluated after the global permissions, so the plan
   # directory needs its own re-grant when the architect runs in plan mode.
   - action: edit

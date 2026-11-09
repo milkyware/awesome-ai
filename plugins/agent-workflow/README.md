@@ -189,6 +189,7 @@ documentation:
 | Scoped writes (OpenCode, scalar deny + allow)     | **Verified** — probe agent wrote in scope, out of scope rejected                       |
 | Policy hard denies (OpenCode `policies`)          | **Verified** — `git push` and `git -C . push` both blocked                             |
 | Nested delegation by specialists (OpenCode)       | **Verified** — `subagent: deny` resolves for each specialist                           |
+| `agents` and `handoffs` frontmatter (OpenCode)    | **Ignored** — logged as unsupported fields; `subagent` rules govern delegation         |
 | Read-only enforcement (Copilot)                   | **Not enforced** — instructions plus detection only                                    |
 | Architect refuses delegated use                   | **Enforced in OpenCode** by `mode: primary`; instruction in Copilot                    |
 | Orchestrator refuses non-architect delegation     | **Instruction only** — `question: deny` removes the user channel                       |
@@ -212,7 +213,7 @@ exception after it.
 | Agent        | Edit                                            | Question | Subagents                               | Shell                                   |
 | ------------ | ----------------------------------------------- | -------- | --------------------------------------- | --------------------------------------- |
 | architect    | `.agent-workflow/*` and `.gitignore`; else deny | allow    | researcher, reviewer, orchestrator only | broad shell, writes ask (recommended)   |
-| orchestrator | allow                                           | deny     | researcher, implementer, reviewer only  | global rules; Git grants recommended    |
+| orchestrator | `.agent-workflow/*` and `.gitignore`; else deny | deny     | researcher, implementer, reviewer only  | global rules; Git grants recommended    |
 | implementer  | allow                                           | deny     | none                                    | global rules; blanket grant recommended |
 | researcher   | deny                                            | deny     | none                                    | global rules, native-tool method        |
 | reviewer     | deny                                            | deny     | none                                    | global rules, native-tool method        |
@@ -230,12 +231,20 @@ optional. Its discovery work is open-ended, and a prefix allowlist cannot cover 
 idiom the agent invents. That grant is a trust-and-audit posture, not a read-only
 guarantee; see [Trust and audit](#trust-and-audit-the-architects-shell).
 
-It is also the only role with a declared write scope. It records design artefacts
-and must not turn design work into implementation, so it denies `edit` and
-re-grants one directory. The rules are scalar — a catch-all deny followed by a
-prefix allow — which is the form OpenCode honours. The plan directory is
-re-granted for the same reason: the agent's own deny is evaluated after the global
-permissions, so leaving it out would revoke a path the harness already allows.
+The architect and the orchestrator are the two roles with a declared write scope.
+Both record workflow artefacts and must not turn design or coordination work into
+implementation, so both deny `edit` and re-grant one directory. The rules are
+scalar — a catch-all deny followed by a prefix allow — which is the form OpenCode
+honours. The plan directory is re-granted for the same reason: the agent's own
+deny is evaluated after the global permissions, so leaving it out would revoke a
+path the harness already allows.
+
+The orchestrator carries the same two-rule shape, for the same reason: it holds
+workflow state rather than source, so a source write would turn coordination into
+implementation. It re-grants `.gitignore` as well, because its on-entry step
+appends the ignore entry when it is missing and creating the file is a write. The
+consequence is that every source change in the workflow, at every tier, is
+performed by the implementer — including T0.
 
 ### Required shell policy (OpenCode)
 
@@ -397,6 +406,11 @@ else's shell policy.
         { "action": "shell", "resource": "git add *", "effect": "allow" },
         { "action": "shell", "resource": "git commit *", "effect": "allow" },
         { "action": "shell", "resource": "git switch *", "effect": "allow" },
+        {
+          "action": "shell",
+          "resource": "dotnet restore *",
+          "effect": "allow",
+        },
         { "action": "shell", "resource": "git reset *", "effect": "ask" },
         { "action": "shell", "resource": "git clean *", "effect": "ask" },
         { "action": "shell", "resource": "git rebase *", "effect": "ask" },
@@ -412,6 +426,11 @@ by the policy above. The architect's write asks are speed bumps, not a boundary:
 `[IO.File]::WriteAllText` and redirection bypass them. The boundary is the policy
 layer plus the audit in
 [Trust and audit](#trust-and-audit-the-architects-shell).
+
+`dotnet restore` is granted to the orchestrator but omitted from the implementer:
+the implementer's blanket `shell * allow` already covers it, so an explicit entry
+would be noise. It is listed here because the orchestrator has no blanket and
+would otherwise prompt before nearly every verification run.
 
 ### Read-only enforcement
 
@@ -432,6 +451,27 @@ The fingerprint is `git status --porcelain=v1`, the diff identity, and a hash of
 each untracked file. It does not prevent a write; it makes one visible and
 attributable. That is the achievable guarantee for a harness without a read-only
 subagent mode.
+
+### MCP writes sit outside the read-only claim
+
+The base permission policy allows MCP tools outright, so the two denies in the
+required policy cover only `*_delete_*` and `github_merge_*`:
+
+```jsonc
+{ "action": "tool.use", "resource": "*_delete_*:*", "effect": "deny" },
+{ "action": "tool.use", "resource": "github_merge_*:*", "effect": "deny" }
+```
+
+With a GitHub or Azure MCP server configured, the researcher and the reviewer can
+therefore reach write-shaped tools such as `create_or_update_file` or
+`push_files`. Their read-only claim covers the edit tool and policy-matched shell
+commands; it does not cover MCP.
+
+Closing the gap needs either tool-name denies in the agent frontmatter, which the
+final permission tier puts beyond the reach of a consumer's configuration, or
+top-level policy denies, which then apply to the orchestrator and the implementer
+as well. It is recorded here as a known limitation rather than a defect, and it
+is the one place where the read-only agents are not read-only.
 
 ### Trust and audit (the architect's shell)
 
@@ -459,7 +499,7 @@ and the fingerprint is post-hoc. If you need prevention, keep the architect on t
 narrow allowlist and accept that discovery will prompt; do not describe the result
 as read-only under either configuration.
 
-### Why only one write scope is enforced by permission
+### Why the implementer's write scope is not enforced by permission
 
 OpenCode documents a path-scoped form for `edit`:
 
@@ -488,15 +528,30 @@ A probe agent carrying exactly those two rules wrote `.agent-workflow/ok.md` and
 was denied `root.md` with `permission.rejected`. Because `*` spans path
 separators, one prefix covers the whole subtree.
 
-Only the architect uses this, because its boundary is a single directory. The
-orchestrator and implementer write across the repository, where a multi-path scope
-is still not expressible: they take `edit: "*" → allow` and rely on the
-instruction boundary plus the tree fingerprint. Read-only agents are unaffected —
-total denial is reliable. Note also that an `edit` rule governs the edit tool
-only: a write performed through a shell command is not covered by it. The
-fingerprint layer and the shell policy exist to catch that, and the architect's
+Only the architect and the orchestrator use this, because both have a
+single-directory boundary. The implementer writes across the repository, where a
+multi-path scope is still not expressible: it takes `edit: "*" → allow` and
+relies on the instruction boundary plus the tree fingerprint. Read-only agents are
+unaffected — total denial is reliable. Note also that an `edit` rule governs the
+edit tool only: a write performed through a shell command is not covered by it.
+The fingerprint layer and the shell policy exist to catch that, and the architect's
 configuration is discussed in
 [Trust and audit](#trust-and-audit-the-architects-shell).
+
+### The `build` agent is a stated exception
+
+OpenCode ships a built-in `build` agent. It is not part of this plugin, but it is
+often configured beside it with `edit: "*" → allow` and `shell: "*" → allow`,
+with `ask` on the Git verbs that rewrite work. That is a full-trust agent, and it
+silently permits more than the Git asks cover: `Remove-Item` without `-Recurse`
+(permanent, with no recycle bin), `rm`, `del`, `rd /s`, `Move-Item`, `Copy-Item`,
+`Rename-Item`, and `git stash clear`.
+
+The exception holds only because the policy layer still denies remote side
+effects, history rewrites, recursive deletion, and secret access, and no
+permission rule or saved approval can lift those. It is neither read-only nor
+scoped. Record it as a stated boundary rather than an omission, and do not
+describe the resulting posture as least-privilege.
 
 ### The `tools` conflict
 
@@ -581,8 +636,10 @@ at task level. When two tiers are plausible, take the higher one.
 | T2   | Public contract, data shape, CI or release configuration, security, dependencies, several modules   | Required      | Required      | Required     | Required           | Required             |
 | T3   | History rewrite, deletion, migration, dependency upgrade with lockfile churn, anything irreversible | Required      | Required      | Required     | Required           | Per action           |
 
-At T0 the orchestrator may make the change itself when dispatching would cost more
-than the change, and records it as `direct`. A behaviour change never qualifies.
+At T0 the orchestrator dispatches with a short brief — ID, requirement IDs,
+objective, write scope, acceptance criteria, and expected verification — rather
+than a full one. It never makes the change itself: a source change is the
+implementer's work at every tier. A behaviour change never qualifies for T0.
 
 ## Workflow Contracts
 
@@ -593,7 +650,9 @@ consumers state the evidence they require rather than restating the shape.
   success criteria, capability map, approach, decisions, slices, non-goals.
 - **Task brief** (orchestrator, at `tasks/<ID>.md`) — requirement IDs, risk
   tier, objective, inputs, write scope, acceptance criteria, dependencies,
-  expected verification, approvals required.
+  expected verification, approvals required. At T0 a short brief carries the ID,
+  requirement IDs, objective, write scope, acceptance criteria, and expected
+  verification; the rest may be `none`.
 - **Execution plan** (orchestrator, at `plan.md`) — slice identity, scope,
   tasks, ordering, concurrency candidates, interfaces, risk register, decisions,
   verification strategy.
@@ -611,11 +670,10 @@ resolves a conflict. For an architectural decision that outlives the task, use a
 ADR rather than a second format here.
 
 Task states are `Proposed`, `Awaiting approval`, `Ready`, `In progress`,
-`In review`, `Needs revision`, `Blocked`, `Failed`, and `Complete`. At T1 and
-above, a task reaches `Complete` only when its acceptance criteria are met,
-verification evidence is present, the review verdict is `accept`, and an
-integration commit records the reviewed diff identity. At T0, criteria met and
-evidence present are sufficient.
+`In review`, `Needs revision`, `Blocked`, `Failed`, and `Complete`. A task
+reaches `Complete` only when its acceptance criteria are met, verification
+evidence is present, and an integration commit records the reviewed diff
+identity. At T1 and above it also requires a review verdict of `accept`.
 
 Slice approval replaces per-task approval, so a task inside an approved slice does
 not need its own approval unless it is irreversible. `Blocked` is recoverable
@@ -777,15 +835,16 @@ A: Treat it as a boundary violation. The tree fingerprint will differ, the resul
 is rejected, and the reviewed state is restored before continuing.
 
 **Q: Can any agent write anywhere?**
-A: The orchestrator and implementer can, because their write scope spans the
-repository and a multi-path scope cannot be expressed in OpenCode frontmatter.
-The architect is scoped to `.agent-workflow/` by the edit permission — a scalar
-`edit` deny followed by a prefix allow, which the harness enforces — plus the plan
-directory when it runs in plan mode. Under the recommended grant the architect can
-also write through shell; that is an audit boundary, not a permission scope, and
-the tree fingerprint is what makes it visible. See
-[Trust and audit](#trust-and-audit-the-architects-shell) and "Why only one write
-scope is enforced by permission".
+A: The implementer can, because its write scope spans the repository and a
+multi-path scope cannot be expressed in OpenCode frontmatter. The architect and
+the orchestrator are scoped to `.agent-workflow/` and `.gitignore` by the edit
+permission — a scalar `edit` deny followed by a prefix allow, which the harness
+enforces — plus the plan directory for the architect when it runs in plan mode.
+Under the recommended grant the architect can also write through shell; that is
+an audit boundary, not a permission scope, and the tree fingerprint is what makes
+it visible. See
+[Trust and audit](#trust-and-audit-the-architects-shell) and "Why the
+implementer's write scope is not enforced by permission".
 
 ## Contributing
 
