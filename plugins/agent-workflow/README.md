@@ -171,7 +171,7 @@ serves no requirement is recorded and left unused.
 
 ## Harness Support
 
-Verified against APM 0.30.0, OpenCode 2.2.6, and the current harness
+Verified against the current APM and OpenCode releases and the current harness
 documentation:
 
 | Capability                                        | Status                                                                                 |
@@ -231,19 +231,17 @@ idiom the agent invents. That grant is a trust-and-audit posture, not a read-onl
 guarantee; see [Trust and audit](#trust-and-audit-the-architects-shell).
 
 The architect and the orchestrator are the two roles with a declared write scope.
-Both record workflow artefacts and must not turn design or coordination work into
-implementation, so both deny `edit` and re-grant one directory. The rules are
-scalar — a catch-all deny followed by a prefix allow — which is the form OpenCode
-honours. The plan directory is re-granted for the same reason: the agent's own
-deny is evaluated after the global permissions, so leaving it out would revoke a
-path the harness already allows.
+Both hold workflow artefacts rather than source, and a write outside that scope
+would turn design or coordination into implementation. Both therefore deny `edit`
+and re-grant `.agent-workflow/*` and `.gitignore`, the latter because the ignore
+entry is appended on entry and creating the file is a write.
 
-The orchestrator carries the same two-rule shape, for the same reason: it holds
-workflow state rather than source, so a source write would turn coordination into
-implementation. It re-grants `.gitignore` as well, because its on-entry step
-appends the ignore entry when it is missing and creating the file is a write. The
-consequence is that every source change in the workflow, at every tier, is
-performed by the implementer — including T0.
+The rules are scalar — a catch-all deny followed by a prefix allow — which is the
+form OpenCode honours. The plan directory is re-granted on the architect for the
+same reason: its own deny is evaluated after the global permissions, so leaving it
+out would revoke a path the harness already allows. The consequence is that every
+source change in the workflow, at every tier, is performed by the implementer —
+including T0.
 
 ### Required shell policy (OpenCode)
 
@@ -592,12 +590,6 @@ companion appears in the capability map when it is installed and is absent
 otherwise. Neither package depends on the other, which keeps the process plugin
 installable on its own and the technology plugin usable by any agent.
 
-A companion skill is a procedure, not a bundled tool. It should prefer the native
-tools and the artefacts a technology ships; a script earns its place only where no
-readable artefact exists. Skills are loaded on demand, so the description carries
-the discovery burden: name the technology and the question it answers, and avoid
-overlap with the process skills.
-
 ## Risk Tiers and Gates
 
 The tier sets the gates. The architect classifies; the orchestrator applies them
@@ -702,28 +694,6 @@ This version executes implementation sequentially and keeps the workflow
 human-supervised. It does not create or manage Git worktrees, run a custom
 orchestration runtime, or maintain durable state outside `.agent-workflow/`.
 
-Shipped in this version:
-
-- An architect agent that owns the design, checks capability, and issues slices.
-- A slice-based feedback loop: the orchestrator reports, the architect decides
-  whether the design holds.
-- A durable workflow directory, so state survives a context reset.
-- A dependency-free capability check over harness locations and instruction
-  files, run with the native tools.
-- Native-tool-first discovery, with shell reserved for Git, builds, tests, and
-  hashes.
-- A trust-and-audit posture for the architect's shell, with write asks and tree
-  fingerprints.
-- Functional requirements as identifiers, traced from design to slice to task.
-- Risk tiers and a gate matrix, so ceremony is decided by rules rather than mood.
-- Two targeted research tasks may run concurrently, with disjoint questions and
-  path scopes. This is the safe half of parallel execution: read-only, no shared
-  write scope, no worktree.
-- Design review and plan review by the reviewer at T2 and above.
-- Decision records and a risk register.
-- Diff-identity binding and tree fingerprints.
-- Integration and commit rules owned by the orchestrator.
-
 Deliberately deferred:
 
 - Parallel implementation with Git worktrees, branch ownership, and conflict
@@ -737,8 +707,9 @@ Deliberately deferred:
 ## Troubleshooting
 
 **Q: The architect is asking me to run a specialist myself.**
-A: The current harness does not support automatic delegation. The handoff is
-manual by design; paste the specialist's result back to continue.
+A: Automatic delegation is available in OpenCode, so this means the active harness
+has no agent tool, or the handoff fell back to manual. Run the specialist yourself
+and paste its result back to continue.
 
 **Q: I started the orchestrator directly and it stopped.**
 A: It declared itself unable to continue. The orchestrator is a subagent with no
