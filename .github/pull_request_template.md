@@ -15,5 +15,5 @@
 
 I have verified these changes via:
 
-- [ ] Code inspection only
-- [ ] Manual Testing
+- [ ] Code inspection
+- [ ] Manual testing
