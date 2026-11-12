@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.6...delivery-v0.0.7) (2026-11-12)
+
+
+### 🚀 Enhancements
+
+* **delivery:** added `create-pull-request` skill ([#64](https://github.com/milkyware/awesome-ai/issues/64)) ([e232a2a](https://github.com/milkyware/awesome-ai/commit/e232a2a0ee1c06da829f5ae9beba36f8ee28a7e6))
+
 ## [0.0.6](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.5...delivery-v0.0.6) (2026-11-07)
 
 
