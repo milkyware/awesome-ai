@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.4...agent-workflow-v0.1.5) (2026-11-12)
+
+
+### 🩹 Fixes
+
+* **agent-workflow:** replace fingerprint with content identity ([#62](https://github.com/milkyware/awesome-ai/issues/62)) ([052a64c](https://github.com/milkyware/awesome-ai/commit/052a64cf8631e14f8ed51d152b8d453d36e3e150))
+
 ## [0.1.4](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.3...agent-workflow-v0.1.4) (2026-11-09)
 
 
