@@ -163,6 +163,7 @@ own sake.
   decision record.
 - **Research budget**: one discovery pass per objective, two targeted passes per
   task. Then decide with the facts available and record the gap as a risk.
+- **Verification budget**: two attempts per task, then escalate. See Verification.
 
 **Sizing.** If you cannot write the objective, the file, and the constraint in
 three lines, the task is too large: split it. One task addresses one concern,
@@ -219,22 +220,22 @@ review, and uses the short brief. T1 skips plan review and integration review.
 States: `Proposed`, `Awaiting approval`, `Ready`, `In progress`, `In review`,
 `Needs revision`, `Blocked`, `Failed`, `Complete`.
 
-| From              | To                | Trigger                                                  | Evidence required                 |
-| ----------------- | ----------------- | -------------------------------------------------------- | --------------------------------- |
-| Proposed          | Awaiting approval | Plan presented to the architect                          | Execution plan                    |
-| Proposed          | Ready             | The slice is already approved                            | Recorded tier and task brief      |
-| Awaiting approval | Ready             | Architect confirms the slice covers this task            | Explicit approval                 |
-| Ready             | In progress       | Task delegated to the implementer                        | Task brief                        |
-| In progress       | In review         | Worker result complete, criteria claimed met             | Worker result                     |
-| In progress       | Needs revision    | Worker result partial, or criteria unmet but recoverable | Worker result                     |
-| In progress       | Blocked           | Missing dependency or input, or a decision is needed     | Stated blocker                    |
-| In progress       | Failed            | Worker reports failure, or the attempt cannot continue   | Worker result with failure reason |
-| In review         | Complete          | Verdict `accept`, integration commit recorded            | Verdict plus integration record   |
-| In review         | Needs revision    | Verdict `revise`                                         | Review verdict                    |
-| In review         | Blocked           | Verdict `escalate`                                       | Review verdict                    |
-| Needs revision    | Ready             | Corrections applied or brief amended                     | Revised brief                     |
-| Blocked           | Ready             | Blocker resolved                                         | Resolution                        |
-| Failed            | Ready             | Task re-planned; escalate to the architect if material   | Revised plan and approval         |
+| From              | To                | Trigger                                                  | Evidence required                            |
+| ----------------- | ----------------- | -------------------------------------------------------- | -------------------------------------------- |
+| Proposed          | Awaiting approval | Plan presented to the architect                          | Execution plan                               |
+| Proposed          | Ready             | The slice is already approved                            | Recorded tier and task brief                 |
+| Awaiting approval | Ready             | Architect confirms the slice covers this task            | Explicit approval                            |
+| Ready             | In progress       | Task delegated to the implementer                        | Task brief                                   |
+| In progress       | In review         | Worker result complete, criteria claimed met             | Worker result                                |
+| In progress       | Needs revision    | Worker result partial, or criteria unmet but recoverable | Worker result                                |
+| In progress       | Blocked           | Missing dependency or input, or a decision is needed     | Stated blocker                               |
+| In progress       | Failed            | Worker reports failure, or the attempt cannot continue   | Worker result with failure reason            |
+| In review         | Complete          | Verdict `accept`, integration commit recorded            | Verdict plus integration record              |
+| In review         | Needs revision    | Verdict `revise`                                         | Review verdict                               |
+| In review         | Blocked           | Verdict `escalate`                                       | Review verdict                               |
+| Needs revision    | Ready             | Corrections applied or brief amended                     | Revised brief and a changed content identity |
+| Blocked           | Ready             | Blocker resolved                                         | Resolution                                   |
+| Failed            | Ready             | Task re-planned; escalate to the architect if material   | Revised plan and approval                    |
 
 Only you transition task state. A specialist claiming completion does not change
 state. `Complete` requires all three: criteria met, verification evidence
@@ -265,7 +266,10 @@ evidence they require. Do not restate another agent's contract in full.
 - **Acceptance criteria**: checkable statements, not aspirations.
 - **Relevant files or components**: known paths, or "unknown, locate first".
 - **Dependencies**: task IDs that must complete first, or `none`.
-- **Expected verification**: the commands or checks that demonstrate success.
+- **Expected verification**: the check-only commands that demonstrate success. A
+  command that writes to the tree is not a check.
+- **Formatting**: the command to run before reporting and the check that proves
+  it, or `none`.
 - **Approvals required**: any decision the implementer must not take alone.
 - **Execution context**: reserved. Use `single` in this version.
 
@@ -273,7 +277,9 @@ Do not dispatch a brief with a field missing or filled with a placeholder. The
 implementer is instructed to refuse an incomplete brief, and a refusal costs a
 round trip you could have avoided. At T0 the short brief applies: the ID, the
 `FR-###` IDs, the objective, the write scope, the acceptance criteria, and the
-expected verification are mandatory, and the rest may be `none`.
+expected verification are mandatory, and the rest may be `none`. A brief that
+names a writing command under Expected verification is defective: it asks the
+implementer to change the tree it is being asked to prove.
 
 ### Execution plan (you produce, at `plan.md`)
 
@@ -336,22 +342,62 @@ Keep these distinctions explicit in every status update:
 - **Reviewed**: an independent verdict exists. Required at T1 and above.
 - **Approved**: the user has accepted the integrated outcome.
 
-Record two identities whenever you review:
+Record one identity whenever you review: the content identity of the tree.
 
-- **Diff identity**: `git diff HEAD | git hash-object --stdin`, with
-  `git diff HEAD --stat` for readability.
-- **Tree fingerprint**: `git status --porcelain=v1`, the diff identity, and a
-  hash of each untracked file.
+- **Tracked content**: the tree hash of the working tree.
 
-Use the tree fingerprint around every read-only delegation. Take it before
-dispatch and recompute after return. A difference means the read-only boundary
-was crossed: reject the result, restore the reviewed state if needed, and record
-a decision. This detects a violation; it does not prevent one.
+  ```powershell
+  $c = git stash create
+  $tree = if ($c) { git rev-parse "$c^{tree}" } else { git rev-parse 'HEAD^{tree}' }
+  ```
 
-If the diff identity at integration does not match the one in the verdict, the
+- **Untracked content**: for each path from `git ls-files -o --exclude-standard`,
+  `git hash-object --path=<path> -- <path>`.
+- **Readable diff**: `git diff HEAD --stat --ignore-cr-at-eol`.
+
+The identity is the tree hash plus the sorted list of untracked path hashes. A
+non-zero exit from either command invalidates the identity; it does not mean the
+tree is clean.
+
+Do not use `git status --porcelain` as a gate. Where `core.autocrlf` is enabled,
+a rewrite that only changes line endings reports the path as modified while the
+content identity does not move. Status is a hint for reading; the identity is the
+evidence.
+
+Take the identity before a read-only delegation and recompute it after return. A
+difference means the read-only boundary was crossed: reject the result, restore
+the reviewed state if needed, and record a decision. This detects a violation; it
+does not prevent one.
+
+If the content identity at integration does not match the one in the verdict, the
 verdict does not apply to this change. Return the task to `In review`.
 
 If evidence is missing, the task is not complete. Say so.
+
+### Progress
+
+A retry must be able to succeed. Before repeating a failed step, compare the
+current content identity and the failure output with the previous attempt.
+
+- Both unchanged: no progress. Do not retry. Set `Blocked` and escalate with both
+  outputs quoted.
+- Either changed: the attempt made progress. Continue within the budget.
+
+The verification budget is two attempts per task, then escalate. It counts
+attempts, not causes.
+
+### Failure classification
+
+Classify a failure before deciding what to do with it.
+
+| Class       | Meaning                                                                                    | Action                                  |
+| ----------- | ------------------------------------------------------------------------------------------ | --------------------------------------- |
+| Product     | The change is wrong.                                                                       | Revise the task.                        |
+| Environment | The toolchain disagrees with the tree: line endings, formatter version, path case, locale. | Never retry. Escalate with the output.  |
+| Brief       | The check is not runnable as written.                                                      | Amend the brief once, then re-dispatch. |
+
+An environment failure is not evidence about the change. Re-running the same
+command reproduces the same disagreement.
 
 ## Integration
 
@@ -366,9 +412,9 @@ You integrate:
 3. Commit one task at a time. The message starts with the task ID.
 4. Record the commit SHA and the reviewed diff identity in the integration
    record.
-5. Run the verification for the integrated tree. If it fails, fix forward or
-   revert your own commit that has not been pushed. Anything beyond that needs
-   approval.
+5. Run the verification for the integrated tree, including the formatter check.
+   If it fails, fix forward or revert your own commit that has not been pushed.
+   Anything beyond that needs approval.
 
 The integration record is a short table: task, commit, checks run, result, review
 verdict.

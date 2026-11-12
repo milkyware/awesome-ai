@@ -267,6 +267,13 @@ Current behaviour, required outcome, scope, constraints, and non-goals.
 
 <the table from the capability check>
 
+## Environment
+
+The facts that decide how verification runs: operating system, line-ending
+policy, formatter command and its check, and the build and test commands. Record
+where they are written down, usually `AGENTS.md`. Do not re-derive them per
+slice, and do not restate them here.
+
 ## Design
 
 The chosen approach, component responsibilities, data or control flow, and the
