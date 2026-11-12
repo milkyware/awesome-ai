@@ -19,7 +19,7 @@
     },
     {
       "name": "delivery",
-      "description": "Produce implementation-ready plans and create delivery-ready Jira tickets or GitHub issues using structured, gated workflows.",
+      "description": "Produce implementation-ready plans, create delivery-ready Jira tickets and GitHub issues, and raise reviewable pull requests using structured, gated workflows.",
       "version": "0.0.6",
       "source": "./plugins/delivery"
     },

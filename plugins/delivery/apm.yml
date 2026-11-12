@@ -1,8 +1,9 @@
 name: delivery
 version: 0.0.6
 description: >-
-  Produce implementation-ready plans and create delivery-ready Jira tickets or
-  GitHub issues using structured, gated workflows.
+  Produce implementation-ready plans, create delivery-ready Jira tickets and
+  GitHub issues, and raise reviewable pull requests using structured, gated
+  workflows.
 author: MilkyWare
 license: MIT
 targets:
@@ -16,6 +17,21 @@ dependencies:
       registry: false
       url: https://mcp.atlassian.com/v2/mcp
       transport: http
+    - name: github
+      registry: false
+      transport: stdio
+      command: docker
+      args:
+        - run
+        - -i
+        - --rm
+        - -p
+        - 127.0.0.1:8085:8085
+        - -e
+        - GITHUB_OAUTH_CALLBACK_PORT
+        - ghcr.io/github/github-mcp-server
+      env:
+        GITHUB_OAUTH_CALLBACK_PORT: "8085"
 includes: auto
 devDependencies:
   apm: []
