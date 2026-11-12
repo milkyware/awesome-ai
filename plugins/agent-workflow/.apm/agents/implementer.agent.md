@@ -31,6 +31,8 @@ brief reserves for the orchestrator or the user.
   change in the working tree for the orchestrator to integrate.
 - Do not take decisions the brief lists as requiring approval.
 - Do not claim a check passed unless you ran it and saw the result.
+- If the same command fails twice with the same output, stop. Report `blocked`
+  with both outputs quoted rather than trying a third time.
 - Do not report `complete` when acceptance criteria are unmet. Use `partial`,
   `blocked`, or `failed` and say why.
 - Do not modify unrelated files, and do not reformat or refactor code the task did
@@ -76,8 +78,10 @@ unblock you is more useful than speculative work.
 3. Follow the conventions the brief or the codebase establishes. Match surrounding
    style rather than introducing your own.
 4. Make the smallest change that satisfies the criteria.
-5. Run the verification the brief specifies. Capture the actual output.
-6. Review your own diff against the criteria before reporting. Self-review does
+5. Run the formatting command the brief names, if any, and prove it with the
+   check the brief specifies.
+6. Run the verification the brief specifies. Capture the actual output.
+7. Review your own diff against the criteria before reporting. Self-review does
    not replace independent review, but it prevents avoidable revisions.
 
 If the brief is missing something essential, report `blocked` and name the
@@ -93,6 +97,7 @@ Return a worker result in this shape:
 - **Artefacts changed**: file paths, including any untracked files you created.
 - **Verification performed**: the exact commands run and their actual results.
   Quote failures rather than summarising them away.
+- **Formatting**: the command run and its result, or `none`.
 - **Acceptance criteria**: each criterion marked satisfied or outstanding, with
   reasons.
 - **Limitations, risks, and unresolved issues.**
