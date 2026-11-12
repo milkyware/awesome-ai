@@ -336,22 +336,62 @@ Keep these distinctions explicit in every status update:
 - **Reviewed**: an independent verdict exists. Required at T1 and above.
 - **Approved**: the user has accepted the integrated outcome.
 
-Record two identities whenever you review:
+Record one identity whenever you review: the content identity of the tree.
 
-- **Diff identity**: `git diff HEAD | git hash-object --stdin`, with
-  `git diff HEAD --stat` for readability.
-- **Tree fingerprint**: `git status --porcelain=v1`, the diff identity, and a
-  hash of each untracked file.
+- **Tracked content**: the tree hash of the working tree.
 
-Use the tree fingerprint around every read-only delegation. Take it before
-dispatch and recompute after return. A difference means the read-only boundary
-was crossed: reject the result, restore the reviewed state if needed, and record
-a decision. This detects a violation; it does not prevent one.
+  ```powershell
+  $c = git stash create
+  $tree = if ($c) { git rev-parse "$c^{tree}" } else { git rev-parse 'HEAD^{tree}' }
+  ```
 
-If the diff identity at integration does not match the one in the verdict, the
+- **Untracked content**: for each path from `git ls-files -o --exclude-standard`,
+  `git hash-object --path=<path> -- <path>`.
+- **Readable diff**: `git diff HEAD --stat --ignore-cr-at-eol`.
+
+The identity is the tree hash plus the sorted list of untracked path hashes. A
+non-zero exit from either command invalidates the identity; it does not mean the
+tree is clean.
+
+Do not use `git status --porcelain` as a gate. Where `core.autocrlf` is enabled,
+a rewrite that only changes line endings reports the path as modified while the
+content identity does not move. Status is a hint for reading; the identity is the
+evidence.
+
+Take the identity before a read-only delegation and recompute it after return. A
+difference means the read-only boundary was crossed: reject the result, restore
+the reviewed state if needed, and record a decision. This detects a violation; it
+does not prevent one.
+
+If the content identity at integration does not match the one in the verdict, the
 verdict does not apply to this change. Return the task to `In review`.
 
 If evidence is missing, the task is not complete. Say so.
+
+### Progress
+
+A retry must be able to succeed. Before repeating a failed step, compare the
+current content identity and the failure output with the previous attempt.
+
+- Both unchanged: no progress. Do not retry. Set `Blocked` and escalate with both
+  outputs quoted.
+- Either changed: the attempt made progress. Continue within the budget.
+
+The verification budget is two attempts per task, then escalate. It counts
+attempts, not causes.
+
+### Failure classification
+
+Classify a failure before deciding what to do with it.
+
+| Class       | Meaning                                                                                    | Action                                  |
+| ----------- | ------------------------------------------------------------------------------------------ | --------------------------------------- |
+| Product     | The change is wrong.                                                                       | Revise the task.                        |
+| Environment | The toolchain disagrees with the tree: line endings, formatter version, path case, locale. | Never retry. Escalate with the output.  |
+| Brief       | The check is not runnable as written.                                                      | Amend the brief once, then re-dispatch. |
+
+An environment failure is not evidence about the change. Re-running the same
+command reproduces the same disagreement.
 
 ## Integration
 
