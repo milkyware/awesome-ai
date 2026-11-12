@@ -434,7 +434,7 @@ for the architect, which needs broad shell for discovery.
 | L5    | Trust and audit for the architect: broad shell, write commands ask, fingerprint at slice approval                  | OpenCode   |
 | L6    | Documented limitation                                                                                              | Copilot    |
 
-The fingerprint is `git status --porcelain=v1`, the diff identity, and a hash of
+The fingerprint is the tree hash of the working tree plus a normalised hash of
 each untracked file. It does not prevent a write; it makes one visible and
 attributable. That is the achievable guarantee for a harness without a read-only
 subagent mode.
@@ -616,9 +616,9 @@ consumers state the evidence they require rather than restating the shape.
   success criteria, capability map, approach, decisions, slices, non-goals.
 - **Task brief** (orchestrator, at `tasks/<ID>.md`) — requirement IDs, risk
   tier, objective, inputs, write scope, acceptance criteria, dependencies,
-  expected verification, approvals required. At T0 a short brief carries the ID,
-  requirement IDs, objective, write scope, acceptance criteria, and expected
-  verification; the rest may be `none`.
+  check-only verification, formatting, approvals required. At T0 a short brief
+  carries the ID, requirement IDs, objective, write scope, acceptance criteria,
+  and expected verification; the rest may be `none`, including formatting.
 - **Execution plan** (orchestrator, at `plan.md`) — slice identity, scope,
   tasks, ordering, concurrency candidates, interfaces, risk register, decisions,
   verification strategy.
@@ -656,10 +656,35 @@ The workflow distinguishes four levels explicitly:
 - **Reviewed** — an independent verdict exists, bound to an identity.
 - **Approved** — you have accepted the integrated result.
 
-Review is bound to an artefact, not to a conversation. The verdict records
-`git diff HEAD | git hash-object --stdin` and a diff stat; integration recomputes
-the identity and refuses the verdict if it no longer matches. A verdict cannot be
-earned on one tree and applied to another.
+Review is bound to an artefact, not to a conversation. The verdict records the
+content identity of the tree — the tree hash of the working tree plus a hash of
+each untracked file — and integration recomputes it, refusing the verdict if it
+no longer matches. A verdict cannot be earned on one tree and applied to another.
+
+`git status` is not part of the identity. Where `core.autocrlf` is enabled, a
+rewrite that changes only line endings reports a path as modified while the
+content identity does not move, so status is a hint for reading and the identity
+is the evidence.
+
+## Verification environment
+
+Verification is evidence only if it can be reproduced and if it does not change
+what it measures.
+
+- **Check-only commands.** A command that writes to the tree is work, not a
+  check: `prettier --check`, not `prettier --write`. A formatter run is a task
+  step with its own proof, and integration re-checks the result.
+- **Environment failures are not product failures.** A toolchain that disagrees
+  with the tree — line endings, formatter version, path case, locale — disagrees
+  identically on the next attempt. The workflow classifies it and escalates
+  rather than retrying.
+- **No progress, no retry.** Two identical failures with an unchanged content
+  identity are one escalation, not a third attempt.
+
+Record the repository's own facts — operating system, line-ending policy,
+formatter command, build and test commands — in `AGENTS.md`. The agents read it
+during the capability check; `.agent-workflow/` is local state and is not the
+place for facts that outlive one objective.
 
 ## Integration
 
