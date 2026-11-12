@@ -84,7 +84,7 @@ Default types, when no configuration narrows them:
 | `refactor` | Restructuring with no behavioural change     |
 | `perf`     | Performance improvement                      |
 | `test`     | Test additions or corrections only           |
-| `build`    | Build tool, packaging or dependencies      |
+| `build`    | Build tool, packaging or dependencies        |
 | `ci`       | Continuous integration configuration         |
 | `chore`    | Maintenance with no source or test change    |
 | `revert`   | Reverts an earlier commit                    |
