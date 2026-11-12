@@ -48,7 +48,7 @@ The plugin declares two MCP servers: the Atlassian remote server for Jira, and t
 
 The GitHub server runs the [`ghcr.io/github/github-mcp-server`](https://github.com/github/github-mcp-server) container and authenticates through GitHub OAuth. Docker must be available, and port `8085` must be free for the OAuth callback. The `gh` CLI remains the primary path in every skill; the MCP server is the substitute when the CLI is unavailable.
 
-A self-defined MCP server declared by an installed package needs trust before it is activated. Pass `--trust-transitive-mcp` to approve these non-interactively, or re-declare the server in your own `apm.yml`.
+A self-defined MCP server declared by an installed package needs trust before it is activated. Pass `--trust-transitive-mcp` to approve these non-interactively, or redeclare the server in your own `apm.yml`.
 
 ## Usage
 

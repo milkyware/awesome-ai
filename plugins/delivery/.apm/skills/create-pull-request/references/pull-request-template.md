@@ -85,7 +85,7 @@ Treat a change as UI-affecting when the diff touches any of these:
 - Static assets and design tokens: `**/public/**`, `**/static/**`, `**/assets/**`, image, icon and font files
 - Server-rendered templates that carry user-facing text
 
-Widen the match when the repository documents what its UI layer is. Narrow it when matched files are clearly non-visual, such as a stylesheet consumed only in email templates.
+Widen the match when the repository documents what its UI layer is. Narrow it when matched files are clearly non-visual, such as a style sheet consumed only in email templates.
 
 ## Screenshot recommendations
 

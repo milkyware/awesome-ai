@@ -84,7 +84,7 @@ Default types, when no configuration narrows them:
 | `refactor` | Restructuring with no behavioural change     |
 | `perf`     | Performance improvement                      |
 | `test`     | Test additions or corrections only           |
-| `build`    | Build system, packaging or dependencies      |
+| `build`    | Build tool, packaging or dependencies      |
 | `ci`       | Continuous integration configuration         |
 | `chore`    | Maintenance with no source or test change    |
 | `revert`   | Reverts an earlier commit                    |
@@ -92,7 +92,7 @@ Default types, when no configuration narrows them:
 Format rules:
 
 - `type(scope): description`, with the scope optional and lower case. Use the scope when the repository's history or configuration establishes a vocabulary; do not invent one.
-- The description is imperative, lower case and has no trailing period. Start from what the change does, not from a file name.
+- The description is imperative, lower case and has no trailing period. Start from what the change does, not from a filename.
 - Mark a breaking change with `!` before the colon, as in `feat(api)!: drop v1 token endpoint`, and explain the break in the body.
 - Keep the title within 72 characters where the description allows.
 - No ticket identifiers, version numbers or bracketed tags unless the repository requires them.
