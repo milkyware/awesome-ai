@@ -25,7 +25,7 @@ Use details already stated in the request and conversation. Resolve, in order:
 2. **Head branch**: the current branch, confirmed with `git rev-parse --abbrev-ref HEAD`. Stop if the result is `HEAD`, which means a detached checkout; a pull request needs a branch.
 3. **Base branch**: the user's explicit choice, otherwise the repository default from `gh repo view --json defaultBranchRef --jq .defaultBranchRef.name`. Treat any non-default base as a deliberate choice and state it; stacked pull requests depend on it.
 4. **Ready or draft**: create the pull request as **ready for review** by default. Add `--draft` only when the user asks for a draft or states the work is incomplete. Never infer draft from an unfinished checklist.
-5. **Assignees, reviewers, labels, milestone and project**: apply only when the user requests them or the repository records an unambiguous convention. Do not duplicate CODEOWNERS requests or labeler automation.
+5. **Assignees, reviewers, labels, milestone and project**: apply only when the user requests them or the repository records an unambiguous convention. Do not duplicate CODEOWNERS requests or labeller automation.
 6. **Screenshots**: follow [5. Compose the body](#5-compose-the-body).
 
 If the head branch equals the base branch, stop and explain that the change needs its own branch or the exact branch name to use.
