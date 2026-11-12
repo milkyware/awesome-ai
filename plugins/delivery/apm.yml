@@ -1,5 +1,5 @@
 name: delivery
-version: 0.0.6
+version: 0.0.7
 description: >-
   Produce implementation-ready plans, create delivery-ready Jira tickets and
   GitHub issues, and raise reviewable pull requests using structured, gated
@@ -23,15 +23,15 @@ dependencies:
       command: docker
       args:
         - run
-        - -i
-        - --rm
-        - -p
+        - '-i'
+        - '--rm'
+        - '-p'
         - 127.0.0.1:8085:8085
-        - -e
+        - '-e'
         - GITHUB_OAUTH_CALLBACK_PORT
         - ghcr.io/github/github-mcp-server
       env:
-        GITHUB_OAUTH_CALLBACK_PORT: "8085"
+        GITHUB_OAUTH_CALLBACK_PORT: '8085'
 includes: auto
 devDependencies:
   apm: []
