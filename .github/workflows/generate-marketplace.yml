@@ -28,7 +28,7 @@ jobs:
       - name: Install APM CLI
         uses: microsoft/apm-action@d723bb64ed70c135bbaf87d126b721dd2dae0439 # v1.10.0
         with:
-          apm-version: "0.30.0"
+          apm-version: latest
 
       - name: Generate .claude-plugin/marketplace.json
         run: apm pack
