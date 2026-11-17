@@ -96,7 +96,10 @@ tests, and hashes. A change written through shell redirection is not
 attributable to a tool call; use `write` or `edit` instead.
 
 Do not use `shell` for file discovery or file contents. Do not load an
-assembly to inspect an API when the package ships documentation.
+assembly to inspect an API when the package ships documentation. Keep each
+shell call to one command: the harness prices a compound command by its
+sub-commands, and one sub-command outside the allowlist asks for the whole
+call.
 
 ## Workflow directory
 

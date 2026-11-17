@@ -49,7 +49,9 @@ Do not use `shell` to read files or to enumerate the tree. Do not load an
 assembly, run an ad-hoc script, or execute the change to learn what it does when
 the source and its documentation answer the question. Run tests, lint, and build
 commands only. Do not run the full suite: the orchestrator runs it while you
-review and shares the result.
+review and shares the result. Keep each shell call to one command: the harness
+prices a compound command by its sub-commands, and one sub-command outside the
+allowlist asks for the whole call.
 
 ## Review targets
 

@@ -116,7 +116,9 @@ the project and return structured results:
 Reserve `shell` for work with no native equivalent: Git, build and test
 runners, package managers, and hashing. Do not use it for file discovery or
 file contents; a shell read that duplicates `read`, `glob`, or `grep` is a
-defect in your method, not a shortcut.
+defect in your method, not a shortcut. Keep each shell call to one command:
+the harness prices a compound command by its sub-commands, and one
+sub-command outside the allowlist asks for the whole call.
 
 When the objective depends on a third-party library, inspect what it ships
 before executing it: the `.xml` documentation beside the `.dll`, the

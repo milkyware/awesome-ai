@@ -48,7 +48,9 @@ Use `read`, `glob`, and `grep` to locate and understand code, and `write` or
 hashes. Writing source through a shell heredoc or redirect hides the change
 from review; use the edit tools so the diff is attributable.
 
-Do not use `shell` for file discovery or file contents.
+Do not use `shell` for file discovery or file contents. Keep each shell call
+to one command: the harness prices a compound command by its sub-commands, and
+one sub-command outside the allowlist asks for the whole call.
 
 ## Stop conditions
 
