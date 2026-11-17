@@ -6,15 +6,15 @@ A curated collection of reusable skills for AI-assisted software delivery and ar
 
 ## Plugins
 
-| Plugin                                                       | Description                                                                                           | Skills / agents                                                                           |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| [`agent-workflow`](./plugins/agent-workflow/README.md)       | Human-supervised orchestration of specialist AI coding agents through bounded, verified tasks         | `orchestrator`, `researcher`, `implementer`, `reviewer` (agents)                          |
-| [`architecture-docs`](./plugins/architecture-docs/README.md) | Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides | `generate-adr`, `generate-hld`, `generate-architecture-md`                                |
-| [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                                                             |
-| [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans, delivery-ready Jira tickets, GitHub issues, and pull requests             | `implementation-plan`, `create-jira-ticket`, `create-github-issue`, `create-pull-request` |
-| [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`                                           |
+| Plugin                                                       | Description                                                                                           | Skills / agents                                                                                 |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| [`agent-workflow`](./plugins/agent-workflow/README.md)       | Human-supervised design and delivery through bounded, verified tasks                                  | `architect` with supporting sub-agents: `orchestrator`, `researcher`, `implementer`, `reviewer` |
+| [`architecture-docs`](./plugins/architecture-docs/README.md) | Architecture Decision Records (ADRs), High-Level Design (HLD) documents, and `ARCHITECTURE.md` guides | `generate-adr`, `generate-hld`, `generate-architecture-md`                                      |
+| [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                                                                   |
+| [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans, delivery-ready Jira tickets, GitHub issues, and pull requests             | `implementation-plan`, `create-jira-ticket`, `create-github-issue`, `create-pull-request`       |
+| [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`                                                 |
 
-`agent-workflow` ships agents rather than skills. Each plugin README documents installation for its supported harnesses, what it provides, and usage guidance.
+`agent-workflow` ships an `architect` agent with supporting sub-agents rather than skills. Each plugin README documents installation for its supported harnesses, what it provides, and usage guidance.
 
 ## Install
 
@@ -69,7 +69,7 @@ Do not edit `.claude-plugin/marketplace.json` by hand. Run `apm pack` from the r
 
 ## Writing standards
 
-All skills enforce the following writing standards:
+All repository content follows these writing standards:
 
 - Concise, neutral language without marketing tone or storytelling.
 - Information-dense paragraphs with one architectural concern each.
@@ -79,10 +79,7 @@ All skills enforce the following writing standards:
 
 ## Contributing
 
-1. Open an [issue](https://github.com/milkyware/awesome-ai/issues) with details.
-2. For new content, describe the use case and include examples.
-3. Ensure all skills follow the [writing standards](#writing-standards).
-4. Submit a pull request with a clear description.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for issue and pull request guidance.
 
 ## License
 

@@ -129,7 +129,11 @@ Then handle screenshots, following [UI change detection](references/pull-request
 - **No UI change and no images.** Remove the Screenshots section.
 - **Images supplied without a UI change.** Keep the section and attach them; the user's judgement overrides detection.
 
-Write the body to a temporary file outside the repository, in the same directory as any screenshots, because `--body-file` resolves relative paths against the file's own directory.
+Pass the body on standard input with `--body-file -`, through a literal
+here-string so no expansion touches it (PowerShell `@' … '@`, Bash `<<'EOF'`).
+Relative paths in the body then resolve against the working directory, so
+reference screenshots by repository-relative paths. This needs no temporary
+file, no write outside the repository, and no external-directory permission.
 
 ## 6. Confirm before writing
 
@@ -152,7 +156,7 @@ gh pr create \
   --base <base> \
   --head <branch> \
   --title "<type>(<scope>): <description>" \
-  --body-file <temporary-body-file>
+  --body-file -
 ```
 
 - Add `--draft` only when the user asked for a draft.
@@ -163,7 +167,6 @@ gh pr create \
 - When the command reports that a pull request already exists, report that URL. Do not retry with a different base or title.
 - When some attachments fail, the pull request is still created and its URL is still printed, but the command exits non-zero. Report which uploads failed.
 - Never change the ready or draft state of another pull request, and never push follow-up commits to resolve a creation error.
-- Remove the temporary body file once the command finishes.
 
 ## 8. Report the result
 

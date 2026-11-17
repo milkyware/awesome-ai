@@ -105,13 +105,15 @@ Rules that keep the labels trustworthy:
 
 ## 6. Create the issue
 
-Write the body to a temporary file outside the repository and pass it with `--body-file`. This preserves Markdown exactly and avoids shell quoting problems on every platform.
+Pass the body on standard input with `--body-file -`. This preserves Markdown
+exactly, avoids shell quoting problems on every platform, and needs no
+temporary file or write outside the repository.
 
 ```bash
 gh issue create \
   --repo <owner/repo> \
   --title "<title>" \
-  --body-file <temporary-file> \
+  --body-file - \
   --label "type:story" \
   --label "size:m" \
   --label "priority:p2"
@@ -123,7 +125,6 @@ gh issue create \
 - On a validation error, correct the specific field. Never guess a label, issue type, milestone or project name; resolve it with `gh label list`, `gh issue list` or `gh project list` first.
 - If `gh` prints recovery instructions after a failed interactive run, use `gh issue create --recover <token>` instead of starting again.
 - If some `--attach` uploads fail, the issue is still created and its URL is printed; report which attachments were omitted.
-- Remove the temporary body file once the command finishes.
 
 ## 7. Report the result
 

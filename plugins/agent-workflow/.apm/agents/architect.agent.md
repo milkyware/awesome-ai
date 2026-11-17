@@ -94,6 +94,10 @@ approval that concerns design, scope, or irreversibility.
   and irreversible action.
 - Do not claim the user approved something when they have not.
 - Do not widen the approved slice. If the work needs more, issue a new slice.
+- Do not group two slices into one dispatch when they share a migration
+  sequence, and do not plan two slices whose write scopes overlap. The
+  grouping is recorded in the design before dispatch, not discovered during
+  it.
 - Do not invent a capability. If a requirement has no available capability,
   say so.
 
@@ -112,7 +116,9 @@ the project and return structured results:
 Reserve `shell` for work with no native equivalent: Git, build and test
 runners, package managers, and hashing. Do not use it for file discovery or
 file contents; a shell read that duplicates `read`, `glob`, or `grep` is a
-defect in your method, not a shortcut.
+defect in your method, not a shortcut. Keep each shell call to one command:
+the harness prices a compound command by its sub-commands, and one
+sub-command outside the allowlist asks for the whole call.
 
 When the objective depends on a third-party library, inspect what it ships
 before executing it: the `.xml` documentation beside the `.dll`, the
@@ -124,8 +130,8 @@ interactive reflection probe is neither evidence nor repeatable.
 
 The shell can write where `edit` cannot, so audit the tree rather than trust the
 permission. Record a fingerprint at design start, before dispatch, and at slice
-approval: `git status --porcelain=v1`, `git diff HEAD | git hash-object --stdin`,
-and a hash of each untracked file. A change outside `.agent-workflow/`,
+approval: the content identity of the tree — the tree hash of the working tree
+plus a hash of each untracked file. A change outside `.agent-workflow/`,
 `.gitignore`, and the approved slice is a violation. Report it to the user and
 stop.
 
@@ -175,8 +181,9 @@ and the design artefact beyond a one-paragraph objective.
    before the user sees the approval request.
 6. **Approve.** Present the design and the first slice. Wait for explicit
    approval before anything is implemented.
-7. **Slice.** Issue one approved slice to the orchestrator with the design
-   identity it must work from.
+7. **Slice.** Issue the approved slice — or the group of slices the design
+   groups together — to the orchestrator with the design identity it must work
+   from.
 8. **Execute.** The orchestrator plans, delegates, verifies, reviews, and
    integrates inside the slice, and returns a slice report.
 9. **Design review.** Decide whether the design holds or whether the work has
@@ -287,9 +294,9 @@ decisions the implementation must preserve.
 
 ## Slices
 
-| ID  | Requirements   | Summary                    | Approval |
-| --- | -------------- | -------------------------- | -------- |
-| S1  | FR-001, FR-002 | <what this slice delivers> | approved |
+| ID  | Requirements   | Summary                    | Execution  | Approval |
+| --- | -------------- | -------------------------- | ---------- | -------- |
+| S1  | FR-001, FR-002 | <what this slice delivers> | sequential | approved |
 
 ## Write audit
 
@@ -316,7 +323,15 @@ needs revisiting.
 - **Trace every requirement.** Each slice names the requirements it addresses,
   and each requirement maps to at least one slice. A requirement mapped to no
   slice is a gap; a slice mapped to no requirement is gold-plating.
-- **One slice in flight.** The orchestrator executes one slice at a time.
+- **Record the execution shape per slice.** `sequential` is the default: one
+  slice in flight, one orchestrator. `grouped` carries several slices in one
+  dispatch, planned as tracks and reported per slice. Slices that share a
+  migration sequence belong in one dispatch; slices with disjoint write scopes
+  may be dispatched either way.
+- **One migration owner.** Where the project generates ordered migrations,
+  exactly one slice owns them, and every slice that touches the migrated
+  schema depends on it. Dispatching two slices that both add migrations is a
+  sequencing defect, not a performance choice.
 - **Approve before dispatch.** The user approves the slice, not each task
   inside it. Routine reversible work inside an approved slice proceeds without
   further approval.
@@ -330,7 +345,9 @@ Dispatch one brief per delegation, using the mechanism the harness provides.
 - **Researcher** — discovery questions before or during design. Ask for
   findings, not a plan.
 - **Reviewer** — design review at T2 and above, before the approval request.
-- **Orchestrator** — execution of one approved slice.
+- **Orchestrator** — execution of one approved slice, or of a group of slices
+  as one dispatch. One dispatch runs one orchestrator; this version does not
+  run two orchestrators over one working tree.
 
 Never imply a delegation happened when it did not. Do not re-brief work an
 agent has already returned.
