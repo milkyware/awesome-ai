@@ -24,13 +24,13 @@ and the integrated outcome afterwards.
 
 ## Agents
 
-| Agent            | Mode (OpenCode) | Responsibility                                                                                                                                                                  |
-| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **architect**    | `primary`       | Owns the design. Establishes the spec with you, checks capability, writes the design artefact, and issues approved slices. Does not implement or review.                        |
-| **orchestrator** | `subagent`      | Owns one approved slice. Plans the tasks inside it, delegates implementation, verifies evidence, obtains review, integrates, and reports. Accepts work from the architect only. |
-| **researcher**   | `subagent`      | Read-only investigation. Discovery for the architect, targeted questions for the orchestrator. Returns findings with evidence, confidence, and explicit gaps.                   |
-| **implementer**  | `subagent`      | Executes one bounded task inside a stated write scope, and returns a structured result with the verification it actually ran.                                                   |
-| **reviewer**     | `subagent`      | Independently assesses a design, a plan, a task, or an integrated change, and returns a severity-graded verdict bound to an identity.                                           |
+| Agent            | Mode (OpenCode) | Responsibility                                                                                                                                                                                                  |
+| ---------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **architect**    | `primary`       | Owns the design. Establishes the spec with you, checks capability, writes the design artefact, and issues approved slices. Does not implement or review.                                                        |
+| **orchestrator** | `subagent`      | Owns one approved slice, or a group of slices as tracks. Plans the tasks inside it, delegates implementation, verifies evidence, obtains review, integrates, and reports. Accepts work from the architect only. |
+| **researcher**   | `subagent`      | Read-only investigation. Discovery for the architect, targeted questions for the orchestrator. Returns findings with evidence, confidence, and explicit gaps.                                                   |
+| **implementer**  | `subagent`      | Executes one bounded task inside a stated write scope, and returns a structured result with the verification it actually ran.                                                                                   |
+| **reviewer**     | `subagent`      | Independently assesses a design, a plan, a task, or an integrated change, and returns a severity-graded verdict bound to an identity.                                                                           |
 
 Only the architect is selectable as a primary agent, so the workflow has one
 entry point and one agent that can approve. The orchestrator holds the task
@@ -209,13 +209,13 @@ Each agent declares only what its role can or cannot do, using OpenCode V2
 `permissions`. The last matching rule wins, so a catch-all sits first and every
 exception after it.
 
-| Agent        | Edit                                            | Question | Subagents                               | Shell                                   |
-| ------------ | ----------------------------------------------- | -------- | --------------------------------------- | --------------------------------------- |
-| architect    | `.agent-workflow/*` and `.gitignore`; else deny | allow    | researcher, reviewer, orchestrator only | broad shell, writes ask (recommended)   |
-| orchestrator | `.agent-workflow/*` and `.gitignore`; else deny | deny     | researcher, implementer, reviewer only  | global rules; Git grants recommended    |
-| implementer  | allow                                           | deny     | none                                    | global rules; blanket grant recommended |
-| researcher   | deny                                            | deny     | none                                    | global rules, native-tool method        |
-| reviewer     | deny                                            | deny     | none                                    | global rules, native-tool method        |
+| Agent        | Edit                                            | Question | Subagents                               | Shell                                           |
+| ------------ | ----------------------------------------------- | -------- | --------------------------------------- | ----------------------------------------------- |
+| architect    | `.agent-workflow/*` and `.gitignore`; else deny | allow    | researcher, reviewer, orchestrator only | broad shell, writes ask (recommended)           |
+| orchestrator | `.agent-workflow/*` and `.gitignore`; else deny | deny     | researcher, implementer, reviewer only  | global rules; Git integration grant recommended |
+| implementer  | allow                                           | deny     | none                                    | global rules; blanket grant recommended         |
+| researcher   | deny                                            | deny     | none                                    | global rules, native-tool method                |
+| reviewer     | deny                                            | deny     | none                                    | global rules, including verification commands   |
 
 `global rules` means the agent declares no shell rule and inherits whatever the
 harness configured. Shell approval policy belongs to the person running the
@@ -403,6 +403,7 @@ else's shell policy.
         { "action": "shell", "resource": "git add *", "effect": "allow" },
         { "action": "shell", "resource": "git commit *", "effect": "allow" },
         { "action": "shell", "resource": "git switch *", "effect": "allow" },
+        { "action": "shell", "resource": "git merge *", "effect": "allow" },
         { "action": "shell", "resource": "git reset *", "effect": "ask" },
         { "action": "shell", "resource": "git clean *", "effect": "ask" },
         { "action": "shell", "resource": "git rebase *", "effect": "ask" },
@@ -418,6 +419,44 @@ by the policy above. The architect's write asks are speed bumps, not a boundary:
 `[IO.File]::WriteAllText` and redirection bypass them. The boundary is the policy
 layer plus the audit in
 [Trust and audit](#trust-and-audit-the-architects-shell).
+
+### Global baseline additions
+
+Some vocabulary is shared by every agent and belongs in the global baseline
+rather than an agent grant.
+
+```jsonc
+{
+  "permissions": [
+    // Content identity: read-only Git plumbing every agent computes.
+    { "action": "shell", "resource": "git fetch *", "effect": "allow" },
+    { "action": "shell", "resource": "git rev-list *", "effect": "allow" },
+    { "action": "shell", "resource": "git stash create *", "effect": "allow" },
+    { "action": "shell", "resource": "git write-tree *", "effect": "allow" },
+    // Read-only gh verbs. `gh pr create` stays on ask: it is a remote side effect.
+    { "action": "shell", "resource": "gh auth status *", "effect": "allow" },
+    { "action": "shell", "resource": "gh pr list *", "effect": "allow" },
+    // Named package runners only, for example `npx prettier *`. A blanket
+    // `npx *` allow executes arbitrary packages.
+  ],
+}
+```
+
+Code-generation commands are deliberately absent from this baseline. They
+write source, they are project-specific, and a global entry would hand them to
+the read-only agents, whose `edit` deny does not cover the shell. Grant them
+per project with "allow always", which saves a durable project-scoped allow,
+and leave commands that mutate a live system on ask.
+
+Named runners are described rather than enumerated for the same reason: which
+runners a project needs is project knowledge, and an enumerated list would date
+the plugin. Add the ones your projects actually run.
+
+Prompts on package runners, restores, or SDK tools can come from either layer:
+the command may be missing from the shell allowlist, or the cache it touches
+outside the project may be missing from `external_directory`. Check which
+action asked before granting either; broadening the shell allow does not fix
+an external-directory ask.
 
 ### Read-only enforcement
 
@@ -775,13 +814,28 @@ A: The reviewer is read-only for files, and it should inspect with `read` and
 and build commands; deny anything that writes to the tree.
 
 **Q: The architect prompts on every new PowerShell idiom. Why?**
-A: OpenCode splits a compound command into one permission resource per
-sub-command, method call, and script-block body. `$t.GetMethods()` and the body of
-`ForEach-Object` are each a resource, and "always allow" saves the literal text,
-so the next script with a different variable name prompts again. Use the native
-tools for discovery and keep shell to Git, builds, tests, and hashes. If discovery
-is genuinely open-ended, apply the architect grant in
+A: OpenCode prices a shell call by the resources its scanner extracts: one per
+sub-command, method call, and script-block body. `$t.GetMethods()` and the
+body of `ForEach-Object` are each a resource, and a method call is a resource
+per expression, so `$t.GetMethods()` and `$u.GetMethods()` are two resources
+and the second prompts again. Choosing "allow always" saves a project-scoped
+allow for the prefix the tool proposes, which persists across sessions in that
+project; no saved pattern covers an expression it has not seen. Use the native
+tools for discovery and keep shell to Git, builds, tests, and hashes. If
+discovery is genuinely open-ended, apply the architect grant in
 [Per-agent shell grants](#per-agent-shell-grants).
+
+**Q: A command is on the allowlist but still prompted. Why?**
+A: Three mechanisms, in likelihood order. First, `external_directory` is
+checked before `shell` resources, for the command's working directory and the
+directories its scanner infers: a path outside the project asks even when the
+command is allowed. Second, the scanner prices a compound call by its
+sub-commands, and one unresolved sub-command asks for the whole call, so
+`$t = git status; ...` or a wrapped `git -C <path> status` prompts where
+`git status` does not. Third, a block naming CC Safety Net is not a permission
+prompt: that plugin blocks rather than asks, and it fails closed on commands
+its parser cannot analyse. The first two are answered by allowing the external
+paths actually used and keeping each shell call to one command.
 
 **Q: Should I give the architect a blanket shell allow?**
 A: That is the trust-and-audit posture in
