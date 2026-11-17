@@ -130,8 +130,8 @@ interactive reflection probe is neither evidence nor repeatable.
 
 The shell can write where `edit` cannot, so audit the tree rather than trust the
 permission. Record a fingerprint at design start, before dispatch, and at slice
-approval: `git status --porcelain=v1`, `git diff HEAD | git hash-object --stdin`,
-and a hash of each untracked file. A change outside `.agent-workflow/`,
+approval: the content identity of the tree — the tree hash of the working tree
+plus a hash of each untracked file. A change outside `.agent-workflow/`,
 `.gitignore`, and the approved slice is a violation. Report it to the user and
 stop.
 
