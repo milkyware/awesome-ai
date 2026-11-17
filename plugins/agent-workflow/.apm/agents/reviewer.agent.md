@@ -48,7 +48,8 @@ and the diff rather than relying on the implementer's report.
 Do not use `shell` to read files or to enumerate the tree. Do not load an
 assembly, run an ad-hoc script, or execute the change to learn what it does when
 the source and its documentation answer the question. Run tests, lint, and build
-commands only.
+commands only. Do not run the full suite: the orchestrator runs it while you
+review and shares the result.
 
 ## Review targets
 
@@ -110,12 +111,26 @@ contract changes, the full check suite on the integrated tree, and whether the
 rollback story is credible. Use this target only when more than one task is
 integrated or the change crosses module boundaries.
 
+## Revision reviews
+
+When you are asked to re-review after a `revise` verdict, you are given the
+parent verdict and the delta — what changed since it — not a fresh brief. Read
+the delta and the paths it touches; do not re-read the plan or the whole diff.
+
+Confirm each parent finding is addressed or still open, check the delta for
+what it introduced, and re-issue the verdict against the same identity scheme.
+Do not re-raise a finding the parent verdict already settled unless the delta
+reopened it.
+
 ## Evidence
 
 For every verdict, record the identity you reviewed:
 
-- For a task: `git diff HEAD | git hash-object --stdin`, with
-  `git diff HEAD --stat` for readability.
+- For a task: `git diff <base> -- <path scope> | git hash-object --stdin`,
+  using the `base` and `path scope` recorded in the brief's execution context,
+  with `git diff <base> --stat -- <path scope>` for readability. Anchoring to
+  the recorded base, not `HEAD`, keeps the identity stable while other tasks
+  commit.
 - For an integration: the same computed against the integration base, for example
   `git diff <base>..HEAD`.
 - For a plan: the plan's decision IDs and task IDs.
