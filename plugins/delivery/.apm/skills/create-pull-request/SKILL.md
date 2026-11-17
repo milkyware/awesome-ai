@@ -130,7 +130,7 @@ Then handle screenshots, following [UI change detection](references/pull-request
 - **Images supplied without a UI change.** Keep the section and attach them; the user's judgement overrides detection.
 
 Pass the body on standard input with `--body-file -`, through a literal
-here-string so no expansion touches it (PowerShell `@' … '@`, bash `<<'EOF'`).
+here-string so no expansion touches it (PowerShell `@' … '@`, Bash `<<'EOF'`).
 Relative paths in the body then resolve against the working directory, so
 reference screenshots by repository-relative paths. This needs no temporary
 file, no write outside the repository, and no external-directory permission.
