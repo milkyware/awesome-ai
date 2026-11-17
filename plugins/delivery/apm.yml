@@ -1,5 +1,5 @@
 name: delivery
-version: 0.0.7
+version: 0.0.8
 description: >-
   Produce implementation-ready plans, create delivery-ready Jira tickets and
   GitHub issues, and raise reviewable pull requests using structured, gated

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.7...delivery-v0.0.8) (2026-11-17)
+
+
+### 🚀 Enhancements
+
+* **agent-workflow:** rebalance permissions and add grouped dispatch ([#66](https://github.com/milkyware/awesome-ai/issues/66)) ([563dfba](https://github.com/milkyware/awesome-ai/commit/563dfbaf305adc269ef59ffc0f0e78e85c3a301d))
+
 ## [0.0.7](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.6...delivery-v0.0.7) (2026-11-12)
 
 
