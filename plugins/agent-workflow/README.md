@@ -92,6 +92,9 @@ Start with the architect and state your objective. A typical run:
 12. It returns a slice report, including any design questions the work raised.
 13. The architect decides whether the design holds or needs revising, and either
     issues the next slice or returns to you.
+14. When the design groups slices, the architect dispatches the group as one
+    dispatch; the orchestrator reports per slice, and a context reset re-enters
+    at the last slice reported.
 
 Delegation depends on the harness:
 
@@ -655,12 +658,14 @@ consumers state the evidence they require rather than restating the shape.
   success criteria, capability map, approach, decisions, slices, non-goals.
 - **Task brief** (orchestrator, at `tasks/<ID>.md`) — requirement IDs, risk
   tier, objective, inputs, write scope, acceptance criteria, dependencies,
-  check-only verification, formatting, approvals required. At T0 a short brief
+  check-only verification, formatting, approvals required, and the execution
+  context record: mode, isolation, path scope, dispatch base commit, and the
+  task fingerprint taken before dispatch and after return. At T0 a short brief
   carries the ID, requirement IDs, objective, write scope, acceptance criteria,
-  and expected verification; the rest may be `none`, including formatting.
+  and expected verification; the rest may be `none`.
 - **Execution plan** (orchestrator, at `plan.md`) — slice identity, scope,
-  tasks, ordering, concurrency candidates, interfaces, risk register, decisions,
-  verification strategy.
+  tasks, ordering, concurrency candidates, tracks, interfaces, risk register,
+  decisions, verification strategy.
 - **Worker result** (implementer) — outcome, artefacts changed, verification
   performed with actual results, criteria status, limitations, escalations.
 - **Review verdict** (reviewer) — target, identity reviewed, severity-graded
@@ -685,6 +690,14 @@ not need its own approval unless it is irreversible. `Blocked` is recoverable
 without re-planning. `Failed` is terminal for the attempt: the task returns to
 `Ready` only through a revised plan, and at T2 and above that escalates to the
 architect.
+
+Concurrency is gated before dispatch. At most two implementers could run at
+once with disjoint write scopes and disjoint path scopes recorded in the plan,
+and this version does not dispatch them concurrently: on one shared tree an
+implementer's verification builds the other task's in-progress code. Each
+verdict binds to the task diff identity computed against the task's recorded
+base, so the integration queue's commits cannot change what a verdict
+accepted.
 
 ## Verification
 
@@ -739,12 +752,18 @@ place for facts that outlive one objective.
 Workers leave changes in the working tree. They do not commit, push, branch,
 stash, reset, or rewrite history.
 
-The orchestrator integrates: it confirms the tree fingerprint, obtains integration
-approval through the architect at T2 and above, commits one task at a time with
-the task ID in the message, records the SHA and reviewed diff identity, and runs
-the verification on the integrated tree. A failed check is fixed forward or
-reverted; anything beyond reverting its own commit that has not been pushed needs
-approval.
+The orchestrator integrates through an explicit queue: one task at a time, in
+dependency order, and only after its verdict is `accept`. Before committing, it
+recomputes the task diff identity against the recorded base and confirms the
+task fingerprint taken after return is unchanged; if either differs from the
+reviewed version, the task returns to `In review` without a commit. The commit
+carries one task with the task ID leading the message, and the queue ledger
+records the commit, the reviewed task diff identity, the checks run, the
+result, and the verdict.
+
+The full check suite runs once per slice, on the integrated tree, after the
+queue drains. A failed check is fixed forward or reverted; anything beyond
+reverting its own commit that has not been pushed needs approval.
 
 ## Approval Boundaries
 
@@ -763,14 +782,17 @@ Net effect is that you are asked about slices rather than tasks.
 
 ## Scope and Roadmap
 
-This version executes implementation sequentially and keeps the workflow
+This version executes implementation sequentially, dispatches several slices as
+one grouped dispatch when the design records it, and keeps the workflow
 human-supervised. It does not create or manage Git worktrees, run a custom
 orchestration runtime, or maintain durable state outside `.agent-workflow/`.
 
 Deliberately deferred:
 
-- Parallel implementation with Git worktrees, branch ownership, and conflict
-  handling.
+- Git worktree management, concurrent implementer dispatch, and concurrent
+  per-slice orchestrators. All three need an isolated working tree; the
+  concurrency gate is recorded per pair so the precondition is visible when
+  isolation arrives.
 - Dependencies on `delivery/implementation-plan` and `code-quality/code-review`.
   The overlap is intentional for now so the plugin installs and behaves on its
   own. These become package dependencies once the six artefacts have survived two
