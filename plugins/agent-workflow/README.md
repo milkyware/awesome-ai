@@ -656,15 +656,24 @@ The workflow distinguishes four levels explicitly:
 - **Reviewed** — an independent verdict exists, bound to an identity.
 - **Approved** — you have accepted the integrated result.
 
-Review is bound to an artefact, not to a conversation. The verdict records the
-content identity of the tree — the tree hash of the working tree plus a hash of
-each untracked file — and integration recomputes it, refusing the verdict if it
-no longer matches. A verdict cannot be earned on one tree and applied to another.
+Review is bound to an artefact, not to a conversation. Each task records its
+identity against the `base` and `path scope` in its execution context: the task
+diff identity hashes `git diff <base> -- <path scope>`, with a `--stat` form for
+readability, and the task fingerprint adds a hash of each untracked file inside
+the scope. Integration recomputes both and refuses the verdict if either no
+longer matches, so the queue's commits cannot change what a verdict accepted.
 
 `git status` is not part of the identity. Where `core.autocrlf` is enabled, a
 rewrite that changes only line endings reports a path as modified while the
 content identity does not move, so status is a hint for reading and the identity
 is the evidence.
+
+Task verification is focused and slice verification is complete. The brief
+names the checks that cover the change and the implementer runs those; the
+full suite runs once per slice, on the integrated tree. Where a review is in
+flight, the orchestrator starts the suite in the background when it dispatches
+the review, so the reviewer's read and the suite's run overlap instead of
+queueing.
 
 ## Verification environment
 

@@ -23,7 +23,9 @@ brief reserves for the orchestrator or the user.
 ## Boundaries
 
 - Do not exceed the write scope in the brief. If the work requires changes
-  outside it, stop and report that rather than expanding.
+  outside it, stop and report that rather than expanding. Where the brief sets
+  a track, another implementer may be editing a disjoint scope in the same
+  tree at the same time, so the scope is absolute.
 - Write source with `write` or `edit`, not with shell redirection. A shell write
   is not covered by your `edit` permission and bypasses the diff the reviewer
   checks.
@@ -80,7 +82,10 @@ unblock you is more useful than speculative work.
 4. Make the smallest change that satisfies the criteria.
 5. Run the formatting command the brief names, if any, and prove it with the
    check the brief specifies.
-6. Run the verification the brief specifies. Capture the actual output.
+6. Run the verification the brief specifies. Capture the actual output. Task
+   verification is focused: the checks that cover this change. The full suite
+   runs once per slice, on the integrated tree, and is the orchestrator's
+   step; do not run it per task unless the brief names it.
 7. Review your own diff against the criteria before reporting. Self-review does
    not replace independent review, but it prevents avoidable revisions.
 

@@ -405,6 +405,19 @@ the verdict does not apply to this change. Return the task to `In review`.
 
 If evidence is missing, the task is not complete. Say so.
 
+### Suite overlap
+
+Task verification is focused: the brief names the checks that cover the change,
+and the implementer runs those. The full check suite runs once per slice, on
+the integrated tree.
+
+At integration, when the tier requires an integration review, dispatch the
+review and start the suite in the background at the same time, so the
+reviewer's read and the suite's run overlap instead of queueing. Collect the
+suite result when the verdict returns. A suite failure after an `accept`
+verdict is a fix-forward or a re-dispatch; it never overrides the verdict, and
+the verdict never overrides the suite.
+
 ### Progress
 
 A retry must be able to succeed. Before repeating a failed step, compare the
