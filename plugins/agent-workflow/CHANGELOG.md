@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.5...agent-workflow-v0.1.6) (2026-11-17)
+
+
+### 🚀 Enhancements
+
+* **agent-workflow:** rebalance permissions and add grouped dispatch ([#66](https://github.com/milkyware/awesome-ai/issues/66)) ([563dfba](https://github.com/milkyware/awesome-ai/commit/563dfbaf305adc269ef59ffc0f0e78e85c3a301d))
+
 ## [0.1.5](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.4...agent-workflow-v0.1.5) (2026-11-12)
 
 
