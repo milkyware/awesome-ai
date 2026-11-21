@@ -99,16 +99,27 @@ Use `read`, `glob`, and `grep` to locate files and read their contents. Use
 `write` and `edit` to change a file, so the change is attributable and shows in
 the diff.
 
-Use `shell` only for the exact command string a brief names under `Expected
-verification` or `Formatting`, and for the identity commands below. One command
-per call, with no `|`, `&&`, `;`, `$()`, or redirect. The harness prices a
-compound command by its sub-commands, one sub-command outside the allowlist asks
-for the whole call, and `Always Allow` never matches a string that changes
-between tasks.
+Use `shell` only for the literal strings below, or the exact string a brief names under
+`Expected verification` or `Formatting`. Copy a string whole: one command per call,
+with no `|`, `&&`, `;`, `$()`, redirect or other composition. A compound command is a
+chain of prompts, not one command, because the harness checks each subcommand and one
+subcommand outside the approved set asks for the whole call.
 
-Never invent a build, test, or format command. Never read a file, list a
-directory, or search contents through `shell`; `cat`, `ls`, `find`, `head`, and
-`grep` duplicate a native tool.
+```text
+git rev-parse HEAD
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+git hash-object <path>
+git log --oneline -n 10
+git show --stat HEAD
+```
+
+A saved approval is a prefix pattern, so it covers later variants of the same command,
+not a different one. Never invent a build, test, or format command.
+
+Never read a file, list a directory, or search contents through `shell`; `cat`, `ls`,
+`find`, `head`, and `grep` duplicate a native tool.
 
 When the objective depends on a third-party library, inspect what it ships
 before executing it: the `.xml` documentation beside the `.dll`, the `.nuspec`,
@@ -120,28 +131,39 @@ Identity is compared as stored text, never hashed. `git status` is a hint, not
 evidence: under `core.autocrlf=true`, an LF-only rewrite reports a path as
 modified while `git diff` is empty.
 
-- `git diff <base> --stat -- <path scope>` gives the readable record.
-- `git diff <base> --name-only -- <path scope>` gives the machine comparison.
-- `git ls-files -o --exclude-standard -- <path scope>` lists untracked files;
-  pin one with `git hash-object <path>` when its content matters.
+The identity is four literal strings, and none of them takes a base or a path scope:
 
-Record each output verbatim in the artefact that needs it, and compare the
-stored text. Equal text is the same change; different text is a different
-change.
+```text
+git rev-parse HEAD
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+```
+
+The first records the base as text. The other three read the working tree against it.
+Pin an untracked file's content with `git hash-object <path>` when the audit depends on
+it; the path is the one variable argument in the vocabulary.
+
+Record each output verbatim in the artefact that needs it, and compare the stored text.
+Equal text is the same change; different text is a different change.
+
+`HEAD` does not move during a task, so the identity is stable between dispatch and
+approval, and a write outside `.agent-workflow/`, `.gitignore` and the approved slice
+appears in it rather than being filtered out.
 
 For a read-only delegation, take `git diff HEAD --name-only` before and after. A
 difference means the boundary was crossed. This detects a violation; it does not
 prevent one.
 
 Never build an identity with `git stash create`, `git rev-parse <commit>^{tree}`,
-`git hash-object --stdin`, or a pipe. Git normalises line endings for `diff`, so
-these add no evidence and break `Always Allow`.
+`git hash-object --stdin`, or a pipe. Git normalises line endings for `diff`, so these
+add no evidence, and a pipe is a compound command.
 
 ## Write audit
 
-Record the identity at design start, before dispatch, and at slice approval. A
-change outside `.agent-workflow/`, `.gitignore`, and the approved slice is a
-violation: report it to the user and stop.
+Record the identity at design start, before dispatch, and at slice approval, each time
+as the four strings above. A change outside `.agent-workflow/`, `.gitignore`, and the
+approved slice is a violation: report it to the user and stop.
 
 ## Workflow directory
 

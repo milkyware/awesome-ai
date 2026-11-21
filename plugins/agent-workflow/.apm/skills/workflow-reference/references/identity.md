@@ -6,18 +6,24 @@ never hashed.
 
 ## Commands
 
-Record the execution context in the task brief: the `base` commit and the `path
-scope`. Then capture three outputs, one command per call.
+Record the execution context in the task brief: the dispatch base and the path scope as a
+boundary. Then capture four literal strings, one command per call:
 
 ```text
-git diff <base> --stat -- <path scope>
-git diff <base> --name-only -- <path scope>
-git ls-files -o --exclude-standard -- <path scope>
+git rev-parse HEAD
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
 ```
 
-The first is the readable record quoted in a verdict. The second is the machine
-comparison. The third lists untracked files inside the scope; where content matters,
-pin a single file with `git hash-object <path>`.
+None of them carries an argument. The first records the base. The second is the readable
+record quoted in a verdict, the third is the machine comparison, and the fourth lists
+untracked paths. Where an untracked file's content matters, pin that one path with
+`git hash-object <path>`: the path is the subject of the command, so it is the one
+variable argument in the vocabulary.
+
+`git diff HEAD` and not `git diff`, because it compares the working tree to the commit and
+so still reports content after an accidental staging.
 
 ## Why the diff and not the status
 
@@ -31,9 +37,13 @@ the outputs; do not infer from a summary line.
 
 ## Comparison
 
-Anchor to the recorded `base`, not to `HEAD`, so a later task's commit does not move
-the identity under review. Recompute before integration and compare the text with the
-text the verdict quoted:
+Execution is sequential on one shared tree: workers leave their changes uncommitted, the
+orchestrator commits one reviewed task at a time, and `HEAD` therefore does not move
+between dispatch and integration. Two consequences follow. The base is recorded but never
+used as a diff argument. And the diff has no path scope, so a write outside the task
+appears in the identity rather than being filtered out of it.
+
+Recompute before integration and compare the text with the text the verdict quoted:
 
 - equal text: the same change, so the verdict still applies;
 - different text: a different change, so the verdict does not apply and the task
@@ -49,5 +59,6 @@ pair it with a harness permission that denies writes where the harness supports 
 ## Recipes to avoid
 
 Do not build an identity with a stash, a tree object hash, a hash piped from standard
-input, or any pipeline. They add no evidence beyond the diff, they price as several
-sub-commands, and a saved approval never matches a string that varies between tasks.
+input, or any pipeline. They add no evidence beyond the diff, and a pipe is a compound
+command: the harness checks each subcommand separately, so it prompts per subcommand
+rather than once.

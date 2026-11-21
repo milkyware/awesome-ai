@@ -89,16 +89,31 @@ Use `read`, `glob`, and `grep` to locate files and read their contents. Use
 `write` and `edit` to change a file, so the change is attributable and shows in
 the diff.
 
-Use `shell` only for the exact command string a brief names under `Expected
-verification` or `Formatting`, and for the identity commands below. One command
-per call, with no `|`, `&&`, `;`, `$()`, or redirect. The harness prices a
-compound command by its sub-commands, one sub-command outside the allowlist asks
-for the whole call, and `Always Allow` never matches a string that changes
-between tasks.
+Use `shell` only for the literal strings below, or the exact string a brief names under
+`Expected verification` or `Formatting`. Copy a string whole: one command per call,
+with no `|`, `&&`, `;`, `$()`, redirect or other composition. A compound command is a
+chain of prompts, not one command, because the harness checks each subcommand and one
+subcommand outside the approved set asks for the whole call.
 
-Never invent a build, test, or format command: run the brief's string verbatim.
-Never read a file, list a directory, or search contents through `shell`; `cat`,
-`ls`, `find`, `head`, and `grep` duplicate a native tool.
+```text
+git rev-parse HEAD
+git status --porcelain
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+git hash-object <path>
+git log --oneline -n 10
+git show --stat HEAD
+git show HEAD
+git add -- <paths>
+git commit -F .agent-workflow/commit-message.txt
+git revert --no-edit HEAD
+```
+
+A saved approval is a prefix pattern, so it covers later variants of the same command,
+not a different one. Never invent a build, test, or format command: run the brief's
+string verbatim. Never read a file, list a directory, or search contents through
+`shell`; `cat`, `ls`, `find`, `head`, and `grep` duplicate a native tool.
 
 ## Change identity
 
@@ -106,22 +121,35 @@ Identity is compared as stored text, never hashed. `git status` is a hint, not
 evidence: under `core.autocrlf=true`, an LF-only rewrite reports a path as
 modified while `git diff` is empty.
 
-- `git diff <base> --stat -- <path scope>` gives the readable record.
-- `git diff <base> --name-only -- <path scope>` gives the machine comparison.
-- `git ls-files -o --exclude-standard -- <path scope>` lists untracked files;
-  pin one with `git hash-object <path>` when its content matters.
+The identity is four literal strings, and none of them takes a base or a path scope:
 
-Record each output verbatim in the brief's execution context and compare the
-stored text. Equal text is the same change; different text is a different
-change.
+```text
+git rev-parse HEAD
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+```
+
+The first records the dispatch base, and the rest read the working tree against it.
+Pin an untracked file's content with `git hash-object <path>`; the path is the one
+variable argument in the vocabulary.
+
+Record each output verbatim in the brief's execution context and compare the stored
+text. Equal text is the same change; different text is a different change.
+
+Execution is sequential on one shared tree, and workers never commit, so `HEAD` does not
+move while a task is in flight. Two consequences are deliberate. The base is recorded
+but never used as a diff argument. And the diff has no path scope, so a write outside
+the task's scope appears in the identity instead of being filtered out of it: a boundary
+breach becomes visible evidence.
 
 For a read-only delegation, take `git diff HEAD --name-only` before and after. A
 difference means the boundary was crossed. This detects a violation; it does not
 prevent one.
 
 Never build an identity with `git stash create`, `git rev-parse <commit>^{tree}`,
-`git hash-object --stdin`, or a pipe. Git normalises line endings for `diff`, so
-these add no evidence and break `Always Allow`.
+`git hash-object --stdin`, or a pipe. Git normalises line endings for `diff`, so these
+add no evidence, and a pipe is a compound command.
 
 ## Workflow directory
 
@@ -254,10 +282,11 @@ ID; requirement IDs; risk tier and the gates it implies; objective as one
 sentence stating the outcome; context and inputs the implementer cannot infer;
 scope and out-of-scope; write scope as files, directories, or globs; acceptance
 criteria as checkable statements; relevant files or components; dependencies;
-expected verification as check-only commands; formatting command and its check;
-approvals required; and execution context — mode and isolation (both `single`
-and `shared-tree` in this version), path scope, dispatch base commit, and the
-task identity before dispatch and after return.
+expected verification as single check-only commands; formatting command and the
+check that proves it; approvals required; and execution context — mode and isolation
+(both `single` and `shared-tree` in this version), path scope as a boundary, the
+dispatch base commit as the text of `git rev-parse HEAD`, and the task identity before
+dispatch and after return.
 
 Do not dispatch a brief with a field missing or filled with a placeholder. A
 brief that names a writing command under expected verification is defective: it
@@ -301,12 +330,14 @@ implementer says so, not sufficient), **verified** (evidence of the stated check
 passing), **reviewed** (an independent verdict exists), **approved** (the user has
 accepted the outcome).
 
-A task diff identity is computed against the recorded `base`, not `HEAD`, so the
-previous task's commit does not change what a verdict accepted. A change outside
-the task's path scope is a boundary breach unless an in-flight task declares that
-path: stop, record a decision, and escalate. If the identity at integration does
-not match the one in the verdict, the verdict does not apply: return the task to
-`In review`. If evidence is missing, the task is not complete; say so.
+A task diff identity is the four strings taken before dispatch and again after
+return: the recorded base names the commit, and the diff is read against it. Because
+`HEAD` does not move while the task is in flight, the text a verdict quotes stays
+reproducible until integration. A change outside the task's path scope is a boundary
+breach unless an in-flight task declares that path: the identity shows it, so stop,
+record a decision, and escalate. If the identity at integration does not match the one
+in the verdict, the verdict does not apply: return the task to `In review`. If evidence
+is missing, the task is not complete; say so.
 
 **Suite overlap.** Task verification is focused and per task; the full check suite
 runs once per slice on the integrated tree. Where the harness supports asynchronous
@@ -338,11 +369,22 @@ task, commit, reviewed diff identity, checks run, result, verdict. Integrate one
 task at a time in dependency order, only after an `accept` verdict, and never start
 a second integration while one is unresolved.
 
-Before committing, recompute the identity against the task's recorded `base` and
-confirm it is unchanged since return; if it differs, return the task to `In review`
-without a commit. At T2 and above, obtain integration approval through the
-architect. Commit that task alone with the task ID leading the message, and record
-the commit and reviewed identity in the ledger.
+Before committing, recompute the identity and confirm it is unchanged since return; if
+it differs, return the task to `In review` without a commit. At T2 and above, obtain
+integration approval through the architect.
+
+Commit that task alone. Write the message with `write` to
+`.agent-workflow/commit-message.txt`, with the task ID leading it, then run two
+commands, one per call:
+
+```text
+git add -- <paths>
+git commit -F .agent-workflow/commit-message.txt
+```
+
+`<paths>` is the reviewed path scope: never `-A` and never `.`. The message file is
+ignored with the rest of `.agent-workflow/` and is never staged. Record the commit and
+the reviewed identity in the ledger.
 
 Run the full check suite once after the queue drains, including the formatter check.
 If it fails, fix forward or revert only your own unpushed commit; anything beyond

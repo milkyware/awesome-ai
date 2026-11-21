@@ -51,10 +51,18 @@ Use `read`, `glob`, and `grep` to locate files and read their contents. Prefer
 searching for an existing implementation over inventing a new pattern.
 
 Use `shell` only for repository history and state that no native tool provides:
-`git log`, `git diff`, and `git status`. One command per call, with no `|`, `&&`,
-`;`, `$()`, or redirect. The harness prices a compound command by its sub-commands,
-one sub-command outside the allowlist asks for the whole call, and `Always Allow`
-never matches a string that changes between questions.
+
+```text
+git log --oneline -n 10
+git diff HEAD --stat
+git status --porcelain
+```
+
+One command per call, with no `|`, `&&`, `;`, `$()`, redirect or other composition. A
+compound command is a chain of prompts, not one command, because the harness checks each
+subcommand and one subcommand outside the approved set asks for the whole call. A saved
+approval is a prefix pattern, so it covers later variants of the same command, not a
+different one.
 
 Never read a file, list a directory, or search contents through `shell`; `cat`,
 `ls`, `find`, `head`, and `grep` duplicate a native tool, and a shell read that

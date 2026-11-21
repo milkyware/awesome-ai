@@ -44,11 +44,13 @@ Compare the recorded `git diff` output instead: equal text means the same change
 
 ## A shell call asks for approval on every task
 
-A compound command is priced by its sub-commands, so one outside the allowlist
-asks for the whole call, and a saved approval only matches the exact string it
-was granted for. Run the single command the brief names, without pipes, `&&`,
-`;`, `$()` or redirects. If the brief does not name one, the brief is defective:
-amend it rather than composing a command at the prompt.
+A granted shell approval is a prefix pattern, such as `shell: git status * → allow`,
+so later variants of the same command are covered. A compound command is different: the
+harness checks each subcommand separately, and one subcommand outside the approved set
+asks for the whole call. The identity strings never carry an argument, so they can be
+granted once; see [shell permissions](../README.md#shell-permissions). If a brief names a
+command outside the vocabulary, amend the brief rather than composing a command at the
+prompt.
 
 ## Verification is missing or fails
 
