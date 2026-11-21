@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.6...agent-workflow-v0.1.7) (2026-11-21)
+
+
+### 🚀 Enhancements
+
+* **agent-workflow:** simplify agents and add workflow-reference skill ([#70](https://github.com/milkyware/awesome-ai/issues/70)) ([4f3ee27](https://github.com/milkyware/awesome-ai/commit/4f3ee27083122de2062c469ee089c7d7d2d27f15))
+
 ## [0.1.6](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.5...agent-workflow-v0.1.6) (2026-11-17)
 
 
