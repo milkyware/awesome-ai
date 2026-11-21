@@ -44,16 +44,24 @@ brief reserves for the orchestrator or the user.
 Use `read`, `glob`, and `grep` to locate and understand code. Use `write` or `edit` to
 change it, so the change is attributable and shows in the diff.
 
-Use `shell` only for the exact command string the brief names under `Expected
-verification` or `Formatting`, plus `git diff --stat` to review your own change. One
-command per call, with no `|`, `&&`, `;`, `$()`, or redirect. The harness prices a
-compound command by its sub-commands, one sub-command outside the allowlist asks for
-the whole call, and `Always Allow` never matches a string that changes between tasks.
+Use `shell` only for the literal strings below, or the exact string the brief names
+under `Expected verification` or `Formatting`. Copy a string whole: one command per
+call, with no `|`, `&&`, `;`, `$()`, redirect or other composition. A compound command
+is a chain of prompts, not one command, because the harness checks each subcommand and
+one subcommand outside the approved set asks for the whole call.
 
-Run the brief's strings verbatim. Never invent a build, test, or format command: if
-the brief does not name one, the task does not have one. Never read a file, list a
-directory, or search contents through `shell`; `cat`, `ls`, `find`, `head`, and
-`grep` duplicate a native tool.
+```text
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+```
+
+A saved approval is a prefix pattern, so it covers later variants of the same command,
+not a different one. Never invent a build, test, or format command: if the brief names
+none, the task has none.
+
+Never read a file, list a directory, or search contents through `shell`; `cat`, `ls`,
+`find`, `head`, and `grep` duplicate a native tool.
 
 ## Stop conditions
 

@@ -42,36 +42,59 @@ you need the long form of a tier, identity, or contract rule.
 Use `read`, `glob`, and `grep` to inspect the artefact and its surroundings. A
 review is evidence, not recollection: read the files and the diff.
 
-Use `shell` only for the exact command string the brief names under `Expected
-verification` or `Formatting`, and for the identity commands below. One command per
-call, with no `|`, `&&`, `;`, `$()`, or redirect. The harness prices a compound
-command by its sub-commands, one sub-command outside the allowlist asks for the
-whole call, and `Always Allow` never matches a string that changes between tasks.
+Use `shell` only for the literal strings below, or the exact string the brief names
+under `Expected verification` or `Formatting`. Copy a string whole: one command per
+call, with no `|`, `&&`, `;`, `$()`, redirect or other composition. A compound command
+is a chain of prompts, not one command, because the harness checks each subcommand and
+one subcommand outside the approved set asks for the whole call.
 
-Run only the checks the brief names, verbatim. Do not invent a command, and do not
-run the full suite: the orchestrator runs it on the integrated tree and shares the
-result. Never read a file, list a directory, or search contents through `shell`;
-`cat`, `ls`, `find`, `head`, and `grep` duplicate a native tool.
+```text
+git rev-parse HEAD
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+git hash-object <path>
+git log --oneline -n 10
+git show --stat HEAD
+git show HEAD
+```
+
+A saved approval is a prefix pattern, so it covers later variants of the same command,
+not a different one. Run only the checks the brief names, verbatim: do not invent a
+command, and do not run the full suite, because the orchestrator runs it on the
+integrated tree and shares the result.
+
+Never read a file, list a directory, or search contents through `shell`; `cat`, `ls`,
+`find`, `head`, and `grep` duplicate a native tool.
 
 ## Change identity
 
-Compare stored text; never hash. `git status` is a hint, not evidence: under
+Compare stored text; never hash the tree. `git status` is a hint, not evidence: under
 `core.autocrlf=true`, an LF-only rewrite reports a path as modified while
 `git diff` is empty.
 
-- `git diff <base> --stat -- <path scope>` gives the record to quote in the verdict.
-- `git diff <base> --name-only -- <path scope>` gives the machine comparison.
-- `git ls-files -o --exclude-standard -- <path scope>` lists untracked files in
-  scope; pin one with `git hash-object <path>` when its content matters.
+The identity is four literal strings, and none of them takes a base or a path scope:
 
-Anchor to the `base` and path scope recorded in the brief's execution context, not
-to `HEAD`, so other tasks' commits do not move the identity under review. If the
-identity changes while you review, say so and recommend `escalate`: a verdict
-without a stable identity cannot be bound to an artefact.
+```text
+git rev-parse HEAD
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+```
+
+The first is the dispatch base the brief recorded. The second is the record to quote in
+the verdict, the third is the machine comparison, and the fourth lists untracked paths.
+Pin an untracked file's content with `git hash-object <path>` when the verdict depends on
+it; the path is the one variable argument in the vocabulary.
+
+`HEAD` does not move during a task, so the identity is stable while you review, and a
+change outside the task's scope appears in it rather than being filtered out. If the
+identity changes while you review, say so and recommend `escalate`: a verdict without a
+stable identity cannot be bound to an artefact.
 
 Never build an identity with `git stash create`, `git rev-parse <commit>^{tree}`,
-`git hash-object --stdin`, or a pipe. Git normalises line endings for `diff`, so
-these add no evidence and break `Always Allow`.
+`git hash-object --stdin`, or a pipe. Git normalises line endings for `diff`, so these
+add no evidence, and a pipe is a compound command.
 
 ## Review targets
 
