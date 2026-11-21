@@ -157,6 +157,55 @@ instruction or detected boundary violation is not the same as runtime
 enforcement. Where a harness does not surface skills to a subagent, the agent's
 own rules still apply: the skill only expands them.
 
+## Shell permissions
+
+The agents declare no `shell` rules in their frontmatter, deliberately. In OpenCode the
+agent file's rules are evaluated last and win over global and `agents.<id>.permissions`
+configuration, so a rule shipped in the plugin could not be tightened by the repository
+that installed it. Grants belong in your own configuration. See the
+[OpenCode permissions reference](https://opencode.ai/docs/permissions).
+
+The agents run only the literal strings listed in the
+[shell vocabulary](./.apm/skills/workflow-reference/references/commands.md), plus the
+check-only commands a task brief names. Granting that set once removes the prompt from
+every task. Add these ordered rules after any broader rule you already have:
+
+```jsonc
+{
+  "permissions": [
+    { "action": "shell", "resource": "*", "effect": "ask" },
+    { "action": "shell", "resource": "git rev-parse *", "effect": "allow" },
+    { "action": "shell", "resource": "git status *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "git ls-files *", "effect": "allow" },
+    { "action": "shell", "resource": "git log *", "effect": "allow" },
+    { "action": "shell", "resource": "git show *", "effect": "allow" },
+    { "action": "shell", "resource": "git hash-object *", "effect": "allow" },
+  ],
+  "agents": {
+    "orchestrator": {
+      "permissions": [
+        { "action": "shell", "resource": "git add -- *", "effect": "allow" },
+        { "action": "shell", "resource": "git commit -F *", "effect": "allow" },
+        {
+          "action": "shell",
+          "resource": "git revert --no-edit *",
+          "effect": "allow",
+        },
+      ],
+    },
+  },
+}
+```
+
+The integration rules sit under the orchestrator because no other agent commits. Keep
+`git commit -F` narrow: `git commit *` would also grant `--amend`, which rewrites a
+commit a verdict was bound to.
+
+Verification and formatting strings are repository-specific: the plugin cannot know them,
+so add the ones your repository documents. A compound command is checked per subcommand,
+so keep each string to one command. The vocabulary reference explains why.
+
 ## Companion packages
 
 The workflow is intentionally technology-neutral. Install technology-specific
