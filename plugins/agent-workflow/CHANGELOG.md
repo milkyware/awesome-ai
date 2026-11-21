@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.8](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.7...agent-workflow-v0.1.8) (2026-11-21)
+
+
+### 🚀 Enhancements
+
+* **agent-workflow:** close the agents' shell vocabulary ([#72](https://github.com/milkyware/awesome-ai/issues/72)) ([8192a30](https://github.com/milkyware/awesome-ai/commit/8192a3049e208a93878856530bbf570ee5708ddf))
+
+
+### 🩹 Fixes
+
+* **agent-workflow:** require per-task formatting evidence ([#74](https://github.com/milkyware/awesome-ai/issues/74)) ([8861e80](https://github.com/milkyware/awesome-ai/commit/8861e80d2e0834034046e09608cf60022976c1d7))
+
 ## [0.1.7](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.6...agent-workflow-v0.1.7) (2026-11-21)
 
 
