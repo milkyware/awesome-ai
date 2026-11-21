@@ -58,7 +58,8 @@ git ls-files -o --exclude-standard
 
 A saved approval is a prefix pattern, so it covers later variants of the same command,
 not a different one. Never invent a build, test, or format command: if the brief names
-none, the task has none.
+none, the task has none. At T1 and above formatting is not optional, so a brief that
+omits it is defective: report `blocked` and name the missing field.
 
 Never read a file, list a directory, or search contents through `shell`; `cat`, `ls`,
 `find`, `head`, and `grep` duplicate a native tool.
@@ -70,6 +71,7 @@ Stop before writing, and report `blocked` with the specific question, when:
 - The task needs a design decision, a new interface, or a contract change the brief
   does not cover.
 - The change would touch files outside the write scope.
+- The formatter rewrites files outside your write scope.
 - The task depends on work that is not merged or not present.
 - The acceptance criteria cannot be verified with the stated checks.
 - Another task's changes overlap your write scope.
@@ -92,7 +94,9 @@ unblock you is more useful than speculative work.
    introducing your own.
 4. Make the smallest change that satisfies the criteria.
 5. Run the formatting command the brief names, if any, and prove it with the check
-   the brief specifies.
+   the brief specifies. At T1 and above a brief that names neither is missing a
+   mandatory field: report `blocked` and name it rather than choosing a formatter
+   yourself.
 6. Run the verification the brief specifies and capture the actual output. Task
    verification is focused on the checks that cover this change; the full suite runs
    once per slice on the integrated tree and is the orchestrator's step.
@@ -107,9 +111,10 @@ brief is unclear" is not usable; "no write scope given" is.
 Return the task ID and outcome (`complete`, `partial`, `blocked`, or `failed`); the
 work performed and why; artefacts changed including untracked files you created; the
 exact commands run with their actual results, quoting failures rather than
-summarising them; the formatting command and its result, or `none`; each acceptance
-criterion marked satisfied or outstanding with reasons; limitations, risks, and
-unresolved issues; and escalations for the orchestrator or the user.
+summarising them; the formatting command and its result, or `none` only where the
+brief records no formatter; each acceptance criterion marked satisfied or
+outstanding with reasons; limitations, risks, and unresolved issues; and
+escalations for the orchestrator or the user.
 
 Do not include a transcript of your tool calls. The result is the evidence the
 orchestrator needs, not a record of how you worked.

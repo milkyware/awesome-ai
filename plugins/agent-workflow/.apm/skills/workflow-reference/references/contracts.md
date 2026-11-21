@@ -25,16 +25,19 @@ ID; requirement IDs; risk tier and the gates it implies; objective stated as the
 outcome rather than the activity; context and inputs the implementer cannot infer;
 scope and out-of-scope; write scope as files, directories, or globs; acceptance
 criteria as checkable statements; relevant files or components; dependencies;
-expected verification as single literal check-only commands; formatting command and the
-check that proves it; approvals required; and execution context — mode, isolation, path
-scope as a boundary, the dispatch base commit as the text of `git rev-parse HEAD`, and the
-identity taken before dispatch and after return.
+expected verification as single literal check-only commands; the formatting command
+and the check that proves it, mandatory at T1 and above; approvals required; and
+execution context — mode, isolation, path scope as a boundary, the dispatch base
+commit as the text of `git rev-parse HEAD`, and the identity taken before dispatch
+and after return.
 
 A brief with a missing field or a placeholder is not ready to dispatch, because the
 implementer is instructed to refuse it. A brief that names a writing command under
 expected verification is defective: it asks the implementer to change the tree it is
 being asked to prove. At T0 the mandatory fields are the ID, requirement IDs,
-objective, write scope, acceptance criteria, and expected verification.
+objective, write scope, acceptance criteria, and expected verification. Formatting is
+optional at T0 and mandatory at T1 and above; a `none` where the repository has a
+formatter is a missing field, not a decision.
 
 ## Execution plan
 
@@ -49,9 +52,11 @@ verification and review strategy; decision records; out of scope.
 
 Usable only when it supplies the outcome, the files changed including untracked ones,
 the commands run with their actual results, the status of each acceptance criterion,
-limitations and risks, and any escalation. If a category is missing the result is
-incomplete: name the missing category and set `Needs revision`. The orchestrator does
-not reconstruct missing evidence.
+the formatting check and its result where the tier requires one, limitations and
+risks, and any escalation. If a category is missing the result is incomplete: name
+the missing category and set `Needs revision`. A `none` where the repository has a
+formatter is missing evidence. The orchestrator does not reconstruct missing
+evidence.
 
 ## Review verdict
 
