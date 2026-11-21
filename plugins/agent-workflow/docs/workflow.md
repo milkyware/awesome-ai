@@ -139,22 +139,34 @@ rather than applying a stale verdict. For a read-only delegation, compare
 whose harness does not enforce read-only behaviour, but detection is not prevention.
 
 Verification commands should be check-only. A command that changes the tree is
-work, not proof; formatters should be run in check mode after any formatting
-change. Agents run the literal string the brief names, one command per shell call,
-without pipes or command chaining. The harness checks each subcommand separately, so a
-compound command is a chain of prompts and one subcommand outside the approved set asks
-for the whole call; a saved approval is a prefix pattern, so it covers later variants of
-the same command rather than every command. Run focused checks per task and the complete
-repository check suite once on the integrated slice. Record environment details that
-affect reproducibility (such as line endings, formatter version, and test commands) in
-the repository's contributor or agent instructions rather than in local workflow state.
+work, not proof: format first, then prove the result in check mode. At T1 and
+above the brief names the formatting command and the check that proves it, and a
+task is not verified until that check has run and passed; `none` is valid at T0
+only. Formatting is proved per task rather than deferred to the integration
+suite, because drift that accumulates across tasks turns one reviewable change
+into a tree-wide rewrite with no task scope. A formatter that reports files
+outside the task's write scope is a scope problem to escalate, not a licence to
+reformat the tree. Agents run the literal string the brief names, one command per
+shell call, without pipes or command chaining. The harness checks each subcommand
+separately, so a compound command is a chain of prompts and one subcommand outside
+the approved set asks for the whole call; a saved approval is a prefix pattern, so
+it covers later variants of the same command rather than every command. Run
+focused checks per task and the complete repository check suite once on the
+integrated slice. Record environment details that affect reproducibility (such as
+line endings, formatter version, and test commands) in the repository's
+contributor or agent instructions rather than in local workflow state.
 
 ## Integration and concurrency
 
 Workers leave changes in the working tree; they do not commit or rewrite
 history. The orchestrator integrates one accepted task at a time in dependency
 order, records one commit per task, and runs the full check suite after the
-integration queue drains.
+integration queue drains. The suite is a backstop, not the first proof of
+formatting. A formatter-only failure on the integrated tree is a T0 fix-forward
+task scoped to the paths the formatter reports, evidenced by the re-run check; it
+does not reopen an accepted verdict and it is not an environment failure. A
+version, line-ending, or path-case disagreement is an environment failure:
+escalate with the output and do not reformat the tree to make the check pass.
 
 The commit stages the reviewed paths and reads its message from
 `.agent-workflow/commit-message.txt`, which is written with `write` and never staged, so

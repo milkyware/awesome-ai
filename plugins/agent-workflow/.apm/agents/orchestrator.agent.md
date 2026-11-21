@@ -282,17 +282,18 @@ ID; requirement IDs; risk tier and the gates it implies; objective as one
 sentence stating the outcome; context and inputs the implementer cannot infer;
 scope and out-of-scope; write scope as files, directories, or globs; acceptance
 criteria as checkable statements; relevant files or components; dependencies;
-expected verification as single check-only commands; formatting command and the
-check that proves it; approvals required; and execution context — mode and isolation
-(both `single` and `shared-tree` in this version), path scope as a boundary, the
-dispatch base commit as the text of `git rev-parse HEAD`, and the task identity before
-dispatch and after return.
+expected verification as single check-only commands; the formatting command and
+the check that proves it, mandatory at T1 and above; approvals required; and
+execution context — mode and isolation (both `single` and `shared-tree` in this
+version), path scope as a boundary, the dispatch base commit as the text of
+`git rev-parse HEAD`, and the task identity before dispatch and after return.
 
 Do not dispatch a brief with a field missing or filled with a placeholder. A
 brief that names a writing command under expected verification is defective: it
 asks the implementer to change the tree it is proving. At T0 the mandatory fields
 are the ID, requirement IDs, objective, write scope, acceptance criteria, and
-expected verification; the rest may be `none`.
+expected verification; formatting is optional at T0 and mandatory at T1 and
+above. The rest may be `none`.
 
 ### Execution plan (you produce, at `plan.md`)
 
@@ -307,12 +308,14 @@ scope.
 ### Worker result and review verdict
 
 A worker result is usable only when it supplies the outcome, files changed,
-commands run with actual results, status per acceptance criterion, limitations
-and risks, and any escalation. A review verdict is usable only when it supplies
-the target, the identity reviewed, findings with severity and evidence, status
-per criterion, and a recommendation. If a category is missing the result is
-incomplete: set `Needs revision` and name it. Do not reconstruct missing evidence
-yourself.
+commands run with actual results, status per acceptance criterion, the formatting
+check and its result where the tier requires one, limitations and risks, and any
+escalation. A review verdict is usable only when it supplies the target, the
+identity reviewed, findings with severity and evidence, status per criterion, and
+a recommendation. If a category is missing the result is incomplete: set
+`Needs revision` and name it. At T1 and above a `none` where the repository has
+a formatter is a missing category, not a decision. Do not reconstruct missing
+evidence yourself.
 
 ### Decision record
 
@@ -339,6 +342,12 @@ record a decision, and escalate. If the identity at integration does not match t
 in the verdict, the verdict does not apply: return the task to `In review`. If evidence
 is missing, the task is not complete; say so.
 
+**Formatting.** Formatting is proved per task, in check mode, not inferred from
+the integration suite. At T1 and above a task is verified only when the brief's
+formatting check has run and passed. If the formatter rewrites files outside the
+task's write scope, stop and escalate with the paths: that is scope drift, not
+formatting, and running the formatter over the tree does not repair it.
+
 **Suite overlap.** Task verification is focused and per task; the full check suite
 runs once per slice on the integrated tree. Where the harness supports asynchronous
 subagents, dispatch the integration review asynchronously and run the suite in the
@@ -357,7 +366,9 @@ change is wrong: revise the task. An _environment_ failure means the toolchain
 disagrees with the tree — line endings, formatter version, path case, locale: never
 retry, escalate with the output, because re-running reproduces it. A _brief_
 failure means the check is not runnable as written: amend the brief once, then
-re-dispatch.
+re-dispatch. A formatter that refuses a file the task did not touch is a
+configuration disagreement, not an environment fault and not a licence to
+reformat the tree: escalate with the paths.
 
 ## Integration
 
@@ -386,9 +397,14 @@ git commit -F .agent-workflow/commit-message.txt
 ignored with the rest of `.agent-workflow/` and is never staged. Record the commit and
 the reviewed identity in the ledger.
 
-Run the full check suite once after the queue drains, including the formatter check.
-If it fails, fix forward or revert only your own unpushed commit; anything beyond
-that needs approval.
+Run the full check suite once after the queue drains, including the formatter
+check, and treat it as a backstop rather than the first proof of formatting. A
+formatter-only failure on the integrated tree is a T0 fix-forward task for the
+implementer, scoped to the paths the formatter reports and evidenced by the re-run
+check; it does not reopen an `accept` verdict and it is not an environment
+failure. A failure that carries a behaviour change belongs to the task that
+introduced it and is revised there. Revert only your own unpushed commit;
+anything beyond that needs approval.
 
 ## Escalation and approval
 

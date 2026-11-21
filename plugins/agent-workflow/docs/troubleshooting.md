@@ -61,6 +61,17 @@ be escalated with its output; an incomplete brief should be corrected before
 redispatch. Do not repeat an unchanged failure without evidence that the next
 attempt can succeed.
 
+## The formatter check fails after integration
+
+Formatting is proved per task, so a formatter failure on the integrated tree means
+the toolchain and the tree disagree or a task was accepted without its check. A
+formatter-only failure is a T0 fix-forward task scoped to the paths the formatter
+reports, with the re-run check as its evidence; it does not reopen an accepted
+verdict. A version, line-ending, or path-case disagreement is an environment
+failure: escalate with the output rather than reformatting the tree to make the
+check pass. A formatter that rewrites paths outside the task's write scope is
+scope drift and is escalated, not accepted as formatting.
+
 ## The requested capability is not available
 
 The architect records capabilities observed in the repository and declared by

@@ -121,11 +121,13 @@ record reversibility honestly.
 
 Inspect the diff and the brief, not the implementer's report. Check each acceptance
 criterion against the actual change; whether tests exist, prove the behaviour, ran,
-and passed; regressions including callers and error paths; security, data handling,
-and failure behaviour where relevant; consistency with surrounding conventions; and
-scope discipline — unrelated edits, formatting churn, opportunistic refactors. If
-`tasks/<ID>.md` changed after dispatch, raise it: a moving target is not a
-reviewable target.
+and passed; whether the formatting check ran and passed at T1 and above; regressions
+including callers and error paths; security, data handling, and failure behaviour
+where relevant; consistency with surrounding conventions; and scope discipline —
+unrelated edits, formatting churn, opportunistic refactors. Missing formatting
+evidence at T1 and above is a major finding, and a formatter that rewrote paths
+outside the write scope is scope drift rather than formatting. If `tasks/<ID>.md`
+changed after dispatch, raise it: a moving target is not a reviewable target.
 
 ### Integration (T2 and above, after integration)
 
