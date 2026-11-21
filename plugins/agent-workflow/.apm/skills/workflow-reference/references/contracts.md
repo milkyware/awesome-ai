@@ -25,9 +25,10 @@ ID; requirement IDs; risk tier and the gates it implies; objective stated as the
 outcome rather than the activity; context and inputs the implementer cannot infer;
 scope and out-of-scope; write scope as files, directories, or globs; acceptance
 criteria as checkable statements; relevant files or components; dependencies;
-expected verification as check-only commands; formatting command and the check that
-proves it; approvals required; and execution context — mode, isolation, path scope,
-dispatch base commit, and the identity taken before dispatch and after return.
+expected verification as single literal check-only commands; formatting command and the
+check that proves it; approvals required; and execution context — mode, isolation, path
+scope as a boundary, the dispatch base commit as the text of `git rev-parse HEAD`, and the
+identity taken before dispatch and after return.
 
 A brief with a missing field or a placeholder is not ready to dispatch, because the
 implementer is instructed to refuse it. A brief that names a writing command under

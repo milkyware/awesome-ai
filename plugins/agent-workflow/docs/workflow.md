@@ -111,39 +111,54 @@ and above it also requires an `accept` review verdict. A task with missing
 evidence is not complete.
 
 The review is bound to the task brief and change identity, not to a conversation
-or summary. Record the task's base revision and path scope, then capture three
-commands against that base: `git diff <base> --stat -- <path scope>` for the
-readable record, `git diff <base> --name-only -- <path scope>` for the machine
-comparison, and `git ls-files -o --exclude-standard -- <path scope>` for untracked
-files. Hash a single untracked file with `git hash-object <path>` when its content
-matters.
+or summary. The identity is four literal strings, and none of them takes a base or a
+path scope:
+
+```text
+git rev-parse HEAD
+git diff HEAD --stat
+git diff HEAD --name-only
+git ls-files -o --exclude-standard
+```
+
+The first records the base revision. Hash a single untracked file with
+`git hash-object <path>` when its content matters.
 
 Identity is the stored text of those outputs, compared as text rather than
 hashed. This matters where `core.autocrlf` is enabled: an LF-only rewrite reports
 a path as modified in `git status` while `git diff` is empty, so status is a hint
-and the diff output is the evidence. Recompute before integration; if the text
-differs from the verdict, return the task for review rather than applying a stale
-verdict. For a read-only delegation, compare `git diff HEAD --name-only` before
-and after: detection reveals a write by an agent whose harness does not enforce
-read-only behaviour, but detection is not prevention.
+and the diff output is the evidence.
+
+Execution is sequential on one shared tree, so `HEAD` does not move while a task is in
+flight and the identity stays reproducible until integration. The base is recorded but
+never used as a diff argument, and the diff has no path scope, so a write outside the
+task's scope shows up in the identity rather than being filtered out of it. Recompute
+before integration; if the text differs from the verdict, return the task for review
+rather than applying a stale verdict. For a read-only delegation, compare
+`git diff HEAD --name-only` before and after: detection reveals a write by an agent
+whose harness does not enforce read-only behaviour, but detection is not prevention.
 
 Verification commands should be check-only. A command that changes the tree is
 work, not proof; formatters should be run in check mode after any formatting
-change. Agents run the exact command string the brief names, one command per
-shell call, without pipes or command chaining: a compound command is priced by
-its sub-commands, one outside the allowlist asks for the whole call, and saved
-approvals never match a string that changes between tasks. Run focused checks per
-task and the complete repository check suite once on the integrated slice. Record
-environment details that affect reproducibility (such as line endings, formatter
-version, and test commands) in the repository's contributor or agent instructions
-rather than in local workflow state.
+change. Agents run the literal string the brief names, one command per shell call,
+without pipes or command chaining. The harness checks each subcommand separately, so a
+compound command is a chain of prompts and one subcommand outside the approved set asks
+for the whole call; a saved approval is a prefix pattern, so it covers later variants of
+the same command rather than every command. Run focused checks per task and the complete
+repository check suite once on the integrated slice. Record environment details that
+affect reproducibility (such as line endings, formatter version, and test commands) in
+the repository's contributor or agent instructions rather than in local workflow state.
 
 ## Integration and concurrency
 
 Workers leave changes in the working tree; they do not commit or rewrite
 history. The orchestrator integrates one accepted task at a time in dependency
 order, records one commit per task, and runs the full check suite after the
-integration queue drains. Any action that could discard work or rewrite history
+integration queue drains.
+
+The commit stages the reviewed paths and reads its message from
+`.agent-workflow/commit-message.txt`, which is written with `write` and never staged, so
+no message string reaches the shell. Any action that could discard work or rewrite history
 must be escalated and approved before acting.
 
 The current workflow executes implementation sequentially in a shared working
