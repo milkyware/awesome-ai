@@ -19,7 +19,7 @@ approval and issue a slice to the orchestrator.
 The directory is local workflow state and should remain ignored. Stop using the
 committed state, confirm that `.agent-workflow/` is in `.gitignore`, and inspect
 the repository state before removing anything from the index. Preserve any
-useful local records; do not discard them as part of cleanup.
+useful local records; do not discard them while tidying.
 
 ## A read-only specialist changed a file
 
@@ -30,10 +30,25 @@ Escalate with the affected paths and evidence.
 
 ## The reviewed change no longer matches
 
-A review verdict applies only to the identity it assessed. If the task diff
-identity changes before integration, return the task for review against the new
+A review verdict applies only to the identity it assessed. If the recorded diff
+output changes before integration, return the task for review against the new
 change. Do not integrate based on an earlier verdict or on a matching
 `git status` alone.
+
+## `git status` shows a change that `git diff` does not
+
+With `core.autocrlf` enabled, a file rewritten with LF-only line endings reports
+as modified while its content identity is unchanged. Do not normalise line
+endings, add a `.gitattributes` rule, or disable `core.autocrlf` to quiet it.
+Compare the recorded `git diff` output instead: equal text means the same change.
+
+## A shell call asks for approval on every task
+
+A compound command is priced by its sub-commands, so one outside the allowlist
+asks for the whole call, and a saved approval only matches the exact string it
+was granted for. Run the single command the brief names, without pipes, `&&`,
+`;`, `$()` or redirects. If the brief does not name one, the brief is defective:
+amend it rather than composing a command at the prompt.
 
 ## Verification is missing or fails
 

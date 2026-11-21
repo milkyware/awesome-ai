@@ -111,19 +111,32 @@ and above it also requires an `accept` review verdict. A task with missing
 evidence is not complete.
 
 The review is bound to the task brief and change identity, not to a conversation
-or summary. Record the task's base revision and path scope; compute its diff
-identity against that base and include hashes for untracked files in scope.
-Recompute the identity before integration. If it differs from the verdict,
-return the task for review again rather than applying a stale verdict. A tree
-fingerprint can reveal writes by agents whose harness does not enforce
+or summary. Record the task's base revision and path scope, then capture three
+commands against that base: `git diff <base> --stat -- <path scope>` for the
+readable record, `git diff <base> --name-only -- <path scope>` for the machine
+comparison, and `git ls-files -o --exclude-standard -- <path scope>` for untracked
+files. Hash a single untracked file with `git hash-object <path>` when its content
+matters.
+
+Identity is the stored text of those outputs, compared as text rather than
+hashed. This matters where `core.autocrlf` is enabled: an LF-only rewrite reports
+a path as modified in `git status` while `git diff` is empty, so status is a hint
+and the diff output is the evidence. Recompute before integration; if the text
+differs from the verdict, return the task for review rather than applying a stale
+verdict. For a read-only delegation, compare `git diff HEAD --name-only` before
+and after: detection reveals a write by an agent whose harness does not enforce
 read-only behaviour, but detection is not prevention.
 
 Verification commands should be check-only. A command that changes the tree is
 work, not proof; formatters should be run in check mode after any formatting
-change. Run focused checks per task and the complete repository check suite once
-on the integrated slice. Record environment details that affect reproducibility
-(such as line endings, formatter version, and test commands) in the repository's
-contributor or agent instructions rather than in local workflow state.
+change. Agents run the exact command string the brief names, one command per
+shell call, without pipes or command chaining: a compound command is priced by
+its sub-commands, one outside the allowlist asks for the whole call, and saved
+approvals never match a string that changes between tasks. Run focused checks per
+task and the complete repository check suite once on the integrated slice. Record
+environment details that affect reproducibility (such as line endings, formatter
+version, and test commands) in the repository's contributor or agent instructions
+rather than in local workflow state.
 
 ## Integration and concurrency
 
@@ -138,6 +151,12 @@ tree. It can dispatch a designed group of slices together and reports each
 slice separately, but it does not manage worktrees or run concurrent
 implementers. This prevents one task's verification from accidentally including
 another task's in-progress changes.
+
+Read-only work may overlap. At the integration gate, the independent review can
+be dispatched asynchronously while the full check suite runs in the foreground,
+provided the harness supports asynchronous subagents; otherwise the two run in
+sequence. Shell commands are never backgrounded, because a detached command has
+no recorded evidence and no stable permission scope.
 
 ## Approval boundaries
 

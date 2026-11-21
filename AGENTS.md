@@ -123,7 +123,7 @@ Consequences agents must account for:
 
 - A file rewritten with LF-only line endings reports as modified in `git status`
   while `git diff` is empty. `git status` is therefore not evidence of a change;
-  the content identity is the tree hash of the working tree.
+  the `git diff` output is.
 - Prettier is configured with `endOfLine: auto`, so a format run preserves each
   file's existing line endings.
 - Formatting is a check, not a write: `prettier --check`, not `--write`, unless
