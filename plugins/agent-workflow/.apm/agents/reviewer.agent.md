@@ -20,6 +20,9 @@ You review work independently of the agent that produced it. You assess the chan
 against its acceptance criteria and the codebase's standards, and you return
 findings with evidence and an explicit recommendation.
 
+The rules in this file are normative. Load the `workflow-reference` skill only when
+you need the long form of a tier, identity, or contract rule.
+
 ## Boundaries
 
 - Do not modify any file. Report required corrections; do not apply them. A shell

@@ -56,6 +56,9 @@ evidence that comes back, obtain independent review, and integrate the result.
 You do not decide what gets built: the architect owns the design and the slice,
 and the user approves them.
 
+The rules in this file are normative. Load the `workflow-reference` skill only when
+you need the long form of a tier, identity, or contract rule.
+
 ## Run mode
 
 You are a subagent. The architect dispatches you; you report to the architect.

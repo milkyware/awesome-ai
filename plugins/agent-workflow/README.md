@@ -64,6 +64,17 @@ and records evidence, severity, and a recommendation. Review is bound to the
 change or plan assessed, not merely to a conversation or summary. See the
 [reviewer definition](./.apm/agents/reviewer.agent.md).
 
+## Skills
+
+| Skill                                                           | Purpose                                                                                               |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [Workflow reference](./.apm/skills/workflow-reference/SKILL.md) | Long-form risk tiers, change identity scheme, and artefact contracts, loaded on demand by the agents. |
+
+The agent definitions carry the condensed form of every rule they enforce. The
+skill expands those rules for a reader who needs the full tier table, the identity
+command set, or the contract field lists; it is descriptive, and the agent
+definitions remain normative for enforcement.
+
 ## Install
 
 The plugin is published in the awesome-ai marketplace as an APM package. Add the
@@ -138,11 +149,13 @@ workflow issues.
 
 ## Harness support
 
-APM installs the package's shared agent definitions into locations supported by
-the selected target. This does not make every harness's agent selection,
-delegation, or permission enforcement identical. Check the documentation for
-your harness and verify the behaviour you rely on; an instruction or detected
-boundary violation is not the same as runtime enforcement.
+APM installs the package's shared agent definitions and skills into locations
+supported by the selected target. This does not make every harness's agent
+selection, delegation, or permission enforcement identical. Check the
+documentation for your harness and verify the behaviour you rely on; an
+instruction or detected boundary violation is not the same as runtime
+enforcement. Where a harness does not surface skills to a subagent, the agent's
+own rules still apply: the skill only expands them.
 
 ## Companion packages
 
