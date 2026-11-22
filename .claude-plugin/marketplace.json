@@ -38,7 +38,7 @@
     {
       "name": "source-control",
       "description": "Name branches, record changes with Conventional Commits discipline, and raise reviewable pull requests using structured, gated workflows.",
-      "version": "0.0.2",
+      "version": "0.1.0",
       "source": "./plugins/source-control"
     }
   ]
