@@ -71,7 +71,7 @@ The specification requires a short summary to follow the colon and space. These 
 ## Footers
 
 - One footer per line, in a block after one empty line from the body or description.
-- Each footer is a word token, then either `: ` or ` #`, then the value. Both `Closes: #123` and `Closes #123` are valid; Git treats only `Token: value` as a trailer, so prefer that form.
+- Each footer is a word token, then either `: ` or ` #`, then the value. Both `Closes: #123` and `Closes #123` are valid; Git treats only `Token: value` as a trailer, so prefer that form. <!-- markdownlint-disable-line MD038 -->
 - A token uses `-` in place of whitespace, as in `Reviewed-by`. `BREAKING CHANGE` is the one exception and may carry a space.
 - A value may contain spaces and newlines. Parsing continues until the next valid token and separator pair, so a multi-line explanation needs no continuation marker.
 
