@@ -94,8 +94,8 @@ Follow [conventional-commits.md](references/conventional-commits.md). The rules 
 - **Type** — `feat` or `fix` for a feature or a defect; the repository's own list for anything else.
 - **Scope** — from the vocabulary the repository already uses, or from the branch name when the repository has none. Omit it rather than invent one.
 - **Description** — imperative mood, lower case, no trailing period, 72 characters at most and 50 where the meaning allows.
-- **Body** — why the change was needed and what it replaces, separated from the description by a blank line. Omit it when the description says everything.
-- **Footers** — `Token: value`, one per line, after a blank line. Use the repository's closing keyword when the commit resolves an issue.
+- **Body** — why the change was needed and what it replaces, separated from the description by a empty line. Omit it when the description says everything.
+- **Footers** — `Token: value`, one per line, after a empty line. Use the repository's closing keyword when the commit resolves an issue.
 - **Breaking change** — `!` before the colon, with or without a `BREAKING CHANGE:` footer. Add the footer when the migration needs explaining.
 - **Trailers** — add what the repository requires, such as `Co-authored-by:`. Never attribute a change to a tool that did not author it.
 

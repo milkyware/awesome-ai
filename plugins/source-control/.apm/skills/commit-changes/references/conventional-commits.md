@@ -15,13 +15,13 @@ The repository's own configuration overrides this file. Read it first, as descri
 ```
 
 - The type, an optional scope, an optional `!`, and the terminal colon and space are required before the description. The scope is a noun in parentheses, as in `fix(parser):`.
-- Separate the description, the body and the footer block with one blank line each.
+- Separate the description, the body and the footer block with one empty line each.
 - The body is free-form and may hold any number of paragraphs.
 
 ## Type
 
 - `feat` when the commit adds a new feature to an application or library.
-- `fix` when the commit is a bug fix.
+- `fix` when the commit is a bugfix.
 - Any other type the repository allows. The specification permits others; the default table below is the Angular set.
 - Type and scope are treated as case-insensitive by implementations, so choose one casing and keep to it.
 
@@ -70,7 +70,7 @@ The specification requires a short summary to follow the colon and space. These 
 
 ## Footers
 
-- One footer per line, in a block after one blank line from the body or description.
+- One footer per line, in a block after one empty line from the body or description.
 - Each footer is a word token, then either `: ` or ` #`, then the value. Both `Closes: #123` and `Closes #123` are valid; Git treats only `Token: value` as a trailer, so prefer that form.
 - A token uses `-` in place of whitespace, as in `Reviewed-by`. `BREAKING CHANGE` is the one exception and may carry a space.
 - A value may contain spaces and newlines. Parsing continues until the next valid token and separator pair, so a multi-line explanation needs no continuation marker.
