@@ -34,13 +34,13 @@ Read the repository's convention in this order, and stop at the first source tha
 3. Recent branch names from `git branch -a --sort=-committerdate`. Use them only when the prefixes agree with one another. A repository that mixes `feat/`, `fix/` and `feature/` has no convention to read, so treat that as no answer rather than picking the majority.
 4. The default table below.
 
-| Prefix | Use for | Typical commit type |
-| --- | --- | --- |
-| `feature/` or `feat/` | New capability | `feat` |
-| `bugfix/` or `fix/` | Defect in existing behaviour | `fix` |
-| `hotfix/` | Urgent production fix | `fix` |
-| `release/` | Release preparation, with a version suffix such as `release/v1.2.0` | `chore` |
-| `chore/` | Dependencies, documentation or configuration | `chore` |
+| Prefix                | Use for                                                             | Typical commit type |
+| --------------------- | ------------------------------------------------------------------- | ------------------- |
+| `feature/` or `feat/` | New capability                                                      | `feat`              |
+| `bugfix/` or `fix/`   | Defect in existing behaviour                                        | `fix`               |
+| `hotfix/`             | Urgent production fix                                               | `fix`               |
+| `release/`            | Release preparation, with a version suffix such as `release/v1.2.0` | `chore`             |
+| `chore/`              | Dependencies, documentation or configuration                        | `chore`             |
 
 State which source you used, and say so explicitly when you fell back to the default table. Never invent a prefix, and never widen the table with a prefix the repository does not use.
 

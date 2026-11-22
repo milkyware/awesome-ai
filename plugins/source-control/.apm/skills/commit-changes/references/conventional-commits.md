@@ -29,19 +29,19 @@ The repository's own configuration overrides this file. Read it first, as descri
 
 Use these only when the repository declares no list of its own.
 
-| Type | Use for |
-| --- | --- |
-| `feat` | New capability visible to a user or consumer |
-| `fix` | Defect in existing behaviour |
-| `docs` | Documentation only |
-| `style` | Formatting with no behavioural change |
-| `refactor` | Restructuring with no behavioural change |
-| `perf` | Performance improvement |
-| `test` | Test additions or corrections only |
-| `build` | Build tool, packaging or dependencies |
-| `ci` | Continuous integration configuration |
-| `chore` | Maintenance with no source or test change |
-| `revert` | Reverts an earlier commit |
+| Type       | Use for                                      |
+| ---------- | -------------------------------------------- |
+| `feat`     | New capability visible to a user or consumer |
+| `fix`      | Defect in existing behaviour                 |
+| `docs`     | Documentation only                           |
+| `style`    | Formatting with no behavioural change        |
+| `refactor` | Restructuring with no behavioural change     |
+| `perf`     | Performance improvement                      |
+| `test`     | Test additions or corrections only           |
+| `build`    | Build tool, packaging or dependencies        |
+| `ci`       | Continuous integration configuration         |
+| `chore`    | Maintenance with no source or test change    |
+| `revert`   | Reverts an earlier commit                    |
 
 When a change spans several types, prefer several commits. The specification's own guidance is to go back and split the work rather than stretch one type to cover two intentions.
 
