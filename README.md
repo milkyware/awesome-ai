@@ -13,6 +13,7 @@ A curated collection of reusable skills for AI-assisted software delivery and ar
 | [`code-quality`](./plugins/code-quality/README.md)           | Review branch changes for correctness, scope, and merge readiness                                     | `code-review`                                                                                   |
 | [`delivery`](./plugins/delivery/README.md)                   | Implementation-ready plans, delivery-ready Jira tickets, GitHub issues, and pull requests             | `implementation-plan`, `create-jira-ticket`, `create-github-issue`, `create-pull-request`       |
 | [`devops`](./plugins/devops/README.md)                       | Azure Pipelines to GitHub Actions conversion and release-please onboarding                            | `convert-az-pipeline`, `onboard-release-please`                                                 |
+| [`source-control`](./plugins/source-control/README.md)       | Branch naming and Conventional Commits discipline for recording changes                               | `create-branch`, `commit-changes`                                                               |
 
 `agent-workflow` ships an `architect` agent with supporting sub-agents rather than skills. Each plugin README documents installation for its supported harnesses, what it provides, and usage guidance.
 
@@ -37,6 +38,7 @@ apm install code-quality@awesome-ai --target <target>
 apm install delivery@awesome-ai --target <target>
 apm install devops@awesome-ai --target <target>
 apm install agent-workflow@awesome-ai --target <target>
+apm install source-control@awesome-ai --target <target>
 ```
 
 `<target>` is `copilot`, `claude`, or `opencode`. Use the same target for every install in a project; APM reconciles the active target and removes deployments for targets that are no longer selected. The `agent-workflow` plugin declares `copilot` and `opencode` targets.
