@@ -79,6 +79,17 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/source-control": {
+      "component": "source-control",
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        {
+          "type": "yaml",
+          "path": "apm.yml",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }
