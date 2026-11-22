@@ -82,7 +82,7 @@ Compare case-insensitively. Windows and macOS fold case in the filesystem while 
 
 ## 5. Resolve the base
 
-1. Take the base from the request when the user names one.
+1. Take the base from the request when the user states one.
 2. Otherwise use the remote default:
 
 ```bash
