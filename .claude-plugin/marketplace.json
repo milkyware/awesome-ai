@@ -20,7 +20,7 @@
     {
       "name": "delivery",
       "description": "Produce implementation-ready plans and create delivery-ready Jira tickets and GitHub issues using structured, gated workflows.",
-      "version": "0.0.8",
+      "version": "0.1.0",
       "source": "./plugins/delivery"
     },
     {
