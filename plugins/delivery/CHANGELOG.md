@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.1.0](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.8...delivery-v0.1.0) (2026-11-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **delivery:** move create-pull-request to source-control ([#77](https://github.com/milkyware/awesome-ai/issues/77))
+
+### ♻️ Refactoring
+
+* **delivery:** move create-pull-request to source-control ([#77](https://github.com/milkyware/awesome-ai/issues/77)) ([e94c055](https://github.com/milkyware/awesome-ai/commit/e94c055d7ea50cad0eceb49c108b4ba445446578))
+
 ## [0.0.8](https://github.com/milkyware/awesome-ai/compare/delivery-v0.0.7...delivery-v0.0.8) (2026-11-17)
 
 
