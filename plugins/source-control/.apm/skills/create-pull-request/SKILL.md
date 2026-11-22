@@ -46,7 +46,7 @@ git diff --name-only 'origin/<base>...HEAD'
 
 Then judge the result:
 
-- **Uncommitted changes present.** Stop and ask whether to continue without them. Never commit them as part of opening a pull request.
+- **Uncommitted changes present.** Stop and ask whether to continue without them. Never commit them as part of opening a pull request. When the `commit-changes` skill is available, point the user to it; otherwise give the exact commit command they need.
 - **No upstream, or the upstream is behind the head.** The branch is not pushed. Offer `git push -u origin <branch>` and wait for confirmation before pushing.
 - **Zero commits ahead of the base.** There is nothing to review. Stop.
 - **Behind the base.** Report the divergence. Do not rebase or merge the base automatically; that rewrites or extends the branch.
@@ -73,7 +73,7 @@ Use Conventional Commits. Read the repository's own configuration first, then fa
 2. A title or commit-message validator in `.github/workflows` that declares an explicit type list, such as `types:` on a semantic pull request action.
 3. Contribution guidance in `CONTRIBUTING.md` or `AGENTS.md`.
 
-Default types, when no configuration narrows them:
+Default types, when no configuration narrows them. This table is a title-only extract of [conventional-commits.md](../commit-changes/references/conventional-commits.md); change both together when a type is added:
 
 | Type       | Use for                                      |
 | ---------- | -------------------------------------------- |
@@ -97,6 +97,7 @@ Format rules:
 - Keep the title within 72 characters where the description allows.
 - No ticket identifiers, version numbers or bracketed tags unless the repository requires them.
 - When the change spans several types, choose the type of the user-visible outcome. A feature that also adds tests is `feat`.
+- Keep the type aligned with the branch prefix, so a `feat/...` branch carries a `feat` title. The full standard, including body and footer rules, is in the `commit-changes` skill.
 
 The title is the squash-merge commit message in most repositories, so it is the permanent record of the change.
 
