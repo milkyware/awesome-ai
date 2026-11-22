@@ -34,6 +34,12 @@
       "description": "Human-supervised design and delivery with an architect that owns the spec and iterates it with the user, and an orchestrator that delegates bounded tasks and verifies the results.",
       "version": "0.1.8",
       "source": "./plugins/agent-workflow"
+    },
+    {
+      "name": "source-control",
+      "description": "Name branches and record changes with Conventional Commits discipline using structured, gated workflows.",
+      "version": "0.0.1",
+      "source": "./plugins/source-control"
     }
   ]
 }

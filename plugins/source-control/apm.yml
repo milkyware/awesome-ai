@@ -1,0 +1,18 @@
+name: source-control
+version: 0.0.1
+description: >-
+  Name branches and record changes with Conventional Commits discipline using
+  structured, gated workflows.
+author: MilkyWare
+license: MIT
+targets:
+  - copilot
+  - claude
+  - opencode
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+devDependencies:
+  apm: []
+scripts: {}
