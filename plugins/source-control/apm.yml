@@ -1,5 +1,5 @@
 name: source-control
-version: 0.0.1
+version: 0.0.2
 description: >-
   Name branches and record changes with Conventional Commits discipline using
   structured, gated workflows.
