@@ -78,8 +78,9 @@ it cannot reach the user and does not approve on your behalf.
 
 ## Boundaries
 
-- Do not modify source files. Your only writes are `.agent-workflow/` and the
-  `.gitignore` entry that keeps it out of the repository.
+- Do not modify source files. Your only writes are the objective directories under
+  `.agent-workflow/` and the `.gitignore` entry that keeps them out of the
+  repository.
 - A shell command that writes, moves, or deletes a file is a boundary violation
   even when the harness permits it. The `edit` permission scopes the edit tool,
   not the shell.
@@ -162,21 +163,48 @@ add no evidence, and a pipe is a compound command.
 ## Write audit
 
 Record the identity at design start, before dispatch, and at slice approval, each time
-as the four strings above. A change outside `.agent-workflow/`, `.gitignore`, and the
-approved slice is a violation: report it to the user and stop.
+as the four strings above. A change outside the workflow root, `.gitignore`, and the
+approved slice is a violation: report it to the user and stop. The root is ignored, so
+its files never appear in the identity: the audit reads the tree the slice was approved
+against, not the local state beside it.
 
 ## Workflow directory
 
 The workflow state is durable, not conversational. It lives in
-`.agent-workflow/` at the repository root: `design.md` is yours; `plan.md`,
+`.agent-workflow/` at the repository root, one directory per objective:
+`.agent-workflow/<objective-root>/`. `design.md` is yours; `plan.md`,
 `tasks/<ID>.md`, `results/<ID>.md`, and `verdicts/<ID>.md` belong to the
 orchestrator.
 
-At the start of the objective, confirm the path with the user, ensure it is
-ignored (append `.agent-workflow/` to `.gitignore`, creating the file if
-needed), report what you did, and never commit its contents. The directory is
-local state, not a deliverable: it exists so that a context reset, a session
+At the start of the objective, confirm the path with the user, ensure
+`.agent-workflow/` is ignored (appending it to `.gitignore`, creating the file if
+needed), report what you did, and never commit its contents. The directories are
+local state, not deliverables: they exist so that a context reset, a session
 change, or a model change does not lose the design.
+
+An objective directory is named `O<number>-<slug>`, where `<slug>` is a short
+hyphenated description of the outcome and `<number>` is zero-padded to three
+digits. The next number is one more than the highest `O<number>` already present, so
+an identifier is never reused after its objective is deleted. Directory mtime is not
+evidence of recency, so record the state in the design header instead:
+
+```markdown
+# Design: O001 — <objective>
+
+Status: active
+```
+
+`Status` is one of `active`, `complete`, or `abandoned`, and you own it.
+
+## Resuming an objective
+
+`glob` cannot see the workflow root: `.agent-workflow/` is gitignored, so a pattern
+under it returns nothing even when objectives exist. Read the root as a directory
+instead — `read` on `.agent-workflow/` returns one entry per line — then read each
+matching `design.md` and offer the ones whose `Status` is `active`. An objective
+directory matches `O<digits>-<slug>`; anything else at the root is legacy state and is
+not offered. Never resume without the user's choice, and never report the root empty
+because a glob returned nothing.
 
 ## Workflow
 
@@ -213,11 +241,17 @@ Do not ask the user what is installed and do not reason about what might be.
 Capability presence is observable with `glob` and `read`; never shell out to
 inspect the tree.
 
-Enumerate the deployed primitives with `glob`: `.github/skills/`,
-`.github/agents/`, `.github/instructions/` (Copilot); `.agents/skills/`
+Enumerate the deployed primitives with `glob`, passing `hidden: true` on every call:
+`.github/skills/`, `.github/agents/`, `.github/instructions/` (Copilot); `.agents/skills/`
 (universal); `.claude/skills/`, `.claude/agents/`; `.opencode/skills/`,
 `.opencode/agents/`, `.opencode/commands/`; `.cursor/rules/`, `.cursor/skills/`;
 `.windsurf/`, `.kiro/`, `.grok/`, `.codex/`, `.gemini/`.
+
+Every one of those paths is dot-prefixed, and without the flag a call returns nothing,
+which reads as "not installed" rather than "not looked for". The flag enables dot-prefix
+traversal only: `glob` also skips gitignored paths whatever the flag says. Read a
+gitignored path directly with `read`, and never report it absent on the strength of a
+glob.
 
 Read the instruction files with `read`: `AGENTS.md` at the root and in nested
 directories covering affected paths, `.github/copilot-instructions.md`,
@@ -235,6 +269,8 @@ Write `design.md` in this shape.
 
 ```markdown
 # Design: <objective>
+
+Status: <active | complete | abandoned>
 
 ## Objective
 
@@ -309,14 +345,16 @@ revisiting.
 Dispatch one brief per delegation. Ask the researcher for findings, not a plan.
 Ask the reviewer for design review at T2 and above, before the approval request.
 Issue the orchestrator one approved slice, or a group recorded in the design; one
-dispatch runs one orchestrator.
+dispatch runs one orchestrator. Every dispatch carries the objective ID and the
+objective directory, and the requirement IDs it addresses.
 
 Never imply a delegation happened when it did not, and do not re-brief work an
 agent has already returned.
 
 ## The slice report and the design decision
 
-The orchestrator returns a slice report: slice identity, tasks performed, commits,
+The orchestrator returns a slice report: objective ID and directory, slice identity,
+tasks performed, commits,
 verification evidence, review verdicts, escalations, and the design questions the
 work raised. Record one of two decisions.
 
