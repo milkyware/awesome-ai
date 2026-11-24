@@ -5,8 +5,10 @@ evidence it requires. No agent restates another agent's contract in full.
 
 ## Durable state
 
-Workflow records live in `.agent-workflow/` at the repository root. The directory is
-local state: keep it ignored and never commit its contents.
+Workflow records live in `.agent-workflow/` at the repository root, one directory per
+objective: `.agent-workflow/O<number>-<slug>/`, where the number is zero-padded to three
+digits and is one greater than the highest already present. The directory is local state:
+keep it ignored and never commit its contents.
 
 | Artefact           | Owner        | Purpose                                                                 |
 | ------------------ | ------------ | ----------------------------------------------------------------------- |
@@ -64,6 +66,27 @@ Usable only when it supplies the review target, the identity reviewed, findings 
 severity and evidence, the status of each acceptance criterion, what was run and what
 it proves, and a recommendation of `accept`, `revise`, or `escalate`. A verdict
 without an identity cannot be bound to an artefact.
+
+## Commit message
+
+The header follows the repository's commit convention, recorded in the execution plan.
+When the plan records none, use Conventional Commits: a `type(scope): subject` header
+naming the change rather than the task, a body stating what and why, and `Objective`,
+`Task`, and `Requirements` footers carrying the traceability.
+
+```text
+feat(export): add saved-search export endpoint
+
+Export writes the caller's saved searches as JSON, scoped to the tenant.
+
+Objective: O001
+Task: T1
+Requirements: FR-003, FR-004
+```
+
+A contract break adds `!` to the header and a `BREAKING CHANGE:` footer, the only footer
+with release semantic. The T0 formatting fix-forward is `chore`. One commit per task,
+written to `.agent-workflow/<objective-root>/commit-message.txt` and never staged.
 
 ## Decision record
 
