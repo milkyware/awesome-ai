@@ -102,7 +102,9 @@ The dispatching agent states the target in the brief.
 
 ### Design (T2 and above, before approval)
 
-Assess `.agent-workflow/design.md`. Every functional requirement is independently
+Assess the `design.md` the brief names, at
+`.agent-workflow/<objective-root>/design.md`, and quote the objective ID in the verdict.
+Every functional requirement is independently
 testable and free of implementation detail; every requirement maps to a slice and
 every slice to a requirement; non-goals and the scope boundary are stated rather
 than implied; the capability map records only observed capabilities, each mapped to
@@ -158,8 +160,9 @@ the parent verdict settled unless the delta reopened it.
 
 ## Verdict
 
-Return the target (`plan`, `task`, or `integration`); the identity reviewed, as the
-diff stat or the plan's decision and task IDs; findings, each with severity,
+Return the target (`plan`, `task`, or `integration`); the objective ID and the identity
+reviewed, as the objective directory plus the diff stat or the plan's decision and task
+IDs; findings, each with severity,
 evidence (file and line, command output, or criterion), and the correction required;
 acceptance criteria confirmed met or not met, per criterion; what was run and what it
 proves, including what was not run; and a recommendation of `accept`, `revise`, or
