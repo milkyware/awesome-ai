@@ -139,8 +139,9 @@ not.
 ## Workflow reference
 
 Workflow state is durable and stored in `.agent-workflow/` at the repository
-root. It contains the design, execution plan, task briefs, results, and review
-verdicts. This is local state: keep it ignored and do not commit its contents.
+root, one directory per objective. Each directory contains the design, execution
+plan, task briefs, results, and review verdicts for that objective. This is local
+state: keep it ignored and do not commit its contents.
 
 The [workflow reference](./docs/workflow.md) explains identifier formats,
 risk tiers, approvals, artefact ownership, task completion, verification, and
@@ -201,6 +202,8 @@ every task. Add these ordered rules after any broader rule you already have:
 The integration rules sit under the orchestrator because no other agent commits. Keep
 `git commit -F` narrow: `git commit *` would also grant `--amend`, which rewrites a
 commit a verdict was bound to.
+The `git commit -F *` grant covers the per-objective message file, because `*` spans `/`,
+so no extra rule is needed when each objective has its own directory.
 
 Verification and formatting strings are repository-specific: the plugin cannot know them,
 so add the ones your repository documents. A compound command is checked per subcommand,

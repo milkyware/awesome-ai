@@ -15,6 +15,7 @@ runtime-specific behaviour.
 | `SC-<number>` | Success criterion                                             | `SC-001` |
 | `D<number>`   | Decision record                                               | `D1`     |
 | `R<number>`   | Risk register entry                                           | `R1`     |
+| `O<number>`   | Objective identifier                                          | `O001`   |
 | `T0`–`T3`     | Risk tier, not a task identifier                              | `T2`     |
 | `C<number>`   | Definition pending confirmation from the source documentation | —        |
 
@@ -64,9 +65,16 @@ independently assesses the design, plan, task, or integrated result as requested
 
 ## Durable workflow state
 
-Workflow records live in `.agent-workflow/` at the repository root. This is
-local state, not a deliverable; keep the directory ignored and do not commit its
-contents.
+Workflow records live in `.agent-workflow/` at the repository root, one directory per
+objective: `.agent-workflow/O<number>-<slug>/`, where the number is zero-padded to three
+digits and is one greater than the highest already present. This is local state, not a
+deliverable; keep the directory ignored and do not commit its contents.
+
+Each objective records its state in the design header as `Status:`, taking one of
+`active`, `complete`, or `abandoned`. The root cannot be listed with `glob`, because
+`glob` skips gitignored paths; read the root as a directory with `read`, then read each
+objective's `design.md`. Loose files at the root are legacy state and are not offered
+for resume.
 
 | Artefact           | Owner        | Purpose                                                                 |
 | ------------------ | ------------ | ----------------------------------------------------------------------- |
@@ -169,9 +177,11 @@ version, line-ending, or path-case disagreement is an environment failure:
 escalate with the output and do not reformat the tree to make the check pass.
 
 The commit stages the reviewed paths and reads its message from
-`.agent-workflow/commit-message.txt`, which is written with `write` and never staged, so
-no message string reaches the shell. Any action that could discard work or rewrite history
-must be escalated and approved before acting.
+`.agent-workflow/<objective-root>/commit-message.txt`, which is written with `write` and
+never staged, so no message string reaches the shell. The header follows the commit
+convention the plan records, defaulting to Conventional Commits with `Objective`, `Task`,
+and `Requirements` footers. Any action that could discard work or rewrite history must be
+escalated and approved before acting.
 
 The current workflow executes implementation sequentially in a shared working
 tree. It can dispatch a designed group of slices together and reports each
