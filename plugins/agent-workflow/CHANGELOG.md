@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.9](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.8...agent-workflow-v0.1.9) (2026-11-24)
+
+
+### 📖 Documentation
+
+* **agent-workflow:** bind orchestrator state to the objective directory ([d524e85](https://github.com/milkyware/awesome-ai/commit/d524e85f713beabc0b67e2fc9b15452880f82d90))
+* **agent-workflow:** correct variable and identifier statements ([1735073](https://github.com/milkyware/awesome-ai/commit/173507360abbeb26c1cf905cf3c6b77f0b6d60e8))
+* **agent-workflow:** document objective-scoped paths and commit convention ([33f75c1](https://github.com/milkyware/awesome-ai/commit/33f75c10329cd3295f434c18ffd7b92a6e859695))
+* **agent-workflow:** document objective-scoped state for readers ([2ee1bf7](https://github.com/milkyware/awesome-ai/commit/2ee1bf76d3ec0ea7485b01549505881375c85b38))
+* **agent-workflow:** read design and briefs from the objective directory ([312315c](https://github.com/milkyware/awesome-ai/commit/312315c64a65a7ad23f715897bc96b5cb7e46b18))
+* **agent-workflow:** scope architect workflow state to objective directories ([4fbb5f0](https://github.com/milkyware/awesome-ai/commit/4fbb5f01ee72b94039f881c92875fa23c2bee876))
+
 ## [0.1.8](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.7...agent-workflow-v0.1.8) (2026-11-21)
 
 
