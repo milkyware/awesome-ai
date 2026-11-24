@@ -85,7 +85,8 @@ git ls-files -o --exclude-standard
 The first is the dispatch base the brief recorded. The second is the record to quote in
 the verdict, the third is the machine comparison, and the fourth lists untracked paths.
 Pin an untracked file's content with `git hash-object <path>` when the verdict depends on
-it; the path is the one variable argument in the vocabulary.
+it. The variable arguments are that path, the staged paths, and the commit command's
+objective root; every other string in the vocabulary is fixed.
 
 `HEAD` does not move during a task, so the identity is stable while you review, and a
 change outside the task's scope appears in it rather than being filtered out. If the

@@ -131,8 +131,9 @@ git ls-files -o --exclude-standard
 ```
 
 The first records the dispatch base, and the rest read the working tree against it.
-Pin an untracked file's content with `git hash-object <path>`; the path is the one
-variable argument in the vocabulary.
+Pin an untracked file's content with `git hash-object <path>`. The variable arguments are
+that path, the staged paths, and the commit command's objective root; every other string
+in the vocabulary is fixed.
 
 Record each output verbatim in the brief's execution context and compare the stored
 text. Equal text is the same change; different text is a different change.
@@ -285,8 +286,8 @@ Each artefact has one owner. Do not restate another agent's contract.
 
 ### Task brief (you produce, at `tasks/<ID>.md`)
 
-ID; requirement IDs; risk tier and the gates it implies; objective as one
-sentence stating the outcome; context and inputs the implementer cannot infer;
+ID; the objective ID and directory; requirement IDs; risk tier and the gates it implies;
+objective as one sentence stating the outcome; context and inputs the implementer cannot infer;
 scope and out-of-scope; write scope as files, directories, or globs; acceptance
 criteria as checkable statements; relevant files or components; dependencies;
 expected verification as single check-only commands; the formatting command and

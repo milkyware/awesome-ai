@@ -143,7 +143,8 @@ git ls-files -o --exclude-standard
 
 The first records the base as text. The other three read the working tree against it.
 Pin an untracked file's content with `git hash-object <path>` when the audit depends on
-it; the path is the one variable argument in the vocabulary.
+it. The variable arguments are that path, the staged paths, and the commit command's
+objective root; every other string in the vocabulary is fixed.
 
 Record each output verbatim in the artefact that needs it, and compare the stored text.
 Equal text is the same change; different text is a different change.

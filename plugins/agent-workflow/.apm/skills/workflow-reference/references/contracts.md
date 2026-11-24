@@ -23,8 +23,8 @@ is in flight is a decision, not a silent edit.
 
 ## Task brief
 
-ID; requirement IDs; risk tier and the gates it implies; objective stated as the
-outcome rather than the activity; context and inputs the implementer cannot infer;
+ID; the objective ID and directory; requirement IDs; risk tier and the gates it implies;
+objective stated as the outcome rather than the activity; context and inputs the implementer cannot infer;
 scope and out-of-scope; write scope as files, directories, or globs; acceptance
 criteria as checkable statements; relevant files or components; dependencies;
 expected verification as single literal check-only commands; the formatting command

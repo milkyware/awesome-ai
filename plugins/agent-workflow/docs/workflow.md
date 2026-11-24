@@ -23,6 +23,10 @@ Task IDs and risk tiers currently share the `T<number>` notation. Always label
 the field as **Task ID** or **Risk tier** so the meaning is clear, especially
 when a value such as `T1` could refer to either.
 
+Slice, task, decision, and risk identifiers are scoped to one objective: `T1` in `O001`
+and `T1` in `O002` are different tasks. A reference that leaves the objective directory,
+such as a commit footer, names the objective it belongs to.
+
 ## Risk tiers and gates
 
 The architect classifies the objective; the orchestrator applies the relevant

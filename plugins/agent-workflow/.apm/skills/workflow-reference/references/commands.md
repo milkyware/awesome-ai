@@ -7,7 +7,7 @@ new command with no recorded approval. When the work needs a string that is not 
 and report `blocked` with the missing command.
 
 The agent definitions are normative. This page is the long form: what each string proves,
-which agent may run it, and why the strings carry no placeholders.
+which agent may run it, and where the variables sit in the strings that carry one.
 
 ## Rule
 
@@ -83,9 +83,9 @@ The message file is ignored with the rest of the workflow root and is never stag
 message string reaches the shell, so quoting and line endings cannot break the commit. One
 commit per task.
 
-The objective root is the one variable in the vocabulary. The consumer grant
-`git commit -F *` already covers it, because `*` spans `/`, so one grant still covers
-every objective directory.
+The objective root is the commit command's only variable, and the dispatch fixes it
+before the command runs. The consumer grant `git commit -F *` already covers it, because
+`*` spans `/`, so one grant still covers every objective directory.
 
 The message header follows the repository's commit convention, recorded in the execution
 plan. When the plan records none, use Conventional Commits: a `type(scope): subject`
