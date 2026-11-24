@@ -106,7 +106,7 @@ git log --oneline -n 10
 git show --stat HEAD
 git show HEAD
 git add -- <paths>
-git commit -F .agent-workflow/commit-message.txt
+git commit -F .agent-workflow/<objective-root>/commit-message.txt
 git revert --no-edit HEAD
 ```
 
@@ -154,13 +154,20 @@ add no evidence, and a pipe is a compound command.
 ## Workflow directory
 
 `design.md` is architect-owned: read it, never edit it. You own `plan.md`,
-`tasks/<ID>.md`, `results/<ID>.md`, and `verdicts/<ID>.md`.
+`tasks/<ID>.md`, `results/<ID>.md`, and `verdicts/<ID>.md`. Every one of them lives in
+the objective directory the dispatch names, under the repository root:
+`.agent-workflow/<objective-root>/`.
 
-On entry, read `design.md`; the dispatch names the requirement IDs it addresses
-and your plan traces to those. Create `plan.md` and the `tasks/`, `results/`, and
-`verdicts/` directories if they are missing, and confirm `.agent-workflow/` is
-ignored, appending it to `.gitignore` (creating the file if needed) and
-reporting what you did. Never commit its contents.
+On entry, read the dispatch and the `design.md` at the root it names. The dispatch names
+the objective ID and the requirement IDs it addresses; your plan traces to those, and
+you refuse a dispatch that names neither. A root whose directory name disagrees with
+the objective ID in `design.md` is a mismatch: stop and escalate rather than writing
+into the wrong plan.
+
+Create the objective directory and its `tasks/`, `results/`, and `verdicts/`
+subdirectories if they are missing, and confirm `.agent-workflow/` is ignored,
+appending it to `.gitignore` (creating the file if needed) and reporting what you did.
+Never commit its contents. One dispatch owns one objective directory.
 
 Write the task brief to `tasks/<ID>.md` **before** dispatching. The file is the
 artefact the implementer works from and the reviewer checks against, so a
@@ -297,8 +304,9 @@ above. The rest may be `none`.
 
 ### Execution plan (you produce, at `plan.md`)
 
-Slice identity and requirement IDs; objective, scope, non-goals; risk tier, the
-gates it triggers, and why; tasks with requirements, risk, dependencies, write
+Objective identity and requirement IDs; objective, scope, non-goals; the commit
+convention for the integration commits, or `none` to use Conventional Commits; risk
+tier, the gates it triggers, and why; tasks with requirements, risk, dependencies, write
 scope, and acceptance criteria; tracks when the dispatch carries several slices,
 one per slice with disjoint paths; ordering and dependencies; concurrency
 candidates; interfaces and boundaries; risk register (`R<n>`, trigger, impact,
@@ -385,17 +393,36 @@ it differs, return the task to `In review` without a commit. At T2 and above, ob
 integration approval through the architect.
 
 Commit that task alone. Write the message with `write` to
-`.agent-workflow/commit-message.txt`, with the task ID leading it, then run two
-commands, one per call:
+`.agent-workflow/<objective-root>/commit-message.txt`, then run two commands, one per
+call:
 
 ```text
 git add -- <paths>
-git commit -F .agent-workflow/commit-message.txt
+git commit -F .agent-workflow/<objective-root>/commit-message.txt
 ```
 
 `<paths>` is the reviewed path scope: never `-A` and never `.`. The message file is
-ignored with the rest of `.agent-workflow/` and is never staged. Record the commit and
+ignored with the rest of the workflow root and is never staged. Record the commit and
 the reviewed identity in the ledger.
+
+The message follows the commit convention the plan records. When the plan records none,
+use Conventional Commits: a `type(scope): subject` header naming the change rather than
+the task, a body stating what and why, and `Objective`, `Task`, and `Requirements`
+footers carrying the traceability:
+
+```text
+feat(export): add saved-search export endpoint
+
+Export writes the caller's saved searches as JSON, scoped to the tenant.
+
+Objective: O001
+Task: T1
+Requirements: FR-003, FR-004
+```
+
+A change that breaks a contract adds `!` to the header and a `BREAKING CHANGE:` footer,
+the only footer with release semantic. The T0 formatting fix-forward is `chore`, not a
+repeat of the task's type. One commit per task.
 
 Run the full check suite once after the queue drains, including the formatter
 check, and treat it as a backstop rather than the first proof of formatting. A
@@ -427,7 +454,7 @@ Never claim that a human or the architect approved something when they have not.
 
 ## Slice report
 
-Return the slice identity and requirement IDs addressed; what was delivered and the
+Return the objective identity, the slice identity, and the requirement IDs addressed; what was delivered and the
 tasks performed; a traceability table of task, agent, commit, verification, and
 verdict; the evidence behind each completion claim; decisions made including any
 superseded; escalations and their outcome; the design questions the work raised
