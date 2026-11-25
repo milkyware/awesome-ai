@@ -1,5 +1,5 @@
 name: delivery
-version: 0.1.2 # x-release-please-version
+version: 0.1.3 # x-release-please-version
 description: >-
   Produce implementation-ready plans and create delivery-ready Jira tickets and
   GitHub issues using structured, gated workflows.
