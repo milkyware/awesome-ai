@@ -20,6 +20,13 @@ command whole.
   agent cannot answer.
 - `uvx` runs PyPI packages. It never prompts and resolves the latest version in
   an ephemeral environment.
+- When the executable name differs from the package name, name the package
+  explicitly: `uvx --from <package> <executable>` (for example
+  `uvx --from checkov checkov -d .`). The `--from` package is unpinned like
+  every other canonical command, and the offline retry becomes
+  `uvx --offline --from <package> <executable>`.
+- npm has the same shape: `npx -y -p <package> <executable>` when the binary
+  name differs from the package name.
 - Toolchain-shipped tools run as direct binaries: `dotnet format`, `gofmt`,
   `go vet`.
 - When a Python tool is a project dependency (`uv.lock`, `pyproject.toml`),
@@ -44,6 +51,7 @@ Project guidance overrides every row.
 | Ruff (format)  | `pyproject.toml` `[tool.ruff]`, `ruff.toml`, `.ruff.toml`       | `uvx ruff format --check .`                      | `uvx ruff format .`                      | safe       | Prefer `uv run ruff` when Ruff is a project dependency. `--check` exits non-zero.                                                                        |
 | Ruff (check)   | `pyproject.toml` `[tool.ruff]`, `ruff.toml`, `.ruff.toml`       | `uvx ruff check .`                               | `uvx ruff check . --fix`                 | classified | `--fix` applies safe fixes; `--unsafe-fixes` is opt-in and must be named in the brief.                                                                   |
 | Black          | `pyproject.toml` `[tool.black]` or a `black` dependency         | `uvx black --check .`                            | `uvx black .`                            | safe       | Prefer `uv run black` when Black is a project dependency. `--diff` shows changes without writing.                                                        |
+| Checkov        | `*.tf` files or a `terraform/` directory                        | `uvx --from checkov checkov -d .`                | —                                        | classified | Security and compliance scanner. Exits non-zero when checks fail. Report only; no automatic fixes.                                                       |
 | dotnet format  | `*.csproj`, `*.sln`                                             | `dotnet format --verify-no-changes --no-restore` | `dotnet format --no-restore`             | safe       | Default whitespace and style only. The `analyzers` subcommand applies code fixes that can change behaviour; it is opt-in and must be named in the brief. |
 | gofmt          | `go.mod`, `*.go` sources                                        | `gofmt -l .`                                     | `gofmt -w .`                             | safe       | `-l` exits zero and lists nonconforming files. Proof requires reading the list, not the exit code.                                                       |
 | go vet         | `go.mod`                                                        | `go vet ./...`                                   | —                                        | classified | Report only; no automatic fixes.                                                                                                                         |

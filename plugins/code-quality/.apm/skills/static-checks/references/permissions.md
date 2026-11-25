@@ -72,6 +72,11 @@ file.
     },
     { "action": "shell", "resource": "gofmt -l *", "effect": "allow" },
     { "action": "shell", "resource": "go vet *", "effect": "allow" },
+    {
+      "action": "shell",
+      "resource": "uvx --from checkov checkov *",
+      "effect": "allow",
+    },
 
     // Trailing-flag write variants: the read-only prefix above would also
     // match these, so each needs a later prompt rule.
@@ -95,6 +100,11 @@ Distinct write forms (`npx -y prettier --write`, `uvx black .`, `gofmt -w`,
 them, so they inherit the catch-all prompt. If a mid-string `*` pattern is not
 honoured by the installed version, replace the broad read-only rule with the
 exact canonical command (`npx -y eslint .`) and let the prompt cover variants.
+
+`--from` forms are matched at their full prefix, as in
+`uvx --from checkov checkov *`. The package segment is part of the tool
+identity, so never allow `uvx --from *`, which would permit any package to
+supply any executable.
 
 For a permanent veto on agent writes, add a policy. Policies are a separate
 deny layer that outranks permissions, and a permission allow cannot rescue
