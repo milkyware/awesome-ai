@@ -23,6 +23,7 @@ words:
   - worktree
   - worktrees
   - xsiam
+  - zizmor
 patterns:
   - name: MARKDOWN_CODE_BLOCK
     pattern: |

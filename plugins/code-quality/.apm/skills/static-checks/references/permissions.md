@@ -87,6 +87,23 @@ file.
       "resource": "uvx --from checkov checkov *",
       "effect": "allow",
     },
+    { "action": "shell", "resource": "npx -y cspell *", "effect": "allow" },
+    {
+      "action": "shell",
+      "resource": "npx -y markdownlint-cli .",
+      "effect": "allow",
+    },
+    { "action": "shell", "resource": "uvx zizmor .", "effect": "allow" },
+    {
+      "action": "shell",
+      "resource": "apm marketplace check",
+      "effect": "allow",
+    },
+    {
+      "action": "shell",
+      "resource": "apm marketplace validate",
+      "effect": "allow",
+    },
 
     // Trailing-flag write variants: the read-only prefix above would also
     // match these, so each needs a later prompt rule.
@@ -119,6 +136,13 @@ supply any executable.
 Terraform's write form is distinguished by the absence of `-check`, so
 `terraform fmt -check *` cannot cover it. A broad `terraform fmt *` allow does
 cover it, so keep the mode segment and avoid the broad form.
+
+Two further tools need the exact canonical command. markdownlint's read-only
+form carries no distinguishing flag, so allow `npx -y markdownlint-cli .`
+exactly; a `npx -y markdownlint-cli *` allow would also cover `--fix`.
+zizmor's fix flag precedes its input (`uvx zizmor --fix .`), so no prefix
+separates it from the read-only form; allow `uvx zizmor .` exactly. cspell is
+the exception where a broad tool prefix is safe, because it has no fix mode.
 
 For a permanent veto on agent writes, add a policy. Policies are a separate
 deny layer that outranks permissions, and a permission allow cannot rescue

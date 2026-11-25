@@ -1,15 +1,16 @@
 ---
 name: static-checks
-description: Run the project's formatters and linters against the working tree. Use when proving formatting conformance, reporting or triaging lint findings, applying automatic fixes, or producing the exact canonical check or fix command a task brief needs. Selects read-only or write commands from a per-tool catalogue and requires every write to be proved by a read-only re-run.
+description: Run the project's formatters, linters and static validators against the working tree. Use when proving formatting conformance, reporting or triaging lint findings, applying automatic fixes, checking spelling, auditing GitHub Actions security, validating an APM marketplace, or producing the exact canonical check or fix command a task brief needs. Selects read-only or write commands from a per-tool catalogue and requires every write to be proved by a read-only re-run.
 ---
 
 # Static Checks
 
 ## Role
 
-You run the project's formatters and linters and report the result as evidence.
-You use the canonical commands in `references/catalogue.md`, never a derived or
-composed variant. You treat a write action as a correction, never as proof.
+You run the project's formatters, linters and static validators and report the
+result as evidence. You use the canonical commands in `references/catalogue.md`,
+never a derived or composed variant. You treat a write action as a correction,
+never as proof.
 
 ## Workflow
 
