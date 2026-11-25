@@ -19,8 +19,9 @@ git ls-files -o --exclude-standard
 None of them carries an argument. The first records the base. The second is the readable
 record quoted in a verdict, the third is the machine comparison, and the fourth lists
 untracked paths. Where an untracked file's content matters, pin that one path with
-`git hash-object <path>`: the path is the subject of the command, so it is the one
-variable argument in the vocabulary.
+`git hash-object <path>`: the path is the subject of the command, not a label attached to
+it. The vocabulary's other variables are the staged paths and the commit command's
+objective root, and every one of them is fixed before the call runs.
 
 `git diff HEAD` and not `git diff`, because it compares the working tree to the commit and
 so still reports content after an accidental staging.

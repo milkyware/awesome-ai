@@ -21,6 +21,29 @@ committed state, confirm that `.agent-workflow/` is in `.gitignore`, and inspect
 the repository state before removing anything from the index. Preserve any
 useful local records; do not discard them while tidying.
 
+## `glob` reports the workflow root as empty
+
+`glob` skips gitignored paths whatever `hidden` says, and `.agent-workflow/` is ignored,
+so a pattern under it returns nothing even when objectives exist. Read the root as a
+directory with `read` instead, then read each objective's `design.md`. Never report the
+root empty on the strength of a glob, and never start a new objective over an existing
+one because a search came back empty.
+
+## A capability check reports a directory as absent
+
+Every capability path is dot-prefixed, so a `glob` call without `hidden: true` returns
+nothing and reads as "not installed". Pass the flag, and check the repository's
+`.gitignore` before concluding a generated path such as `plugins/*/.github/` is absent:
+an ignored path is invisible to `glob` but readable with `read`.
+
+## An old objective's files sit at the workflow root
+
+Loose files directly under `.agent-workflow/` predate objective directories and are
+legacy state. Resume ignores them; only directories matching `O<digits>-<slug>` are
+offered. Clear them by hand when their history is no longer needed, and never delete a
+directory to reuse its identifier: the next number is always one greater than the
+highest present.
+
 ## A read-only specialist changed a file
 
 Treat the change as a boundary violation. Stop and compare the affected files

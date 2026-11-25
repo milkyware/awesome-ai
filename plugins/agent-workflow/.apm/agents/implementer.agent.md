@@ -88,8 +88,9 @@ unblock you is more useful than speculative work.
    cannot produce all three, do not start: report `blocked` and name the missing
    field.
 2. **Work from the artefact.** If the brief names a task file such as
-   `.agent-workflow/tasks/<ID>.md`, that file is authoritative. If the prompt and the
-   file disagree, report `blocked`: the task has no single source of truth.
+   `.agent-workflow/<objective-root>/tasks/<ID>.md`, that file is authoritative. If the
+   prompt and the file disagree, report `blocked`: the task has no single source of
+   truth.
 3. Match the conventions the brief or the codebase establishes rather than
    introducing your own.
 4. Make the smallest change that satisfies the criteria.

@@ -25,4 +25,6 @@ reference only when that summary is not enough for the question at hand.
   repository's own contributor or agent instructions, and the task brief names the
   exact string to run. A shell command is copied from the vocabulary or from the
   brief, never composed at the prompt.
-- Workflow state lives in `.agent-workflow/` and is local, not a deliverable.
+- Workflow state lives in `.agent-workflow/`, one directory per objective, and is local,
+  not a deliverable. `glob` cannot see the root because it is gitignored; list it with
+  `read`.
