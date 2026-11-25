@@ -186,7 +186,6 @@ plugins/my-plugin/
 - Use clear, descriptive commit messages
 - Reference the skill, template, or plugin being modified
 - If a skill change affects workflows, describe the impact in the commit message
-- Include author trailers in commits
 
 ## No External Build System
 
