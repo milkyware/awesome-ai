@@ -112,7 +112,7 @@ Refs: 676104e, a215868
 
 ## Trailers
 
-Add the trailers the repository requires, one per line in the footer block, for example `Co-authored-by: Name <email>`. Never attribute a change to a tool that did not author it.
+Add only the trailers the repository requires, one per line in the footer block. Never attribute a change to a tool that did not author it.
 
 ## Examples
 
