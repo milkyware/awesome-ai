@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/milkyware/awesome-ai/compare/devops-v0.0.3...devops-v0.0.4) (2026-11-25)
+
+
+### 🧹 Maintenance
+
+* release plugin versions through the generic updater ([#94](https://github.com/milkyware/awesome-ai/issues/94)) ([8cb8bbe](https://github.com/milkyware/awesome-ai/commit/8cb8bbed684a7b299b15516028c9a2a8f5daf926))
+
 ## [0.0.3](https://github.com/milkyware/awesome-ai/compare/devops-v0.0.2...devops-v0.0.3) (2026-10-25)
 
 
