@@ -1,5 +1,5 @@
 name: architecture-docs
-version: 0.0.8
+version: 0.0.8 # x-release-please-version
 description: >-
   Generate Architecture Decision Records (ADRs) and High-Level Design (HLD)
   documents with structured, gated workflows.
