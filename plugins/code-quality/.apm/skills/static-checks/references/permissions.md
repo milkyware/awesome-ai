@@ -74,6 +74,16 @@ file.
     { "action": "shell", "resource": "go vet *", "effect": "allow" },
     {
       "action": "shell",
+      "resource": "terraform fmt -check *",
+      "effect": "allow",
+    },
+    {
+      "action": "shell",
+      "resource": "terraform validate *",
+      "effect": "allow",
+    },
+    {
+      "action": "shell",
       "resource": "uvx --from checkov checkov *",
       "effect": "allow",
     },
@@ -105,6 +115,10 @@ exact canonical command (`npx -y eslint .`) and let the prompt cover variants.
 `uvx --from checkov checkov *`. The package segment is part of the tool
 identity, so never allow `uvx --from *`, which would permit any package to
 supply any executable.
+
+Terraform's write form is distinguished by the absence of `-check`, so
+`terraform fmt -check *` cannot cover it. A broad `terraform fmt *` allow does
+cover it, so keep the mode segment and avoid the broad form.
 
 For a permanent veto on agent writes, add a policy. Policies are a separate
 deny layer that outranks permissions, and a permission allow cannot rescue
