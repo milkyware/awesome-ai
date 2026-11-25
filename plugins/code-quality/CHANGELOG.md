@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/milkyware/awesome-ai/compare/code-quality-v0.0.2...code-quality-v0.0.3) (2026-11-25)
+
+
+### 🚀 Enhancements
+
+* **code-quality:** add static-checks skill ([#82](https://github.com/milkyware/awesome-ai/issues/82)) ([36ed4cb](https://github.com/milkyware/awesome-ai/commit/36ed4cb23e076d5f3e86d41ee32ec6c7b514c4dc))
+
 ## [0.0.2](https://github.com/milkyware/awesome-ai/compare/code-quality-v0.0.1...code-quality-v0.0.2) (2026-10-26)
 
 
