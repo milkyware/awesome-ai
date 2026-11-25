@@ -1,5 +1,5 @@
 {
-  "plugins/architecture-docs": "0.0.8",
+  "plugins/architecture-docs": "0.0.9",
   "plugins/agent-workflow": "0.1.9",
   "plugins/code-quality": "0.0.4",
   "plugins/delivery": "0.1.3",

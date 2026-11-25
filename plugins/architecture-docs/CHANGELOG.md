@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.8...architecture-docs-v0.0.9) (2026-11-25)
+
+
+### 🧹 Maintenance
+
+* release plugin versions through the generic updater ([#94](https://github.com/milkyware/awesome-ai/issues/94)) ([8cb8bbe](https://github.com/milkyware/awesome-ai/commit/8cb8bbed684a7b299b15516028c9a2a8f5daf926))
+
 ## [0.0.8](https://github.com/milkyware/awesome-ai/compare/architecture-docs-v0.0.7...architecture-docs-v0.0.8) (2026-10-26)
 
 
