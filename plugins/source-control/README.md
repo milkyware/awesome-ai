@@ -6,7 +6,7 @@
 
 | Skill                 | Purpose                                                                                                              | Output                                                                     |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `create-branch`       | Create a branch named in the repository's convention, from the correct base                                          | Created branch, or a validated name and the exact command                  |
+| `create-branch`       | Create a branch named in the repository's convention, from the correct base, with no upstream                        | Created branch, or a validated name and the exact command                  |
 | `commit-changes`      | Split the working tree into logical commits with Conventional Commits messages                                       | Created commits, or a proposed grouping and message                        |
 | `create-pull-request` | Open a reviewable pull request with a Conventional Commits title and a body built from the repository's own template | Created pull request number and URL, or a complete title, body and command |
 
@@ -59,11 +59,11 @@ Ask the agent to start a branch for the work. The skill will:
 2. Read the repository convention from configuration or from recent branches, and fall back to a documented default rather than inventing a prefix.
 3. Compose and validate the name against `git check-ref-format`, then check that it does not already exist locally or on the remote.
 4. Resolve the base, fetch it, and refuse to continue during a rebase, merge, cherry-pick or revert.
-5. Create the branch, and state whether uncommitted changes travelled with it.
+5. Create the branch with `--no-track` and confirm it has no upstream, then state whether uncommitted changes travelled with it.
 
 **Output:** A local branch, or a validated name and the exact command when creation is not possible.
 
-Branch creation is local. Publishing is a separate step. `gh issue develop` is the only operation that writes to the remote, and it is used only when the branch is to be linked to an issue.
+Branch creation is local. Publishing is a separate step, and the branch is created without an upstream, so the first push is an explicit publish rather than a push to the branch it started from. `gh issue develop` is the only operation that writes to the remote, and it is used only when the branch is to be linked to an issue.
 
 ### Commit changes
 
@@ -114,6 +114,10 @@ A: The check covers local branches and `origin`. Delete the stale branch with `g
 **Q: The new branch already contains changes that were uncommitted.**
 
 A: `git switch -c` carries uncommitted changes onto the new branch. That is expected behaviour. Commit them, or move them elsewhere with `git stash` first.
+
+**Q: A push from a GUI landed the branch on the default branch.**
+
+A: The branch inherited an upstream from its start point, because `branch.autoSetupMerge` defaults to `true` and the start point was the default branch. Remove the upstream with `git branch --unset-upstream`, publish explicitly with `git push -u origin <branch>`, and confirm the installed skill creates branches with `--no-track`.
 
 **Q: Committing reports that the staged diff is empty.**
 

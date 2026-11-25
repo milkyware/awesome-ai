@@ -1,6 +1,6 @@
 ---
 name: create-branch
-description: Create a Git branch named in the repository's own convention, from the correct base, after checking that the working tree can take it. Use when asked to start a branch, name a branch, begin work on an issue or ticket, or check whether a branch name complies with the repository convention.
+description: Create a Git branch named in the repository's own convention, from the correct base, with no upstream, after checking that the working tree can take it. Use when asked to start a branch, create or check out a branch, branch off another branch, name a branch, begin work on an issue or ticket, or check whether a branch name complies with the repository convention.
 ---
 
 # Create Branch
@@ -11,7 +11,7 @@ Start a branch that a reviewer can place at a glance. Read the repository's own 
 
 - Run every command from the repository root. Confirm it once with `git rev-parse --show-toplevel`, then use `git -C <root>` when the session started elsewhere.
 - Creating a branch is local and reversible. Publishing it is not part of this skill.
-- Never push, configure an upstream, delete, rename or move a branch, create an orphan branch, or change Git configuration. `gh issue develop` is the only operation that writes to the remote, and it needs explicit approval.
+- Never push, delete, rename or move a branch, create an orphan branch, or change Git configuration. The branch must have no upstream when this skill finishes, and step 9 verifies it. `gh issue develop` is the only operation that writes to the remote, and it needs explicit approval.
 - Never create a branch named after a trunk branch, and never reuse a name that already exists locally or on the remote.
 - Never add an agent or vendor prefix to a branch name. The name describes the work, not the tool that produced it.
 - Report only what was observed. Never claim a branch exists until `git rev-parse --verify refs/heads/<name>` succeeds.
@@ -89,7 +89,7 @@ Compare case-insensitively. Windows and macOS fold case in the filesystem while 
 git symbolic-ref --short refs/remotes/origin/HEAD
 ```
 
-3. If that fails, use the first of `main`, `master` or `develop` that exists locally, and state the assumption.
+3. If that fails, use the first of `main`, `master` or `develop` for which `origin/<base>` resolves, and state the assumption. When a base exists only locally, branch from the local ref and say so.
 
 Then fetch the base so the branch does not start stale:
 
@@ -116,7 +116,7 @@ A detached checkout is allowed only as an explicit rescue: `git switch -c` keeps
 From the fetched base:
 
 ```bash
-git switch -c "<name>" "origin/<base>"
+git switch -c "<name>" "origin/<base>" --no-track
 ```
 
 From the current commit, when the user wants the work already on this checkout:
@@ -125,7 +125,9 @@ From the current commit, when the user wants the work already on this checkout:
 git switch -c "<name>"
 ```
 
-Do not add `--track`, do not set an upstream, and do not push.
+Pass `--no-track` with a remote-tracking start point. Without it, `branch.autoSetupMerge` (default `true`) copies the start point's upstream onto the new branch, and a GUI or scripted push then publishes by refspec to that upstream.
+
+From a default-branch start point, that lands the work on the default branch with no prompt and no intent. The branch must have no upstream when this skill finishes, whichever form created it; step 9 verifies it.
 
 ## 8. Offer issue linkage
 
@@ -135,7 +137,7 @@ When the user named a GitHub issue and wants the branch linked to it, the branch
 gh issue develop <number> --name "<name>" --base "<base>" --checkout
 ```
 
-This links the branch in the issue sidebar and configures it as the pull request base. It also pushes, so ask before running it. Use `git switch -c` when the user does not need the linkage.
+This links the branch in the issue sidebar and configures it as the pull request base. It also pushes, and the branch it creates tracks a remote branch of the same name, which is the one exception to the no-upstream rule. Ask before running it. Use `git switch -c` when the user does not need the linkage.
 
 ## 9. Report the result
 
@@ -145,6 +147,14 @@ State:
 - The base and its short commit, from `git rev-parse --short HEAD`.
 - Whether uncommitted changes were carried onto the branch.
 - Whether the branch is local only, and the exact command to publish it.
+
+Confirm the branch has no upstream before reporting:
+
+```bash
+git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}"
+```
+
+A failure is the expected result and reads `no upstream configured`, so the report states that the branch is unpublished. A printed ref is a defect: report it as `blocked` with `git branch --unset-upstream` as the corrective command, and do not run that command, because removing an upstream changes Git configuration.
 
 ## Related operations
 
