@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/milkyware/awesome-ai/compare/source-control-v0.1.1...source-control-v0.1.2) (2026-11-25)
+
+
+### 🧹 Maintenance
+
+* **main:** release code-quality 0.0.3 ([#85](https://github.com/milkyware/awesome-ai/issues/85)) ([479257b](https://github.com/milkyware/awesome-ai/commit/479257be3319eedcc3bc9a985164d9d68c51efe7))
+
 ## [0.1.1](https://github.com/milkyware/awesome-ai/compare/source-control-v0.1.0...source-control-v0.1.1) (2026-11-25)
 
 
