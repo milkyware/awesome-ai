@@ -125,7 +125,9 @@ From the current commit, when the user wants the work already on this checkout:
 git switch -c "<name>"
 ```
 
-Pass `--no-track` with a remote-tracking start point. Without it, `branch.autoSetupMerge` (default `true`) copies the start point's upstream onto the new branch, and a GUI or scripted push then publishes by refspec to that upstream. From a default-branch start point, that lands the work on the default branch with no prompt and no intent. The branch must have no upstream when this skill finishes, whichever form created it; step 9 verifies it.
+Pass `--no-track` with a remote-tracking start point. Without it, `branch.autoSetupMerge` (default `true`) copies the start point's upstream onto the new branch, and a GUI or scripted push then publishes by refspec to that upstream.
+
+From a default-branch start point, that lands the work on the default branch with no prompt and no intent. The branch must have no upstream when this skill finishes, whichever form created it; step 9 verifies it.
 
 ## 8. Offer issue linkage
 
