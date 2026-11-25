@@ -1,6 +1,6 @@
 ---
 name: static-checks
-description: Run the project's formatters, linters and static validators against the working tree. Use when proving formatting conformance, reporting or triaging lint findings, applying automatic fixes, checking spelling, auditing GitHub Actions security, validating an APM marketplace, or producing the exact canonical check or fix command a task brief needs. Selects read-only or write commands from a per-tool catalogue and requires every write to be proved by a read-only re-run.
+description: Run the project's formatters, linters and static validators against a task-resolved scope. Use when proving formatting conformance, reporting or triaging lint findings, applying automatic fixes, checking spelling, auditing GitHub Actions security, validating an APM project in place, or producing the exact canonical check or fix command a task brief needs. Selects read-only or write invocations from a per-tool catalogue, resolves each invocation's scope from the task instead of defaulting to the whole repository, and requires every write to be proved by a read-only re-run.
 ---
 
 # Static Checks
@@ -8,9 +8,10 @@ description: Run the project's formatters, linters and static validators against
 ## Role
 
 You run the project's formatters, linters and static validators and report the
-result as evidence. You use the canonical commands in `references/catalogue.md`,
-never a derived or composed variant. You treat a write action as a correction,
-never as proof.
+result as evidence. You copy each invocation in `references/catalogue.md`
+verbatim and resolve only its `<scope>` placeholder from the task, never
+deriving or composing a variant of your own. You treat a write action as a
+correction, never as proof.
 
 ## Workflow
 
@@ -35,11 +36,29 @@ configuration file exists.
 If no formatter or linter is detected, report that there is none. Do not
 install, infer, or invent one.
 
-### 3. Validate with the read-only command
+### 3. Resolve the scope
 
-Run the catalogue's `Read-only` command for the detected tool. Copy the string
-whole, as one command per call, with no `|`, `&&`, `;`, `$()`, redirect, or
-other composition.
+Resolve `<scope>` to the narrowest target that covers the task, in this order
+of precedence:
+
+1. The paths the task brief names.
+2. The paths in the working-tree change set the task owns, when it names none.
+3. The whole-tree form, when the task is repository-wide or no narrower target
+   exists.
+
+Match that target to the detected tool's `Scope` granularity: pass `paths`
+directly, take the common ancestor directory for `directory`, the owning
+project or solution for `project`, and a package pattern for `packages`. A
+`module` tool takes no path; it runs with the module directory as the working
+directory. A `root` tool always runs from the repository root. Quote a glob or
+a path containing spaces; the quoting stays inside the single command string.
+
+### 4. Validate with the read-only command
+
+Copy the catalogue's `Read-only` invocation for the detected tool, substitute
+the resolved scope, and run it as one command per call, with no `|`, `&&`, `;`,
+`$()`, redirect, or other composition. Substituting the scope is not
+composition.
 
 Capture the result in the terms the catalogue records as that tool's failure
 signal. Some tools exit non-zero and list nonconforming paths; others exit zero
@@ -49,19 +68,19 @@ If the runner cannot fetch the tool (restricted network or registry outage),
 retry once with `--offline`. If that also fails, report `blocked` and name the
 tool. Never install tooling into the project to obtain a command.
 
-### 4. Select the variant
+### 5. Select the variant
 
-- The objective is to prove conformance or report findings: stop after step 3.
+- The objective is to prove conformance or report findings: stop after step 4.
   The read-only result is the evidence.
 - The objective is to correct deviations or findings: run the `Write` command
-  only after step 3 has established what is wrong, then run the `Read-only`
+  only after step 4 has established what is wrong, then run the `Read-only`
   command again. The second read-only run is the evidence; the write run never
   is.
 
-### 5. Apply corrections by fix class
+### 6. Apply corrections by fix class
 
-For a `safe` tool, the correction is mechanical: run the write command, then
-re-run the read-only command and confirm it passes.
+For a `safe` tool, the correction is mechanical: run the write invocation at
+the resolved scope, then re-run the read-only invocation and confirm it passes.
 
 For a `classified` tool, restrict the fix scope to what the catalogue permits.
 Do not enable unsafe fixes unless the project opts in explicitly and the
@@ -71,8 +90,10 @@ owns the code.
 
 A write that reaches paths outside the task's write scope is scope drift, not
 formatting. Report it with the affected paths and do not accept it silently.
+When the resolved scope is narrower than the tool's granularity, run the write
+at the owning unit and confirm it changed only the paths the task owns.
 
-### 6. Report
+### 7. Report
 
 State, for each tool run:
 
@@ -86,14 +107,14 @@ Format command strings so they can be copied verbatim into a task brief's
 
 ## Rules
 
-- Use the catalogue's canonical command for the detected tool unless project
-  guidance names a different one.
+- Use the catalogue's invocation for the detected tool with its scope resolved
+  by step 3, unless project guidance names a different command.
 - One command per call. Never compose commands with `|`, `&&`, `;`, `$()`,
-  redirects, or substitution.
+  redirects, or substitution. Substituting the scope is not composition.
 - Never pin a tool version in a command; the project's own pins decide the
   version.
 - Keep the tool and mode segment of every command fixed so saved approvals and
-  permission rules match later invocations; vary only trailing paths.
+  permission rules match later invocations; only the scope argument varies.
 - Never treat a write run as evidence.
 - Never reformat files outside the task's write scope.
 - Never install tools. Ephemeral runners only.
