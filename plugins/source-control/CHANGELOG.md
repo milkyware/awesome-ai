@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/milkyware/awesome-ai/compare/source-control-v0.1.0...source-control-v0.1.1) (2026-11-25)
+
+
+### 🚀 Enhancements
+
+* **code-quality:** add static-checks skill ([#82](https://github.com/milkyware/awesome-ai/issues/82)) ([36ed4cb](https://github.com/milkyware/awesome-ai/commit/36ed4cb23e076d5f3e86d41ee32ec6c7b514c4dc))
+
+
+### 🩹 Fixes
+
+* **source-control:** create branches without an upstream ([#86](https://github.com/milkyware/awesome-ai/issues/86)) ([d727f7c](https://github.com/milkyware/awesome-ai/commit/d727f7cb6ce55a1c5aa689d113925c393bcb4ac0))
+
 ## [0.1.0](https://github.com/milkyware/awesome-ai/compare/source-control-v0.0.2...source-control-v0.1.0) (2026-11-22)
 
 
