@@ -7,11 +7,13 @@ dictionaries:
   - powershell
 words:
   - frontmatter
+  - gofmt
   - handoff
   - handoffs
   - intune
   - kiro
   - lastexitcode
+  - linters
   - milkyware
   - negotiables
   - opencode
@@ -21,6 +23,7 @@ words:
   - worktree
   - worktrees
   - xsiam
+  - zizmor
 patterns:
   - name: MARKDOWN_CODE_BLOCK
     pattern: |
