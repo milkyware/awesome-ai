@@ -4,5 +4,5 @@
   "plugins/code-quality": "0.0.2",
   "plugins/delivery": "0.1.1",
   "plugins/devops": "0.0.3",
-  "plugins/source-control": "0.1.0"
+  "plugins/source-control": "0.1.1"
 }
