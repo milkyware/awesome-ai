@@ -14,13 +14,13 @@
     {
       "name": "code-quality",
       "description": "Review branch changes for correctness, scope and merge readiness using structured, gated workflows.",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "source": "./plugins/code-quality"
     },
     {
       "name": "delivery",
       "description": "Produce implementation-ready plans and create delivery-ready Jira tickets and GitHub issues using structured, gated workflows.",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "source": "./plugins/delivery"
     },
     {
