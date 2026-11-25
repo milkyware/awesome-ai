@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.3](https://github.com/milkyware/awesome-ai/compare/source-control-v0.1.2...source-control-v0.1.3) (2026-11-25)
+
+
+### 🚀 Enhancements
+
+* **code-quality:** resolve static-check scope from the task ([#89](https://github.com/milkyware/awesome-ai/issues/89)) ([8cad4c4](https://github.com/milkyware/awesome-ai/commit/8cad4c444e600938480f9347f46bce7127faf222))
+
+
+### 🧹 Maintenance
+
+* release plugin versions through the generic updater ([#94](https://github.com/milkyware/awesome-ai/issues/94)) ([8cb8bbe](https://github.com/milkyware/awesome-ai/commit/8cb8bbed684a7b299b15516028c9a2a8f5daf926))
+* **source-control:** remove co-authoring trailers ([#93](https://github.com/milkyware/awesome-ai/issues/93)) ([6b2f166](https://github.com/milkyware/awesome-ai/commit/6b2f166a439eda669d10719a9b0f2d041a76e278))
+
 ## [0.1.2](https://github.com/milkyware/awesome-ai/compare/source-control-v0.1.1...source-control-v0.1.2) (2026-11-25)
 
 
