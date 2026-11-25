@@ -30,9 +30,8 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "yaml",
-          "path": "apm.yml",
-          "jsonpath": "$.version"
+          "type": "generic",
+          "path": "apm.yml"
         }
       ]
     },
@@ -41,9 +40,8 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "yaml",
-          "path": "apm.yml",
-          "jsonpath": "$.version"
+          "type": "generic",
+          "path": "apm.yml"
         }
       ]
     },
@@ -52,9 +50,8 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "yaml",
-          "path": "apm.yml",
-          "jsonpath": "$.version"
+          "type": "generic",
+          "path": "apm.yml"
         }
       ]
     },
@@ -63,9 +60,8 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "yaml",
-          "path": "apm.yml",
-          "jsonpath": "$.version"
+          "type": "generic",
+          "path": "apm.yml"
         }
       ]
     },
@@ -74,9 +70,8 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "yaml",
-          "path": "apm.yml",
-          "jsonpath": "$.version"
+          "type": "generic",
+          "path": "apm.yml"
         }
       ]
     },
@@ -85,9 +80,8 @@
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
         {
-          "type": "yaml",
-          "path": "apm.yml",
-          "jsonpath": "$.version"
+          "type": "generic",
+          "path": "apm.yml"
         }
       ]
     }

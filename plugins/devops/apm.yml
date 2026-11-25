@@ -1,5 +1,5 @@
 name: devops
-version: 0.0.3
+version: 0.0.3 # x-release-please-version
 description: >-
   Convert Azure DevOps pipeline templates to GitHub Actions and onboard
   repositories with release-please using structured, gated workflows.
