@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.8...agent-workflow-v0.1.9) (2026-11-25)
+
+
+### 🧹 Maintenance
+
+* release plugin versions through the generic updater ([#94](https://github.com/milkyware/awesome-ai/issues/94)) ([8cb8bbe](https://github.com/milkyware/awesome-ai/commit/8cb8bbed684a7b299b15516028c9a2a8f5daf926))
+
 ## [0.1.8](https://github.com/milkyware/awesome-ai/compare/agent-workflow-v0.1.7...agent-workflow-v0.1.8) (2026-11-21)
 
 
