@@ -4,9 +4,10 @@
 
 ## Skills
 
-| Skill         | Purpose                                           | Output                                                   |
-| ------------- | ------------------------------------------------- | -------------------------------------------------------- |
-| `code-review` | Read-only pre-PR review of the current Git branch | Findings, testing and scope summary, and a merge verdict |
+| Skill           | Purpose                                                               | Output                                                                     |
+| --------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `code-review`   | Read-only pre-PR review of the current Git branch                     | Findings, testing and scope summary, and a merge verdict                   |
+| `static-checks` | Canonical formatter and linter commands in read-only and fix variants | Check results, triaged findings, and exact commands for briefs and reports |
 
 All skills enforce the repository [writing standards](../../README.md#writing-standards).
 
