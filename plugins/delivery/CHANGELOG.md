@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.3](https://github.com/milkyware/awesome-ai/compare/delivery-v0.1.2...delivery-v0.1.3) (2026-11-25)
+
+
+### 🚀 Enhancements
+
+* **code-quality:** resolve static-check scope from the task ([#89](https://github.com/milkyware/awesome-ai/issues/89)) ([8cad4c4](https://github.com/milkyware/awesome-ai/commit/8cad4c444e600938480f9347f46bce7127faf222))
+
+
+### 🧹 Maintenance
+
+* release plugin versions through the generic updater ([#94](https://github.com/milkyware/awesome-ai/issues/94)) ([8cb8bbe](https://github.com/milkyware/awesome-ai/commit/8cb8bbed684a7b299b15516028c9a2a8f5daf926))
+
 ## [0.1.2](https://github.com/milkyware/awesome-ai/compare/delivery-v0.1.1...delivery-v0.1.2) (2026-11-25)
 
 
