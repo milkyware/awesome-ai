@@ -14,7 +14,7 @@
     {
       "name": "code-quality",
       "description": "Review branch changes for correctness, scope and merge readiness using structured, gated workflows.",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "source": "./plugins/code-quality"
     },
     {
